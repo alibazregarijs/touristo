@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+# Run lint-staged (no deprecated husky.sh import)
+npx lint-staged

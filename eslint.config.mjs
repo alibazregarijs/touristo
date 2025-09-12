@@ -1,6 +1,8 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { FlatCompat } from '@eslint/eslintrc';
+import pluginNext from '@next/eslint-plugin-next';
+import eslintPluginPrettier from 'eslint-plugin-prettier'; // ✅ Import the plugin
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -9,17 +11,27 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+export default [
+  // Next.js core config
+  ...compat.extends('next/core-web-vitals'),
+
+  // Next.js plugin and rules
   {
-    ignores: [
-      "node_modules/**",
-      ".next/**",
-      "out/**",
-      "build/**",
-      "next-env.d.ts",
-    ],
+    plugins: {
+      '@next/next': pluginNext,
+    },
+    rules: {
+      ...pluginNext.configs.recommended.rules,
+    },
+  },
+
+  // ✅ Define Prettier plugin and its rule in the SAME object
+  {
+    plugins: {
+      prettier: eslintPluginPrettier, // Define the plugin
+    },
+    rules: {
+      'prettier/prettier': 'warn', // Apply the rule
+    },
   },
 ];
-
-export default eslintConfig;
