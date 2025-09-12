@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import './globals.css';
 import { inter, fontVazir } from '../lib/Fonts';
-import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '@/lib/Theme';
-import EmotionRegistry from '@/lib/EmotionRegistery';
-import { NextIntlClientProvider } from 'next-intl';
+import MuiThemeProvider from '@/lib/MuiThemeProvider';
+import TranslationProvider from '@/lib/TranslationProvider';
+import { DirectionProvider } from '@/lib/DirectionProvider'; // Adjust path as needed
+import { getLocale } from 'next-intl/server';
+import { cookies } from 'next/headers';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -18,17 +17,32 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const localeCookie = cookieStore.get('NEXT_LOCALE')?.value;
+
+  // Use cookie as the source of truth, fallback to getLocale
+  let locale: string;
+  let direction: 'ltr' | 'rtl';
+
+  if (localeCookie) {
+    locale = localeCookie;
+    direction = localeCookie === 'en' ? 'ltr' : 'rtl';
+  } else {
+    locale = await getLocale();
+    direction = locale === 'en' ? 'ltr' : 'rtl';
+  }
+
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${fontVazir.variable}`}>
-        <EmotionRegistry>
-          <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <NextIntlClientProvider>{children}</NextIntlClientProvider>
-            </ThemeProvider>
-          </AppRouterCacheProvider>
-        </EmotionRegistry>
+    <html lang={locale} dir={direction} suppressHydrationWarning>
+      <body
+        className={`${inter.variable} ${fontVazir.variable}`}
+        suppressHydrationWarning
+      >
+        <DirectionProvider initialDirection={direction}>
+          <TranslationProvider>
+            <MuiThemeProvider>{children}</MuiThemeProvider>
+          </TranslationProvider>
+        </DirectionProvider>
       </body>
     </html>
   );
