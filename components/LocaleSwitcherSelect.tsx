@@ -1,60 +1,49 @@
 'use client';
 
+import { useParams } from 'next/navigation';
+import { Locale, routing, usePathname, useRouter } from '@/i18n/routing';
+import { ReactNode } from 'react';
 import {
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
+  Select,
   SelectChangeEvent,
 } from '@mui/material';
-import { Locale, routing, useRouter } from '@/i18n/routing';
-import { useParams } from 'next/navigation';
-import { ReactNode } from 'react';
 
 type Props = {
-  children: ReactNode;
+  children?: ReactNode;
   defaultValue: string;
   label: string;
 };
 
 export default function LocaleSwitcherSelect({ defaultValue, label }: Props) {
   const router = useRouter();
+  const pathname = usePathname();
   const params = useParams();
 
-  function onSelectChange(event: SelectChangeEvent) {
-    const nextLocale = event.target.value as Locale;
-
-    // Set the cookie to persist the locale choice
-    document.cookie = `NEXT_LOCALE=${nextLocale}; path=/; max-age=31536000; SameSite=Lax`;
-
-    // Update the HTML dir attribute immediately for instant visual feedback
-    const newDirection = nextLocale === 'en' ? 'ltr' : 'rtl';
-    document.documentElement.dir = newDirection;
-
+  function onSelectChange(event: SelectChangeEvent<string>) {
+    const nextLocale = event.target.value;
     router.replace(
-      // @ts-expect-error -- TypeScript will validate that only known `params`
-      // are used in combination with a given `pathname`. Since the two will
-      // always match for the current route, we can skip runtime checks.
-      { pathname: '/', params },
-      { locale: nextLocale }
+      // @ts-expect-error -- skipping runtime checks as before
+      { pathname, params },
+      { locale: nextLocale as Locale }
     );
   }
 
   return (
-    <FormControl sx={{ minWidth: 80 }} size="small">
-      <InputLabel id="locale-select-label">{label}</InputLabel>
+    <FormControl size="small" variant="outlined">
+      <InputLabel>{label}</InputLabel>
       <Select
-        labelId="locale-select-label"
-        value={defaultValue} // Changed from defaultValue to value for controlled component
-        onChange={onSelectChange}
+        value={defaultValue}
         label={label}
+        onChange={onSelectChange}
         sx={{
-          border: 'none',
-          backgroundColor: 'transparent',
-          '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
-          '&:hover .MuiOutlinedInput-notchedOutline': { border: 'none' },
-          '&.Mui-focused .MuiOutlinedInput-notchedOutline': { border: 'none' },
+          minWidth: 80,
           height: 32,
+          border: 'none',
+          background: 'transparent',
+          '& .MuiOutlinedInput-notchedOutline': { border: 0 },
         }}
       >
         {routing.locales.map((locale) => (

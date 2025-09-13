@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { inter, fontVazir } from '../lib/Fonts';
+import { inter, fontVazir } from '@/lib/Fonts';
 import MuiThemeProvider from '@/lib/MuiThemeProvider';
 import TranslationProvider from '@/lib/TranslationProvider';
 import { DirectionProvider } from '@/lib/DirectionProvider'; // Adjust path as needed
