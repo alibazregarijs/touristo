@@ -7,15 +7,7 @@ export default async function HomePage() {
   const t = await getTranslations('HomePage');
   return (
     <div>
-      <h1 className="font-vazir">{t('title')}</h1>
-      <h1 className="font-inter">{t('title')}</h1>
-      <hr />
-      <div className="mt-4">
-        <LocaleSwitcher />
-      </div>
-      <div>
-        <SignIn />
-      </div>
+      <SignIn />
     </div>
   );
 }

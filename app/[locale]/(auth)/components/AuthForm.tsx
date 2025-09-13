@@ -1,5 +1,7 @@
-'use client';
-import { useState } from 'react';
+import react from 'react';
+import { AuthFormProps } from '@/types';
+import { useInputMaker } from '@/app/[locale]/(auth)/hooks/useInputMaker';
+import { ChangeEvent, useState, Dispatch, SetStateAction } from 'react';
 import {
   Container,
   Paper,
@@ -13,13 +15,12 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff, GitHub, Google } from '@mui/icons-material';
 
-export default function SignUpPage() {
+const AuthForm = ({ page, schema, onSubmit, children }: AuthFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
-    confirmPassword: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +35,13 @@ export default function SignUpPage() {
     // Handle sign-up logic here
     console.log('Form submitted:', formData);
   };
+
+  const inputFields = useInputMaker({
+    formData,
+    handleChange,
+    setShowPassword,
+    showPassword,
+  });
 
   return (
     <Container
@@ -55,7 +63,10 @@ export default function SignUpPage() {
         </Typography>
 
         <Box component="form" onSubmit={handleSubmit} className="space-y-4">
-          <TextField
+          {inputFields.map((field, index) => (
+            <TextField {...field} key={index} />
+          ))}
+          {/* <TextField
             required
             fullWidth
             id="username"
@@ -130,7 +141,7 @@ export default function SignUpPage() {
                 className: 'text-white-1',
               },
             }}
-          />
+          /> */}
 
           <Button
             type="submit"
@@ -169,4 +180,6 @@ export default function SignUpPage() {
       </Paper>
     </Container>
   );
-}
+};
+
+export default AuthForm;
