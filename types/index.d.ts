@@ -7,7 +7,5 @@ export type AuthActionStateFn = (
 export type AuthFormProps = {
   page: 'sign-in' | 'sign-up';
   onSubmit: AuthActionStateFn;
-  schema: SignInSchemaProps[];
-  callbackUrl: string;
   children: React.ReactNode;
 };

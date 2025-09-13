@@ -4,13 +4,7 @@ import LocaleSwitcher from '@/components/LocaleSwitcher';
 
 const Page = async () => {
   const t = await getTranslations('HomePage');
-  return (
-    <div>
-      {' '}
-      <h1 className="font-vazir">{t('title')}</h1>
-      <LocaleSwitcher />
-    </div>
-  );
+  return <div>sign in</div>;
 };
 
 export default Page;

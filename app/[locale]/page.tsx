@@ -5,9 +5,5 @@ import SignIn from '@/components/SignIn';
 
 export default async function HomePage() {
   const t = await getTranslations('HomePage');
-  return (
-    <div>
-      <SignIn />
-    </div>
-  );
+  return <div></div>;
 }
