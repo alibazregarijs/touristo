@@ -14,7 +14,7 @@ import {
 
 const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [state, action] = useActionState(onSubmit, null, 'n/a');
+
   const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
     username: '',
@@ -29,10 +29,10 @@ const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Fix the onSubmit handler signature
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle sign-up logic here
-    console.log('Form submitted:', formData);
+    const result = await onSubmit(formData);
   };
 
   const inputFields = useInputMaker({
@@ -61,15 +61,17 @@ const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
           Create Your Account
         </Typography>
 
-        <Box
-          component="form"
-          ref={formRef}
-          action={action}
-          className="space-y-4"
-        >
-          {inputFields.map((field, index) => (
-            <TextField {...field} key={index} />
-          ))}
+        {/* Remove the data parameter from handleSubmit */}
+        <Box component="form" onSubmit={handleSubmit} className="space-y-4">
+          {inputFields.map((field, index) => {
+            if (page === 'sign-in' && field.name !== 'username') {
+              return <TextField {...field} key={index} />;
+            }
+            if (page === 'sign-up') {
+              return <TextField {...field} key={index} />;
+            }
+            return null; // Add return null for cases that don't match
+          })}
 
           <Button
             type="submit"
@@ -77,7 +79,7 @@ const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
             variant="contained"
             className="bg-pink-2 hover:bg-pink-1 mt-6 py-3 text-base font-semibold"
           >
-            Sign Up
+            {page === 'sign-in' ? 'Sign In' : 'Sign Up'}
           </Button>
 
           <Divider className="text-white-2 my-6">OR</Divider>
@@ -86,12 +88,14 @@ const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
 
         <Box className="mt-4 text-center">
           <Typography variant="body2" className="text-white-2">
-            Already have an account?{' '}
+            {page === 'sign-in'
+              ? "Don't have an account?"
+              : 'Already have an account?'}{' '}
             <a
-              href="/login"
+              href={page === 'sign-in' ? '/signup' : '/login'}
               className="text-pink-2 hover:text-pink-1 font-medium"
             >
-              Sign in
+              {page === 'sign-in' ? 'Sign up' : 'Sign in'}
             </a>
           </Typography>
         </Box>

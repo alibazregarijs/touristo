@@ -1,10 +1,21 @@
 import React from 'react';
-import { getTranslations } from 'next-intl/server';
-import LocaleSwitcher from '@/components/LocaleSwitcher';
+import AuthForm from '@/app/[locale]/(auth)/components/AuthForm';
+import { signIn } from '@/auth';
+import { signInWithCredentials } from '@/app/[locale]/(auth)/actions';
 
-const Page = async () => {
-  const t = await getTranslations('HomePage');
-  return <div>sign in</div>;
+const Page = () => {
+  return (
+    <AuthForm page="sign-in" onSubmit={signInWithCredentials}>
+      <form
+        action={async () => {
+          'use server';
+          await signIn('google');
+        }}
+      >
+        <button type="submit">Signin with Google</button>
+      </form>
+    </AuthForm>
+  );
 };
 
 export default Page;

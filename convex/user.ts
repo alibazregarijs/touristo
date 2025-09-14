@@ -1,6 +1,5 @@
-import { mutation } from './_generated/server';
+import { mutation, query } from './_generated/server';
 import { v } from 'convex/values';
-import { hash } from 'bcryptjs';
 
 export const createUserIfNotExists = mutation({
   args: {
@@ -40,5 +39,15 @@ export const createUserIfNotExists = mutation({
       password: args.password,
     });
     return { success: true, userId };
+  },
+});
+
+export const getUserByEmail = query({
+  args: { email: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query('users')
+      .withIndex('by_email', (q) => q.eq('email', args.email))
+      .unique();
   },
 });
