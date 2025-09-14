@@ -3,7 +3,8 @@ import { compare } from 'bcryptjs';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from '@/convex/_generated/api';
-
+import { Google } from '@mui/icons-material';
+import GoogleProvider from 'next-auth/providers/google';
 // Create a Convex HTTP client
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
@@ -12,6 +13,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: 'jwt',
   },
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
     CredentialsProvider({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -70,13 +75,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
     async redirect({ url, baseUrl }) {
-      // Redirect to 'en/' after sign-in or sign-out
-      // Check if the URL is related to sign-in or sign-out
-      if (url.includes('sign-in') || url.includes('signout')) {
-        return `${baseUrl}/en/`; // Redirect to 'en/' after authentication actions
-      }
-      // For other cases, return the default URL
-      return url.startsWith(baseUrl) ? url : baseUrl;
+      // Redirect to "/en" after successful sign-in
+      return `${baseUrl}/en`;
     },
   },
 });

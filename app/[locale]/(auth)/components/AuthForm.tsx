@@ -1,5 +1,5 @@
 'use client';
-import { useActionState, useState, useRef, useEffect } from 'react';
+import { useState, useRef, useTransition } from 'react';
 import { AuthFormProps } from '@/types';
 import { useInputMaker } from '@/app/[locale]/(auth)/hooks/useInputMaker';
 import {
@@ -14,6 +14,7 @@ import {
 
 const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
@@ -31,8 +32,10 @@ const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
 
   // Fix the onSubmit handler signature
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const result = await onSubmit(formData);
+    startTransition(async () => {
+      e.preventDefault();
+      const result = await onSubmit(formData);
+    });
   };
 
   const inputFields = useInputMaker({
@@ -45,8 +48,8 @@ const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
   return (
     <Container
       component="main"
-      maxWidth="sm"
-      className="flex max-h-screen items-center justify-center py-8"
+      maxWidth="md"
+      className="flex min-h-screen items-center justify-center"
     >
       <Paper
         elevation={8}
@@ -56,13 +59,12 @@ const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
           component="h1"
           variant="h4"
           align="center"
-          className="text-white-1 mb-6 font-bold"
+          className="text-white-1 mb-6! font-bold"
         >
           Create Your Account
         </Typography>
 
-        {/* Remove the data parameter from handleSubmit */}
-        <Box component="form" onSubmit={handleSubmit} className="space-y-4">
+        <Box component="form" onSubmit={handleSubmit} className="space-y-3!">
           {inputFields.map((field, index) => {
             if (page === 'sign-in' && field.name !== 'username') {
               return <TextField {...field} key={index} />;
@@ -70,7 +72,7 @@ const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
             if (page === 'sign-up') {
               return <TextField {...field} key={index} />;
             }
-            return null; // Add return null for cases that don't match
+            return null;
           })}
 
           <Button
