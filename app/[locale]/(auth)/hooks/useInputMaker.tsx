@@ -1,8 +1,12 @@
+'use client';
+
 import { Dispatch, SetStateAction } from 'react';
 import { InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { ChangeEvent, ReactNode } from 'react';
 import { TextFieldVariants } from '@mui/material';
+import { SignUpProps } from '@/types/zod';
+import { UseFormRegisterReturn, UseFormRegister } from 'react-hook-form';
 
 export type FormDataProps = {
   username: string;
@@ -21,8 +25,6 @@ export type FormFieldProps = {
   variant?: TextFieldVariants; // <-- 'outlined' | 'filled' | 'standard'
   className?: string;
   type?: string;
-  value: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   InputProps?: {
     // <-- instead of slotProps
     className?: string;
@@ -32,20 +34,19 @@ export type FormFieldProps = {
     // <-- instead of htmlInput
     className?: string;
   };
+  register: ReturnType<UseFormRegister<SignUpProps>>;
 };
 
 export type SignUpSchemaProps = FormFieldProps[];
 
 export const useInputMaker = ({
-  formData,
-  handleChange,
   setShowPassword,
   showPassword,
+  register,
 }: {
-  formData: FormDataProps;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setShowPassword: Dispatch<SetStateAction<boolean>>;
   showPassword: boolean;
+  register: UseFormRegister<SignUpProps>; // ✅ FIXED
 }): SignUpSchemaProps => {
   return [
     {
@@ -58,9 +59,8 @@ export const useInputMaker = ({
       autoFocus: true,
       variant: 'outlined',
       className: 'bg-black-1 rounded-lg',
-      value: formData.username,
-      onChange: handleChange,
       inputProps: { className: 'text-white-1' },
+      register: register('username'),
     },
     {
       required: true,
@@ -71,8 +71,7 @@ export const useInputMaker = ({
       autoComplete: 'email',
       variant: 'outlined',
       className: 'bg-black-1 rounded-lg',
-      value: formData.email,
-      onChange: handleChange,
+      register: register('email'),
       inputProps: { className: 'text-white-1' },
     },
     {
@@ -84,9 +83,8 @@ export const useInputMaker = ({
       autoComplete: 'new-password',
       variant: 'outlined',
       className: 'bg-black-1 rounded-lg',
+      register: register('password'),
       type: showPassword ? 'text' : 'password',
-      value: formData.password,
-      onChange: handleChange,
       InputProps: {
         className: 'text-white-1',
         endAdornment: (
