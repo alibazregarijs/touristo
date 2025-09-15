@@ -7,6 +7,12 @@ export const routing = defineRouting({
 
   // Used when no locale matches
   defaultLocale: 'en',
+  pathnames: {
+    '/sign-in': {
+      en: '/sign-in',
+      fa: '/sign-in',
+    },
+  },
 });
 
 // Lightweight wrappers around Next.js' navigation APIs

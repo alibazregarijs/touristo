@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { inter, fontVazir } from '../lib/Fonts';
+import { inter, fontVazir } from '@/lib/Fonts';
 import MuiThemeProvider from '@/lib/MuiThemeProvider';
 import TranslationProvider from '@/lib/TranslationProvider';
 import { DirectionProvider } from '@/lib/DirectionProvider'; // Adjust path as needed
 import { getLocale } from 'next-intl/server';
 import { cookies } from 'next/headers';
+import { ConvexClientProvider } from '@/lib/ConvexClientProvider';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -38,11 +39,13 @@ export default async function RootLayout({
         className={`${inter.variable} ${fontVazir.variable}`}
         suppressHydrationWarning
       >
-        <DirectionProvider initialDirection={direction}>
-          <TranslationProvider>
-            <MuiThemeProvider>{children}</MuiThemeProvider>
-          </TranslationProvider>
-        </DirectionProvider>
+        <ConvexClientProvider>
+          <DirectionProvider initialDirection={direction}>
+            <TranslationProvider>
+              <MuiThemeProvider>{children}</MuiThemeProvider>
+            </TranslationProvider>
+          </DirectionProvider>
+        </ConvexClientProvider>
       </body>
     </html>
   );
