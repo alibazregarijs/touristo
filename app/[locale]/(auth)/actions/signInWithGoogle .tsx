@@ -1,3 +1,5 @@
+'use server';
+
 import React from 'react';
 import { signIn } from '@/auth';
 import { Google } from '@mui/icons-material';

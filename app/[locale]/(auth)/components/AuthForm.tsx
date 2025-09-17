@@ -1,9 +1,13 @@
 'use client';
-import { useState, useRef, useTransition } from 'react';
+import { useState, useActionState } from 'react';
 import { AuthFormProps } from '@/types';
 import { useInputMaker } from '@/app/[locale]/(auth)/hooks/useInputMaker';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signUpSchema } from '@/types/zod';
+import { useTranslations } from 'next-intl';
+import LocaleSwitcher from '@/components/LocaleSwitcher';
+import { Google } from '@mui/icons-material';
+import { signInWithGoogle } from '@/app/[locale]/(auth)/actions';
+import Link from 'next/link';
 import {
   Container,
   Paper,
@@ -13,23 +17,34 @@ import {
   Box,
   Divider,
 } from '@mui/material';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import {
+  useForm,
+  SubmitHandler,
+  FieldValues,
+  FieldError,
+  Path,
+} from 'react-hook-form';
 
-import { SignUpProps } from '@/types/zod';
-
-const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
+const AuthForm = <T extends FieldValues>({
+  page,
+  onSubmit,
+  schema,
+}: AuthFormProps<T>) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [isPending, startTransition] = useTransition();
-
+  const [_, formAction] = useActionState(signInWithGoogle, null);
+  const t = useTranslations('AuthForm');
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<SignUpProps>({
-    resolver: zodResolver(signUpSchema), // Use the imported schema
+    formState: { errors, isSubmitting },
+  } = useForm<T>({
+    resolver: zodResolver(schema),
   });
 
-  const onSubmitForm: SubmitHandler<SignUpProps> = (data) => console.log(data);
+  const onSubmitForm: SubmitHandler<T> = async (data) => {
+    const res = await onSubmit(data);
+    console.log(res, 'result in submit');
+  };
 
   const inputFields = useInputMaker({
     setShowPassword,
@@ -37,7 +52,11 @@ const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
     register,
   });
 
-  console.log('register');
+  // Helper function to safely get error message
+  const getErrorMessage = (fieldName: string): string | undefined => {
+    const error = errors[fieldName as Path<T>];
+    return error ? (error as FieldError).message : undefined;
+  };
 
   return (
     <Container
@@ -63,7 +82,7 @@ const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
             },
           })}
         >
-          Create Your Account
+          {t('title')}
         </Typography>
 
         <Box
@@ -72,14 +91,14 @@ const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
           className="space-y-3!"
         >
           {inputFields.map((field, index) => {
+            const errorMessage = getErrorMessage(field.name);
+
             if (page === 'sign-in' && field.name !== 'username') {
               return (
                 <div key={field.name}>
                   <TextField {...field} {...field.register} key={index} />
                   <div className="mt-1">
-                    <p className="text-xl text-red-500">
-                      {errors[field.name as keyof SignUpProps]?.message}
-                    </p>
+                    <p className="text-xl text-red-500">{errorMessage}</p>
                   </div>
                 </div>
               );
@@ -89,9 +108,7 @@ const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
                 <div key={field.name}>
                   <TextField {...field} {...field.register} key={index} />
                   <div className="mt-1">
-                    <p className="text-xs text-red-500">
-                      {errors[field.name as keyof SignUpProps]?.message}
-                    </p>
+                    <p className="text-xs text-red-500">{errorMessage}</p>
                   </div>
                 </div>
               );
@@ -108,20 +125,31 @@ const AuthForm = ({ page, onSubmit, children }: AuthFormProps) => {
           </Button>
           <Divider className="text-white-2 my-6">OR</Divider>
         </Box>
-        <Box component="div">{children}</Box>
+
+        {/* Google Sign-In */}
+        <Box component="div">
+          <div className="flex items-center justify-center">
+            <form action={formAction}>
+              <button type="submit" className="mt-1 cursor-pointer">
+                <Google />
+              </button>
+            </form>
+          </div>
+        </Box>
 
         <Box className="mt-4 text-center">
           <Typography variant="body2" className="text-white-2">
             {page === 'sign-in'
               ? "Don't have an account?"
               : 'Already have an account?'}{' '}
-            <a
+            <Link
               href={page === 'sign-in' ? '/signup' : '/login'}
               className="text-pink-2 hover:text-pink-1 font-medium"
             >
               {page === 'sign-in' ? 'Sign up' : 'Sign in'}
-            </a>
+            </Link>
           </Typography>
+          <LocaleSwitcher />
         </Box>
       </Paper>
     </Container>

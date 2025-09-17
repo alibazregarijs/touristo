@@ -1,6 +1,6 @@
 {
-  "HomePage": {
-    "title": "Hello world!",
+  "AuthForm": {
+    "title": "Create your account",
     "welcome": {
       "title": "Welcome to the home page"
     },

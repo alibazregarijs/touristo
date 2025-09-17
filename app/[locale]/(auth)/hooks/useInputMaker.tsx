@@ -1,89 +1,75 @@
 'use client';
 
-import { Dispatch, SetStateAction } from 'react';
-import { InputAdornment, IconButton } from '@mui/material';
+import { Dispatch, SetStateAction, ReactNode } from 'react';
+import { InputAdornment, IconButton, TextFieldVariants } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { ChangeEvent, ReactNode } from 'react';
-import { TextFieldVariants } from '@mui/material';
-import { SignUpProps } from '@/types/zod';
-import { UseFormRegisterReturn, UseFormRegister } from 'react-hook-form';
+import { UseFormRegister, Path, FieldValues } from 'react-hook-form';
 
-export type FormDataProps = {
-  username: string;
-  email: string;
-  password: string;
-};
-
-export type FormFieldProps = {
-  required?: boolean; // <-- boolean
-  fullWidth?: boolean; // <-- boolean
+export type FormFieldProps<T extends FieldValues> = {
+  required?: boolean;
+  fullWidth?: boolean;
   id: string;
   label: string;
-  name: string;
+  name: Path<T>;
   autoComplete?: string;
-  autoFocus?: boolean; // <-- boolean
-  variant?: TextFieldVariants; // <-- 'outlined' | 'filled' | 'standard'
+  autoFocus?: boolean;
+  variant?: TextFieldVariants;
   className?: string;
   type?: string;
   InputProps?: {
-    // <-- instead of slotProps
     className?: string;
     endAdornment?: ReactNode;
   };
   inputProps?: {
-    // <-- instead of htmlInput
     className?: string;
   };
-  register: ReturnType<UseFormRegister<SignUpProps>>;
+  register: ReturnType<UseFormRegister<T>>;
 };
 
-export type SignUpSchemaProps = FormFieldProps[];
-
-export const useInputMaker = ({
+export const useInputMaker = <T extends FieldValues>({
   setShowPassword,
   showPassword,
   register,
 }: {
   setShowPassword: Dispatch<SetStateAction<boolean>>;
   showPassword: boolean;
-  register: UseFormRegister<SignUpProps>; // ✅ FIXED
-}): SignUpSchemaProps => {
+  register: UseFormRegister<T>;
+}): FormFieldProps<T>[] => {
   return [
     {
       required: true,
       fullWidth: true,
       id: 'username',
       label: 'Username',
-      name: 'username',
+      name: 'username' as Path<T>,
       autoComplete: 'username',
       autoFocus: true,
       variant: 'outlined',
       className: 'bg-black-1 rounded-lg',
       inputProps: { className: 'text-white-1' },
-      register: register('username'),
+      register: register('username' as Path<T>),
     },
     {
       required: true,
       fullWidth: true,
       id: 'email',
       label: 'Email Address',
-      name: 'email',
+      name: 'email' as Path<T>,
       autoComplete: 'email',
       variant: 'outlined',
       className: 'bg-black-1 rounded-lg',
-      register: register('email'),
       inputProps: { className: 'text-white-1' },
+      register: register('email' as Path<T>),
     },
     {
       required: true,
       fullWidth: true,
-      name: 'password',
-      label: 'Password',
       id: 'password',
+      name: 'password' as Path<T>,
+      label: 'Password',
       autoComplete: 'new-password',
       variant: 'outlined',
       className: 'bg-black-1 rounded-lg',
-      register: register('password'),
       type: showPassword ? 'text' : 'password',
       InputProps: {
         className: 'text-white-1',
@@ -101,6 +87,7 @@ export const useInputMaker = ({
         ),
       },
       inputProps: { className: 'text-white-1' },
+      register: register('password' as Path<T>),
     },
   ];
 };

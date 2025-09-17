@@ -15,8 +15,20 @@ export const muiCreateTheme = ({
     typography: {
       fontFamily:
         direction === 'ltr'
-          ? [Inter, Vazir, 'Arial', 'Helvetica', 'sans-serif'].join(',')
-          : [Vazir, Inter, 'Arial', 'Helvetica', 'sans-serif'].join(','),
+          ? [
+              'var(--font-inter)',
+              'var(--font-vazir)',
+              'Arial',
+              'Helvetica',
+              'sans-serif',
+            ].join(',')
+          : [
+              'var(--font-vazir)',
+              'var(--font-inter)',
+              'Arial',
+              'Helvetica',
+              'sans-serif',
+            ].join(','),
     },
     palette: {
       primary: {
