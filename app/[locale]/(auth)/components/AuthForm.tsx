@@ -46,6 +46,8 @@ const AuthForm = <T extends FieldValues>({
     resolver: zodResolver(schema),
   });
 
+  console.log('salam');
+
   const onSubmitForm: SubmitHandler<T> = async (data) => {
     const res = await onSubmit(data);
     if (!res.success) {
@@ -129,7 +131,7 @@ const AuthForm = <T extends FieldValues>({
               : t('alreadyHaveAnAccount')}
             <Link
               href={page === 'sign-in' ? '/signup' : '/login'}
-              className="text-pink-2 hover:text-pink-1 font-medium mx-1!"
+              className="text-pink-2 hover:text-pink-1 mx-1! font-medium"
             >
               {page === 'sign-in' ? t('signUp') : t('signIn')}
             </Link>
