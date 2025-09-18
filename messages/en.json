@@ -1,0 +1,17 @@
+{
+  "AuthForm": {
+    "title": "Create your account",
+    "inputFields": {
+      "username": "Username",
+      "email": "Email Address",
+      "password": "Password"
+    },
+    "devider":"OR",
+    "signIn": "Sign In",
+    "signinigIn": "Signing In...",
+    "signUp": "Sign Up",
+    "signingUp": "Signing Up...",
+    "alreadyHaveAnAccount": "Already have an account?",
+    "dontHaveAnAccount": "Don't have an account?"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "AuthForm": {
+    "title": "ساخت حساب",
+    "inputFields": {
+      "username": "نام کاربری",
+      "email": "ایمیل",
+      "password": "رمز ورود"
+    },
+    "devider": "یا",
+    "signIn": "ورود",
+    "signinigIn": "ورود به سیستم...",
+    "signUp": "ثبت نام",
+    "signingUp": "ثبت نام...",
+    "alreadyHaveAnAccount": "از قبل حساب دارید ؟",
+    "dontHaveAnAccount": "حساب ندارید؟"
+  }
+}
