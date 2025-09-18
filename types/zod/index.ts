@@ -1,24 +1,37 @@
+'use client';
+
 import { z } from 'zod';
+import { useTranslations } from 'next-intl';
 
-export const signInSchema = z.object({
-  email: z.string().min(1, 'Email is required').email('Invalid email address'),
-  password: z
-    .string()
-    .min(1, 'Password is required')
-    .min(6, 'Password must be at least 6 characters'),
-});
+export function useSchemas() {
+  const t = useTranslations('AuthForm');
 
-export const signUpSchema = z.object({
-  username: z
-    .string()
-    .min(1, 'Username is required')
-    .min(3, 'Username must be at least 3 characters')
-    .max(20, 'Username must be less than 20 characters'),
-  email: z.string().min(1, 'Email is required').email('Invalid email address'),
-  password: z
-    .string()
-    .min(1, 'Password is required')
-    .min(8, 'Password must be at least 8 characters'),
-});
+  const signInSchema = z.object({
+    email: z
+      .string()
+      .min(1, { message: t('zodError.emailRequired') })
+      .email({ message: t('zodError.emailInvalid') }),
+    password: z
+      .string()
+      .min(1, { message: t('zodError.passwordRequired') })
+      .min(6, { message: t('zodError.passwordMinLength') }),
+  });
 
-export type SignUpProps = z.infer<typeof signUpSchema>;
+  const signUpSchema = z.object({
+    username: z
+      .string()
+      .min(1, { message: t('zodError.usernameRequired') })
+      .min(3, { message: t('zodError.usernameMinLength') })
+      .max(20, { message: t('zodError.usernameMaxLength') }),
+    email: z
+      .string()
+      .min(1, { message: t('zodError.emailRequired') })
+      .email({ message: t('zodError.emailInvalid') }),
+    password: z
+      .string()
+      .min(1, { message: t('zodError.passwordRequired') })
+      .min(6, { message: t('zodError.passwordMinLength') }),
+  });
+
+  return { signInSchema, signUpSchema };
+}

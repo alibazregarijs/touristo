@@ -12,6 +12,15 @@
     "signUp": "ثبت نام",
     "signingUp": "ثبت نام...",
     "alreadyHaveAnAccount": "از قبل حساب دارید ؟",
-    "dontHaveAnAccount": "حساب ندارید؟"
+    "dontHaveAnAccount": "حساب ندارید؟",
+    "zodError": {
+      "emailRequired": "ایمیل الزامی است",
+      "emailInvalid": "ایمیل نامعتبر است",
+      "passwordRequired": "رمز ورود الزامی است",
+      "passwordMinLength": "رمز ورود باید حداقل 6 کاراکتر باشد",
+      "usernameRequired": "نام کاربری الزامی است",
+      "usernameMinLength": "نام کاربری باید حداقل 3 کاراکتر باشد",
+      "usernameMaxLength": "نام کاربری باید حداکثر 20 کاراکتر باشد"
+    }
   }
 }

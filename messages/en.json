@@ -6,12 +6,21 @@
       "email": "Email Address",
       "password": "Password"
     },
-    "devider":"OR",
+    "devider": "OR",
     "signIn": "Sign In",
     "signinigIn": "Signing In...",
     "signUp": "Sign Up",
     "signingUp": "Signing Up...",
     "alreadyHaveAnAccount": "Already have an account?",
-    "dontHaveAnAccount": "Don't have an account?"
+    "dontHaveAnAccount": "Don't have an account?",
+    "zodError": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email address",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 6 characters",
+      "usernameRequired": "Username is required",
+      "usernameMinLength": "Username must be at least 3 characters",
+      "usernameMaxLength": "Username must be less than 20 characters"
+    }
   }
 }

@@ -22,10 +22,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!credentials?.email || !credentials?.password) {
           return null; // Missing credentials
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
         try {
           // Call the Convex query directly using the HTTP client
           const user = await convex.query(api.user.getUserByEmail, {
