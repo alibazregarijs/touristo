@@ -1,20 +1,17 @@
 {
-  "HomePage": {
-    "title": "Hello world!",
-    "welcome": {
-      "title": "Welcome to the home page"
+  "AuthForm": {
+    "title": "Create your account",
+    "inputFields": {
+      "username": "Username",
+      "email": "Email Address",
+      "password": "Password"
     },
-    "contact": "Go to the contact page"
-  },
-  "contactForm": {
-    "name": "Name",
-    "email": "Email",
-    "message": "Message",
-    "submit": "Submit"
-  },
-  "validation": {
-    "invalid": "Email invalid",
-    "required": "Name required",
-    "min": "Message required to be at least 10 characters"
+    "devider":"OR",
+    "signIn": "Sign In",
+    "signinigIn": "Signing In...",
+    "signUp": "Sign Up",
+    "signingUp": "Signing Up...",
+    "alreadyHaveAnAccount": "Already have an account?",
+    "dontHaveAnAccount": "Don't have an account?"
   }
 }

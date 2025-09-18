@@ -8,9 +8,6 @@ export const createUserIfNotExists = mutation({
     password: v.string(),
   },
   handler: async (ctx, args) => {
-    console.log(args.email, 'email');
-    console.log(args.username, 'username');
-    console.log(args.password, 'password');
     // Query for existing user by email
     const existingUser = await ctx.db
       .query('users')

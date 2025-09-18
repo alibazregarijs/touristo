@@ -16,6 +16,10 @@
     "@emotion/react": "^11.14.0",
     "@emotion/server": "^11.11.0",
     "@emotion/styled": "^11.14.1",
+<<<<<<< HEAD
+=======
+    "@hookform/resolvers": "^5.2.2",
+>>>>>>> origin/master
     "@mui/icons-material": "^7.3.2",
     "@mui/material": "^7.3.2",
     "@mui/material-nextjs": "^7.3.2",
@@ -26,8 +30,15 @@
     "next-intl": "^4.3.7",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+<<<<<<< HEAD
     "stylis-plugin-rtl": "^2.1.1",
     "tailwindcss-animate": "^1.0.7"
+=======
+    "react-hook-form": "^7.62.0",
+    "stylis-plugin-rtl": "^2.1.1",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^4.1.8"
+>>>>>>> origin/master
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

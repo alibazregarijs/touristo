@@ -1,20 +1,17 @@
 {
-  "HomePage": {
-    "title": "سلام دنیا!",
-    "welcome": {
-      "title": "به صفحه خانه خوش آمدید"
+  "AuthForm": {
+    "title": "ساخت حساب",
+    "inputFields": {
+      "username": "نام کاربری",
+      "email": "ایمیل",
+      "password": "رمز ورود"
     },
-    "contact": "Aller à la page de contact"
-  },
-  "contactForm": {
-    "name": "Nom",
-    "email": "Email",
-    "message": "Message",
-    "submit": "Envoyer"
-  },
-  "validation": {
-    "invalid": "Email invalide",
-    "required": "Nom requis",
-    "min": "Message requis pour être au moins 10 caractères"
+    "devider": "یا",
+    "signIn": "ورود",
+    "signinigIn": "ورود به سیستم...",
+    "signUp": "ثبت نام",
+    "signingUp": "ثبت نام...",
+    "alreadyHaveAnAccount": "از قبل حساب دارید ؟",
+    "dontHaveAnAccount": "حساب ندارید؟"
   }
 }

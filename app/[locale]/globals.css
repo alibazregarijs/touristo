@@ -324,7 +324,3 @@
   background-image: --value(--overlay-*);
   box-shadow: --value(--shadow-*);
 }
-
-.font-vazir {
-  font-family: var(--font-vazir), sans-serif;
-}
