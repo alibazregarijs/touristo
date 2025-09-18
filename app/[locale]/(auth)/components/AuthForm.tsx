@@ -46,8 +46,6 @@ const AuthForm = <T extends FieldValues>({
     resolver: zodResolver(schema),
   });
 
-  console.log('salam');
-
   const onSubmitForm: SubmitHandler<T> = async (data) => {
     const res = await onSubmit(data);
     if (!res.success) {
