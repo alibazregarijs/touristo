@@ -4,3 +4,30 @@ export type AuthFormProps<T extends FieldValues> = {
   onSubmit: (data: T) => Promise<{ success: boolean; error?: string }>;
   schema: ZodType<T>;
 };
+
+interface AuthCredentials {
+  email: string;
+  password: string;
+  username: string;
+}
+
+export type FormFieldProps<T extends FieldValues> = {
+  required?: boolean;
+  fullWidth?: boolean;
+  id: string;
+  label: string;
+  name: Path<T>;
+  autoComplete?: string;
+  autoFocus?: boolean;
+  variant?: TextFieldVariants;
+  className?: string;
+  type?: string;
+  InputProps?: {
+    className?: string;
+    endAdornment?: ReactNode;
+  };
+  inputProps?: {
+    className?: string;
+  };
+  register: ReturnType<UseFormRegister<T>>;
+};

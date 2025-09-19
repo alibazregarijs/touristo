@@ -5,12 +5,7 @@ import { api } from '@/convex/_generated/api';
 import { hash } from 'bcryptjs';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
-
-interface AuthCredentials {
-  email: string;
-  password: string;
-  username: string;
-}
+import { type AuthCredentials } from '@/types/index';
 
 export const signUpAction = async (params: AuthCredentials) => {
   const { email, password, username } = params;

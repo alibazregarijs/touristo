@@ -5,27 +5,7 @@ import { InputAdornment, IconButton, TextFieldVariants } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { UseFormRegister, Path, FieldValues } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
-
-export type FormFieldProps<T extends FieldValues> = {
-  required?: boolean;
-  fullWidth?: boolean;
-  id: string;
-  label: string;
-  name: Path<T>;
-  autoComplete?: string;
-  autoFocus?: boolean;
-  variant?: TextFieldVariants;
-  className?: string;
-  type?: string;
-  InputProps?: {
-    className?: string;
-    endAdornment?: ReactNode;
-  };
-  inputProps?: {
-    className?: string;
-  };
-  register: ReturnType<UseFormRegister<T>>;
-};
+import { type FormFieldProps } from '@/types/index';
 
 export const useInputMaker = <T extends FieldValues>({
   setShowPassword,

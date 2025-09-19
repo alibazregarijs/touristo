@@ -26,7 +26,7 @@ import {
   Path,
   FieldErrors,
 } from 'react-hook-form';
-import { type FormFieldProps } from '@/app/[locale]/(auth)/hooks/useInputMaker';
+import { type FormFieldProps } from '@/types/index';
 
 const AuthForm = <T extends FieldValues>({
   page,
