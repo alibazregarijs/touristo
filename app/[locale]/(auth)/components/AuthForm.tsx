@@ -4,7 +4,6 @@ import { AuthFormProps } from '@/types';
 import { useInputMaker } from '@/app/[locale]/(auth)/hooks/useInputMaker';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import LocaleSwitcher from '@/components/LocaleSwitcher';
 import { Google } from '@mui/icons-material';
 import { signInWithGoogle } from '@/app/[locale]/(auth)/actions';
 import Link from 'next/link';
@@ -27,6 +26,7 @@ import {
   FieldErrors,
 } from 'react-hook-form';
 import { type FormFieldProps } from '@/types/index';
+import LocaleSwitcher from '@/components/LocaleSwitcher';
 
 const AuthForm = <T extends FieldValues>({
   page,
@@ -34,6 +34,7 @@ const AuthForm = <T extends FieldValues>({
   schema,
 }: AuthFormProps<T>) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [_, formAction] = useActionState(signInWithGoogle, null);
   const [errorMessage, setErrorMessage] = useState('');
   const [showError, setShowError] = useState(false);
@@ -47,9 +48,11 @@ const AuthForm = <T extends FieldValues>({
   });
 
   const onSubmitForm: SubmitHandler<T> = async (data) => {
+    setIsFormSubmitting(true);
     const res = await onSubmit(data);
     if (!res.success) {
-      setErrorMessage(res.error || 'Submission failed');
+      setIsFormSubmitting(false);
+      setErrorMessage(t(res.error as string) || t('submitionFailed'));
       setShowError(true);
     }
   };
@@ -97,7 +100,7 @@ const AuthForm = <T extends FieldValues>({
             type="submit"
             fullWidth
             variant="contained"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isFormSubmitting}
             className="bg-pink-2 hover:bg-pink-1 mt-6 py-3 text-base font-semibold"
           >
             {isSubmitting
@@ -109,6 +112,7 @@ const AuthForm = <T extends FieldValues>({
                 : t('signUp')}
           </Button>
           <Divider className="text-white-2 my-6">{t('devider')}</Divider>
+          <LocaleSwitcher />
         </Box>
 
         {/* Google Sign-In */}

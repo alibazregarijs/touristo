@@ -1,13 +1,12 @@
-import React from 'react';
+import Link from 'next/link';
 import StoreOAuthUser from '@/app/[locale]/(auth)/components/StoreOAuthUser';
 
-const Page = () => {
+export default function Page() {
   return (
     <div>
-      <StoreOAuthUser />
-      page after auth
+      <h1>Home</h1>
+      <Link href="/about">About</Link>
+      {/* <StoreOAuthUser /> */}
     </div>
   );
-};
-
-export default Page;
+}
