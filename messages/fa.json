@@ -10,6 +10,8 @@
     "signIn": "ورود",
     "signinigIn": "ورود به سیستم...",
     "signUp": "ثبت نام",
+    "signUpUserExistError": "ایمیل قبلا ثبت شده است",
+    "submitionFailed": "ثبت نام ناموفق بود",
     "signingUp": "ثبت نام...",
     "alreadyHaveAnAccount": "از قبل حساب دارید ؟",
     "dontHaveAnAccount": "حساب ندارید؟",

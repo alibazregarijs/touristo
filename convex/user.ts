@@ -18,7 +18,7 @@ export const createUserIfNotExists = mutation({
       // User already exists, return their ID or handle as needed
       return {
         success: false,
-        error: 'User already exists',
+        error: 'signUpUserExistError',
       };
     }
 
@@ -26,7 +26,7 @@ export const createUserIfNotExists = mutation({
     if (!args.username) {
       return {
         success: false,
-        error: 'Username is required',
+        error: 'usernameRequired',
       };
     }
 

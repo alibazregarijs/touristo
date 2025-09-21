@@ -10,9 +10,11 @@
     "signIn": "Sign In",
     "signinigIn": "Signing In...",
     "signUp": "Sign Up",
+    "signUpUserExistError": "Email already exists",
     "signingUp": "Signing Up...",
     "alreadyHaveAnAccount": "Already have an account?",
     "dontHaveAnAccount": "Don't have an account?",
+    "submitionFailed": "Submission failed",
     "zodError": {
       "emailRequired": "Email is required",
       "emailInvalid": "Invalid email address",
