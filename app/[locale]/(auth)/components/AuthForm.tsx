@@ -146,7 +146,7 @@ const AuthForm = <T extends FieldValues>({
           onClose={() => setShowError(false)}
         >
           <Alert severity="error" onClose={() => setShowError(false)}>
-            {errorMessage}
+            <p data-testid="error-message">{errorMessage}</p>
           </Alert>
         </Snackbar>
       </Paper>
