@@ -15,6 +15,9 @@
     "signingUp": "ثبت نام...",
     "alreadyHaveAnAccount": "از قبل حساب دارید ؟",
     "dontHaveAnAccount": "حساب ندارید؟",
+    "invalidErrorPassword": "رمز ورود نامعتبر است",
+    "signInUserExistError": "کاربر وجود ندارد",
+    "missingCredentials": "اطلاعات ورود معتبر نمیباشد",
     "zodError": {
       "emailRequired": "ایمیل الزامی است",
       "emailInvalid": "ایمیل نامعتبر است",
