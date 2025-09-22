@@ -12,6 +12,14 @@ export const routing = defineRouting({
       en: '/sign-in',
       fa: '/sign-in',
     },
+    '/AllUser': {
+      en: '/AllUser',
+      fa: '/AllUser',
+    },
+    '/AItrips': {
+      en: '/AItrips',
+      fa: '/AItrips',
+    },
   },
 });
 

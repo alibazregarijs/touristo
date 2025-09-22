@@ -30,7 +30,7 @@ const config: Config = {
         'pink-2': '#fd366e',
         'pink-3': '#2c1b24',
         'white-1': '#c3c3c6',
-        'white-2': '#a0a0a4',
+        'white-2': '#7F7E83',
       },
     },
   },
