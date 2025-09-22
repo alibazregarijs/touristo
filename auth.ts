@@ -1,12 +1,10 @@
 import NextAuth, { User } from 'next-auth';
 import { compare } from 'bcryptjs';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { ConvexHttpClient } from 'convex/browser';
 import { api } from '@/convex/_generated/api';
-import { Google } from '@mui/icons-material';
+import { convex } from '@/lib/Convex';
 import GoogleProvider from 'next-auth/providers/google';
 // Create a Convex HTTP client
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {

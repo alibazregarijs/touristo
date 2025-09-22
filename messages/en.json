@@ -15,6 +15,9 @@
     "alreadyHaveAnAccount": "Already have an account?",
     "dontHaveAnAccount": "Don't have an account?",
     "submitionFailed": "Submission failed",
+    "invalidErrorPassword": "Invalid password",
+    "signInUserExistError": "User does not exist",
+    "missingCredentials": "Missing credentials",
     "zodError": {
       "emailRequired": "Email is required",
       "emailInvalid": "Invalid email address",
