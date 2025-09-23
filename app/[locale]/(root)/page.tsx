@@ -1,8 +1,7 @@
-import { Box, Typography } from '@mui/material';
-export default function Page() {
-  return (
-    <Box>
-      <Typography>Hello world</Typography>
-    </Box>
-  );
-}
+import React from 'react';
+
+const Page = () => {
+  return <div>dashboard 2222</div>;
+};
+
+export default Page;

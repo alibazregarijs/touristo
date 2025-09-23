@@ -1,11 +1,9 @@
-'use client';
 import { Box, Stack, Typography, Divider } from '@mui/material';
 import React from 'react';
 import Image from 'next/image';
-import SidebarItems from '@/app/[locale]/(root)/@sidebar/components/SidebarItems';
-import { usePathname } from 'next/navigation';
+import SidebarItems from '@/components/SidebarItems';
+
 const Page = () => {
-  const pathname = usePathname();
   return (
     <Box
       sx={{

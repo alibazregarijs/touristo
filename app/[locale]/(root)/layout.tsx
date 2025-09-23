@@ -1,13 +1,8 @@
 import React from 'react';
 import { Grid } from '@mui/material';
+import Sidebar from '@/components/Sidebar';
 
-const Layout = ({
-  children,
-  sidebar,
-}: {
-  children: React.ReactNode;
-  sidebar: React.ReactNode;
-}) => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <Grid
       container
@@ -19,7 +14,9 @@ const Layout = ({
       }}
     >
       {/* Sidebar */}
-      <Grid size={{ xs: 12, md: 2 }}>{sidebar}</Grid>
+      <Grid size={{ xs: 12, md: 2 }}>
+        <Sidebar />
+      </Grid>
 
       {/* Main content */}
       <Grid size={{ xs: 12, md: 10 }}>{children}</Grid>
