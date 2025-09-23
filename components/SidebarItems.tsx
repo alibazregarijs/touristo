@@ -9,7 +9,7 @@ const SidebarItems = () => {
   const pathname = usePathname();
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
-      {sidebarItems.map((item, index) => {
+      {sidebarItems.map((item) => {
         const isActive = pathname === item.href;
         return (
           <Box key={item.name} sx={{ mx: '10px', mt: '30px' }}>

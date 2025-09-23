@@ -25,7 +25,7 @@ const config: Config = {
         vazir: ['var(--font-vazir)', 'sans-serif'], // local
       },
       colors: {
-        'black-1': '#19191c',
+        'black-1': '#141627',
         'pink-1': '#70243c',
         'pink-2': '#fd366e',
         'pink-3': '#2c1b24',

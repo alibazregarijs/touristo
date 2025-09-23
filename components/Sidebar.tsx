@@ -15,7 +15,6 @@ const Page = () => {
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
         backgroundColor: '#FFFFFF',
-        height: '50vh',
       }}
     >
       <Box sx={{ height: '100%', width: '100%' }}>
@@ -53,10 +52,71 @@ const Page = () => {
         />
         <SidebarItems />
       </Box>
+      <Stack
+        direction="row" // horizontal layout
+        alignItems="center" // vertically centered
+        justifyContent="center" // horizontally left aligned
+        className="mt-48"
+        sx={{
+          height: '100%',
+          width: '100%',
+          padding: '0 4px',
+        }}
+        spacing={0.5} // gap between boxes
+      >
+        <Box>
+          <Image
+            src="/images/user-profile.png"
+            quality={100}
+            className="rounded-full"
+            alt="user-profile"
+            width={40}
+            height={40}
+          />
+        </Box>
+        <Box>
+          <Stack direction="column" spacing={{ xs: 0, lg: 0.5 }}>
+            <Typography
+              className="text-black-1"
+              fontWeight={600}
+              noWrap
+              sx={{
+                maxWidth: 90,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                fontSize: { xs: '10px', md: '12px', lg: '14px' }, // bigger on lg+
+                lineHeight: { xs: '12px', md: '14px', lg: '18px' }, // adjust line height accordingly
+              }}
+            >
+              Username
+            </Typography>
 
-      {/* <Box sx={{height:'100%',width:'100%'}}>
-
-      </Box> */}
+            <Typography
+              noWrap
+              fontWeight={400}
+              sx={{
+                maxWidth: 90,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                fontSize: { xs: '6px', md: '10px', lg: '12px' }, // smaller than Username
+                lineHeight: { xs: '10px', md: '12px', lg: '16px' }, // adjust for readability
+              }}
+            >
+              adrian@gmail.com
+            </Typography>
+          </Stack>
+        </Box>
+        <Box>
+          <Typography>
+            <Image
+              src="/icons/logout.png"
+              alt="user-profile"
+              width={24}
+              height={24}
+            />
+          </Typography>
+        </Box>
+      </Stack>
     </Box>
   );
 };
