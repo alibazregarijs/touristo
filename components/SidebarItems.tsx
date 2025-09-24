@@ -5,8 +5,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { sidebarItems } from '@/constants';
-const SidebarItems = () => {
+
+const SidebarItems = ({ isDrawer }: { isDrawer?: boolean }) => {
   const pathname = usePathname();
+  let isDrawerClass;
+  if (isDrawer) {
+    isDrawerClass = 'bg-[#70243c] text-white hover:bg-[#5a1d30]';
+  } else {
+    isDrawerClass = 'text-white-2';
+  }
   return (
     <Box>
       {sidebarItems.map((item) => {
@@ -15,10 +22,22 @@ const SidebarItems = () => {
           <Box key={item.name} sx={{ marginX: '0.5rem', paddingY: '0.5rem' }}>
             <Link
               href={item.href}
-              className={`flex h-[50px] items-center gap-2 rounded-[10px] ${isActive ? 'bg-[#70243c] text-white hover:bg-[#5a1d30]' : 'text-white-2'} px-2! py-2 transition-colors`}
+              className={`flex h-[50px] items-center gap-2 rounded-[10px] ${
+                isActive
+                  ? 'bg-[#70243c] text-white hover:bg-[#5a1d30]' // active (drawer or not)
+                  : isDrawer
+                    ? 'text-white' // inactive + drawer
+                    : 'text-white-2' // inactive + not drawer
+              } px-2! py-2 transition-colors`}
             >
               <Image
-                src={isActive ? item.icon_hover : item.icon}
+                src={
+                  isDrawer
+                    ? item.icon_hover
+                    : isActive
+                      ? item.icon_hover
+                      : item.icon
+                }
                 alt={item.name}
                 width={20}
                 height={20}

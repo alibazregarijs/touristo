@@ -35,9 +35,14 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={locale} dir={direction} suppressHydrationWarning>
+    <html
+      lang={locale}
+      className="no-scrollbar"
+      dir={direction}
+      suppressHydrationWarning
+    >
       <body
-        className={`${inter.variable} ${fontVazir.variable}`}
+        className={`${inter.variable} ${fontVazir.variable} bg-[#F9FBFC]!`}
         suppressHydrationWarning
       >
         <SessionProvider>

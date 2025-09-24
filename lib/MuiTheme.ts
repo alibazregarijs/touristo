@@ -32,8 +32,8 @@ export const muiCreateTheme = ({
     },
     palette: {
       primary: {
-        main: '#fd366e', // pink-2
-        light: '#70243c', // pink-1
+        light: '#fd366e', // pink-2
+        main: '#70243c', // pink-1
         dark: '#2c1b24', // pink-3
       },
       background: {
