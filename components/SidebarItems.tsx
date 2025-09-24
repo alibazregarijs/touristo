@@ -8,11 +8,11 @@ import { sidebarItems } from '@/constants';
 const SidebarItems = () => {
   const pathname = usePathname();
   return (
-    <Box sx={{ height: '100%', width: '100%' }}>
+    <Box>
       {sidebarItems.map((item) => {
         const isActive = pathname === item.href;
         return (
-          <Box key={item.name} sx={{ mx: '10px', mt: '30px' }}>
+          <Box key={item.name} sx={{ marginX: '0.5rem', paddingY: '0.5rem' }}>
             <Link
               href={item.href}
               className={`flex h-[50px] items-center gap-2 rounded-[10px] ${isActive ? 'bg-[#70243c] text-white hover:bg-[#5a1d30]' : 'text-white-2'} px-2! py-2 transition-colors`}

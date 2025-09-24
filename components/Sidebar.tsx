@@ -1,124 +1,83 @@
-import { Box, Stack, Typography, Divider } from '@mui/material';
 import React from 'react';
+import { Box, Divider, Stack, Typography } from '@mui/material';
 import Image from 'next/image';
 import SidebarItems from '@/components/SidebarItems';
 
-const Page = () => {
+const Sidebar = () => {
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        borderTopLeftRadius: '16px',
-        borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 0,
-        backgroundColor: '#FFFFFF',
+        display: 'grid',
+        minHeight: '100vh',
+        width: '100%',
+        paddingTop: '1rem',
+        alignContent: 'space-between', // distributes rows
       }}
     >
-      <Box sx={{ height: '100%', width: '100%' }}>
-        {/* Outer vertical stack */}
-        <Stack>
-          {/* Row with logo + text */}
-          <Stack
-            direction="row"
-            spacing={0.5}
-            alignItems="center"
-            className="mt-[12px] ml-[10px] lg:ml-[20px]"
-          >
-            <Image src="/images/logo.png" alt="logo" width={30} height={30} />
-            <Typography
-              sx={{
-                color: '#1F1F36',
-                lineHeight: '24px',
-                fontWeight: 700,
-                fontSize: '18px',
-              }}
-            >
-              Touristo
-            </Typography>
-          </Stack>
-
-          {/* Divider below the row */}
+      {/* top section */}
+      <Box>
+        <Stack
+          direction="row"
+          justifyContent="start"
+          alignItems="center"
+          spacing={0.5}
+          sx={{ paddingX: '1rem' }}
+        >
+          <Image src="/images/logo.png" alt="logo" width={30} height={30} />
+          <Typography className="text-black-1">Touristo</Typography>
         </Stack>
+
         <Divider
+          variant="fullWidth"
           sx={{
-            mt: '12px',
-            mx: '10px',
-            lg: { mx: '20px' },
+            my: 4,
             borderColor: '#ECF2EF',
+            paddingX: '1rem',
           }}
         />
-        <SidebarItems />
-      </Box>
-      <Stack
-        direction="row" // horizontal layout
-        alignItems="center" // vertically centered
-        justifyContent="center" // horizontally left aligned
-        className="mt-48"
-        sx={{
-          height: '100%',
-          width: '100%',
-          padding: '0 4px',
-        }}
-        spacing={0.5} // gap between boxes
-      >
-        <Box>
-          <Image
-            src="/images/user-profile.png"
-            quality={100}
-            className="rounded-full"
-            alt="user-profile"
-            width={40}
-            height={40}
-          />
-        </Box>
-        <Box>
-          <Stack direction="column" spacing={{ xs: 0, lg: 0.5 }}>
-            <Typography
-              className="text-black-1"
-              fontWeight={600}
-              noWrap
-              sx={{
-                maxWidth: 90,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                fontSize: { xs: '10px', md: '12px', lg: '14px' }, // bigger on lg+
-                lineHeight: { xs: '12px', md: '14px', lg: '18px' }, // adjust line height accordingly
-              }}
-            >
-              Username
-            </Typography>
 
-            <Typography
-              noWrap
-              fontWeight={400}
-              sx={{
-                maxWidth: 90,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                fontSize: { xs: '6px', md: '10px', lg: '12px' }, // smaller than Username
-                lineHeight: { xs: '10px', md: '12px', lg: '16px' }, // adjust for readability
-              }}
-            >
-              adrian@gmail.com
-            </Typography>
-          </Stack>
+        <Box justifyContent="center">
+          <SidebarItems />
         </Box>
-        <Box>
-          <Typography>
-            <Image
-              src="/icons/logout.png"
-              alt="user-profile"
-              width={24}
-              height={24}
-            />
+      </Box>
+
+      {/* bottom section */}
+      <Box sx={{ p: '1rem', display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Image
+          className="hidden rounded-full lg:flex"
+          src="/images/user-profile.png"
+          alt="user-profile"
+          width={40}
+          height={40}
+        />
+        <Box sx={{ display: 'grid' }}>
+          <Typography
+            fontSize={'14px'}
+            lineHeight={'20px'}
+            fontWeight={600}
+            className="text-black-1 truncate overflow-hidden font-semibold text-ellipsis"
+          >
+            Adrian Hajdin
+          </Typography>
+          <Typography
+            fontWeight={400}
+            fontSize={'12px'}
+            className="truncate overflow-hidden text-ellipsis text-[##7F7E83]"
+          >
+            adrian@jsmaster.com
           </Typography>
         </Box>
-      </Stack>
+        <Box>
+          <Image
+            src="/icons/logout.png"
+            alt="language"
+            width={24}
+            height={24}
+          />
+        </Box>
+      </Box>
     </Box>
   );
 };
 
-export default Page;
+export default Sidebar;
