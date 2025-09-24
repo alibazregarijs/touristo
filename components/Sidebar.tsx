@@ -46,6 +46,7 @@ const Sidebar = () => {
         width: '100%',
         paddingTop: '1rem',
         alignContent: 'space-between',
+        borderRight: '1px solid #ECF2EF',
       }}
     >
       {/* top section */}
@@ -66,7 +67,7 @@ const Sidebar = () => {
           sx={{
             my: 4,
             borderColor: '#ECF2EF',
-            paddingX: '1rem',
+            marginX: '1rem',
           }}
         />
 
