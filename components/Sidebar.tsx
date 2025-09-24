@@ -47,6 +47,7 @@ const Sidebar = () => {
         paddingTop: '1rem',
         alignContent: 'space-between',
         borderRight: '1px solid #ECF2EF',
+        borderBottom: '1px solid #ECF2EF',
       }}
     >
       {/* top section */}

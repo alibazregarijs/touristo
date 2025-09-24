@@ -31,3 +31,11 @@ export type FormFieldProps<T extends FieldValues> = {
   };
   register: ReturnType<UseFormRegister<T>>;
 };
+
+// Users card props type
+export type State = (typeof STATES)[keyof typeof STATES];
+
+export interface UsersCardProps {
+  state: State;
+  data: number[];
+}
