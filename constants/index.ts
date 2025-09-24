@@ -13,7 +13,7 @@ export const sidebarItems = [
     icon_hover: '/icons/profile-2user-hover.png',
   },
   {
-    name: 'AI trips',
+    name: 'AI Trips',
     href: '/en/AI-trips',
     icon: '/icons/map.png',
     icon_hover: '/icons/map-hover.png',
