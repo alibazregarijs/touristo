@@ -6,6 +6,7 @@ import StatsCards from '@/app/[locale]/(dashboard)/components/StatsCards';
 import TripsCard from '@/app/[locale]/(dashboard)/components/Trips';
 import UserGrowthChart from './components/UserGrowthChart';
 import TripTrendsChart from './components/TripTrendsChart';
+import LatestUserSignups from './components/LatestUserSignups';
 const Page = () => {
   return (
     <Box
@@ -25,6 +26,12 @@ const Page = () => {
         <Grid size={{ xs: 12, lg: 6 }}>
           <TripTrendsChart />
         </Grid>
+      </Grid>
+      <Grid container spacing={2} mt={4}>
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <LatestUserSignups />
+        </Grid>
+        <Grid size={{ xs: 12, lg: 6 }}></Grid>
       </Grid>
     </Box>
   );
