@@ -11,7 +11,13 @@ export default function UsersCard({ state, data }: UsersCardProps) {
   const lineColor = isUp ? '#12B76A' : '#F04438';
 
   return (
-    <Card sx={{ p: 2 }}>
+    <Card
+      sx={{
+        p: 2,
+        boxShadow: '0px 2px 6px 0px #0D0A2C14',
+        borderRadius: '20px',
+      }}
+    >
       <CardContent>
         <Typography variant="subtitle2">{STATE_LABELS[state]}</Typography>
         <Typography variant="h5" fontWeight={600}>

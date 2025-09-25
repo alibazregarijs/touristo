@@ -1,31 +1,20 @@
 import React from 'react';
 import { Box, Grid, Typography, Divider, Stack } from '@mui/material';
 import Image from 'next/image';
+import { userData } from '@/constants';
 
-const userData = [
-  {
-    name: 'James Anderson',
-    itineraryCreated: '12',
-    image: '/images/user-1.png',
-  },
-  {
-    name: 'James Alexander',
-    itineraryCreated: '6',
-    image: '/images/user-2.png',
-  },
-  {
-    name: 'Hana Anderson',
-    itineraryCreated: '6',
-    image: '/images/user-3.png',
-  },
-  {
-    name: 'Awadhi Thomas',
-    itineraryCreated: '16',
-    image: '/images/user-4.png',
-  },
-];
+type itemT = {
+  name: string;
+  itineraryCreated: string;
+  image: string;
+};
 
-const LatestUserSignups = () => {
+interface Props {
+  lastUser?: boolean;
+  item: itemT[];
+}
+
+const LatestUserSignups = ({ lastUser = false, item }: Props) => {
   return (
     <Box
       p={4}
@@ -33,6 +22,7 @@ const LatestUserSignups = () => {
         backgroundColor: '#FFFFFF',
         boxShadow: '0px 2px 6px 0px #0D0A2C14',
         borderRadius: '20px',
+        maxHeight: '400px',
       }}
     >
       {/* Title */}
@@ -44,7 +34,7 @@ const LatestUserSignups = () => {
             fontWeight={600}
             className="text-black-1"
           >
-            Latest user signups
+            {lastUser ? 'Latest user signups' : 'Latest trip bookings'}
           </Typography>
         </Grid>
       </Grid>
@@ -69,19 +59,13 @@ const LatestUserSignups = () => {
             mb={1}
           >
             <Typography fontWeight={400} fontSize="10px" lineHeight="14px">
-              NAME
+              {lastUser ? 'NAME' : 'BOOKING'}
             </Typography>
             <Typography fontWeight={400} fontSize="10px" lineHeight="14px">
-              ITINERARY CREATED
+              {lastUser ? ' ITINERARY CREATED' : 'TRAVEL DATES'}
             </Typography>
           </Stack>
-        </Grid>
-      </Grid>
-
-      {/* User Row */}
-      <Grid container>
-        <Grid size={{ xs: 12 }}>
-          {userData.map((user, index) => (
+          {item.map((user, index) => (
             <Stack
               key={index}
               direction="row"
@@ -111,9 +95,9 @@ const LatestUserSignups = () => {
               <Typography
                 className="text-black-1"
                 fontWeight={400}
-                paddingRight={'5.7rem'}
                 fontSize="10px"
                 lineHeight="14px"
+                paddingRight={lastUser ? '5.7rem' : '0'}
               >
                 {user.itineraryCreated}
               </Typography>

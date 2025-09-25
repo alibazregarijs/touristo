@@ -7,6 +7,7 @@ import TripsCard from '@/app/[locale]/(dashboard)/components/Trips';
 import UserGrowthChart from './components/UserGrowthChart';
 import TripTrendsChart from './components/TripTrendsChart';
 import LatestUserSignups from './components/LatestUserSignups';
+import { tripData, userData } from '@/constants';
 const Page = () => {
   return (
     <Box
@@ -29,9 +30,11 @@ const Page = () => {
       </Grid>
       <Grid container spacing={2} mt={4}>
         <Grid size={{ xs: 12, lg: 6 }}>
-          <LatestUserSignups />
+          <LatestUserSignups item={userData} lastUser={true} />
         </Grid>
-        <Grid size={{ xs: 12, lg: 6 }}></Grid>
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <LatestUserSignups item={tripData} />
+        </Grid>
       </Grid>
     </Box>
   );

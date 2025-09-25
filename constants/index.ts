@@ -33,3 +33,49 @@ export const STATE_LABELS: Record<State, string> = {
   total_trips: 'Trips',
   active_users_today: 'Active Users Today',
 };
+
+export const userData = [
+  {
+    name: 'James Anderson',
+    itineraryCreated: '12',
+    image: '/images/user-1.png',
+  },
+  {
+    name: 'James Alexander',
+    itineraryCreated: '6',
+    image: '/images/user-2.png',
+  },
+  {
+    name: 'Hana Anderson',
+    itineraryCreated: '6',
+    image: '/images/user-3.png',
+  },
+  {
+    name: 'Awadhi Thomas',
+    itineraryCreated: '16',
+    image: '/images/user-4.png',
+  },
+];
+
+export const tripData = [
+  {
+    name: 'James Anderson',
+    itineraryCreated: 'Jun 02 - Jun 12',
+    image: '/images/trip-1.png',
+  },
+  {
+    name: 'James Alexander',
+    itineraryCreated: 'Jun 07 - Jun 09',
+    image: '/images/trip-2.png',
+  },
+  {
+    name: 'Hana Anderson',
+    itineraryCreated: 'Jun 10 - Jun 23',
+    image: '/images/trip-3.png',
+  },
+  {
+    name: 'Awadhi Thomas',
+    itineraryCreated: 'Jun 12 - Jun 26',
+    image: '/images/trip-4.png',
+  },
+];
