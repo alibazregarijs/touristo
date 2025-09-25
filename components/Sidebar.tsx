@@ -4,7 +4,7 @@ import { Box, Stack, Typography, Divider, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Image from 'next/image';
 import SidebarItems from '@/components/SidebarItems';
-import MobileNavbar from '@/components/MobileNavbar';
+import MobileNavbar from '@/app/[locale]/(dashboard)/components/MobileNavbar';
 
 const Sidebar = () => {
   const theme = useTheme();

@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
 import { Box } from '@mui/material';
-import Header from '@/components/Header';
-import StatsCards from '@/components/StatsCards';
+import Header from '@/app/[locale]/(dashboard)/components/Header';
+import StatsCards from '@/app/[locale]/(dashboard)/components/StatsCards';
 import TripsCard from '@/app/[locale]/(dashboard)/components/Trips';
 const Page = () => {
   return (

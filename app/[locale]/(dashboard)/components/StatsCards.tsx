@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import React from 'react';
-import UsersCard from '@/components/UsersCard';
+import UsersCard from '@/app/[locale]/(dashboard)/components/UsersCard';
 const StatsCards = () => {
   return (
     <Grid container spacing={1} mt={2}>
