@@ -5,6 +5,7 @@ import Header from '@/app/[locale]/(dashboard)/components/Header';
 import StatsCards from '@/app/[locale]/(dashboard)/components/StatsCards';
 import TripsCard from '@/app/[locale]/(dashboard)/components/Trips';
 import UserGrowthChart from './components/UserGrowthChart';
+import TripTrendsChart from './components/TripTrendsChart';
 const Page = () => {
   return (
     <Box
@@ -18,11 +19,11 @@ const Page = () => {
       <StatsCards />
       <TripsCard />
       <Grid container spacing={2} mt={4}>
-        <Grid size={{ lg: 6 }}>
+        <Grid size={{ xs: 12, lg: 6 }}>
           <UserGrowthChart />
         </Grid>
-        <Grid size={{ lg: 6 }}>
-          <UserGrowthChart />
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <TripTrendsChart />
         </Grid>
       </Grid>
     </Box>
