@@ -9,13 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 import Image from 'next/image';
-
-type TripT = {
-  title: string;
-  location: string;
-  buttons: string[];
-  image: string;
-};
+import { type TripT } from '@/types';
 
 const TripsStateCard = ({ trip }: { trip: TripT }) => {
   return (

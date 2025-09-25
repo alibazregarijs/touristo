@@ -39,3 +39,11 @@ export interface UsersCardProps {
   state: State;
   data: number[];
 }
+
+// Trips card props type
+type TripT = {
+  title: string;
+  location: string;
+  buttons: string[];
+  image: string;
+};

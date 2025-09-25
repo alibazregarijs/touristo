@@ -35,7 +35,6 @@ const TripsCard = () => {
       {tripsObj.map((trip) => (
         <Grid size={{ xs: 6, lg: 3 }} key={trip.title}>
           <TripsStateCard trip={trip} />
-          <TripsStateCard trip={trip} />
         </Grid>
       ))}
     </Grid>
