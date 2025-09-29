@@ -1,0 +1,93 @@
+import React, { useEffect } from 'react';
+import { USER_INFO } from '@/constants';
+import usePagination from '@mui/material/usePagination';
+import { Box, Stack, Button } from '@mui/material';
+
+interface UserInfoI {
+  name: string;
+  email_address: string;
+  data_joined: string;
+  itinerary_created: string;
+  status: string;
+  image: string;
+}
+
+const Pagination = ({
+  setUsersToShow,
+}: {
+  setUsersToShow: React.Dispatch<React.SetStateAction<UserInfoI[]>>;
+}) => {
+  const [page, setPage] = React.useState(1);
+  const PER_PAGE = 4;
+
+  const count = Math.ceil(USER_INFO.length / PER_PAGE);
+
+  const { items } = usePagination({
+    count,
+    page,
+    onChange: (_e, value) => setPage(value),
+  });
+
+  const start = (page - 1) * PER_PAGE;
+  const end = start + PER_PAGE;
+  const usersToShow = USER_INFO.slice(start, end);
+
+  useEffect(() => {
+    setUsersToShow(usersToShow);
+  }, [page]);
+  return (
+    <Box>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        p={2}
+      >
+        {/* Previous button on the left */}
+        <Button
+          variant="outlined"
+          disabled={page === 1}
+          onClick={() => setPage((prev) => prev - 1)}
+        >
+          Previous
+        </Button>
+
+        {/* Page numbers in the middle */}
+        <Stack direction="row" spacing={1}>
+          {items.map(({ page: p, type, selected, ...item }, index) => {
+            if (type === 'page') {
+              return (
+                <Button
+                  key={index}
+                  variant={selected ? 'contained' : 'outlined'}
+                  {...item}
+                >
+                  {p}
+                </Button>
+              );
+            }
+            if (type === 'start-ellipsis' || type === 'end-ellipsis') {
+              return (
+                <span key={index} style={{ padding: '0 8px' }}>
+                  …
+                </span>
+              );
+            }
+            return null; // skip previous/next here
+          })}
+        </Stack>
+
+        {/* Next button on the right */}
+        <Button
+          variant="outlined"
+          disabled={page === count}
+          onClick={() => setPage((prev) => prev + 1)}
+        >
+          Next
+        </Button>
+      </Stack>
+    </Box>
+  );
+};
+
+export default Pagination;
