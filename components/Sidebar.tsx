@@ -1,9 +1,43 @@
+'use client';
 import React from 'react';
-import { Box, Divider, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography, Divider, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import Image from 'next/image';
 import SidebarItems from '@/components/SidebarItems';
+import MobileNavbar from '@/app/[locale]/(dashboard)/components/MobileNavbar';
 
 const Sidebar = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  if (isMobile) {
+    // --- Mobile layout ---
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          px: 2,
+          py: 1,
+          borderBottom: '1px solid #ECF2EF',
+        }}
+      >
+        {/* Left: logo + text */}
+        <Stack direction="row" alignItems="center" spacing={0.5}>
+          <Image src="/images/logo.png" alt="logo" width={30} height={30} />
+          <Typography className="text-black-1" fontWeight={600}>
+            Touristo
+          </Typography>
+        </Stack>
+
+        {/* Right: mobile navbar (hamburger/drawer) */}
+        <MobileNavbar />
+      </Box>
+    );
+  }
+
+  // --- Desktop layout ---
   return (
     <Box
       sx={{
@@ -11,7 +45,9 @@ const Sidebar = () => {
         minHeight: '100vh',
         width: '100%',
         paddingTop: '1rem',
-        alignContent: 'space-between', // distributes rows
+        alignContent: 'space-between',
+        borderRight: '1px solid #ECF2EF',
+        borderBottom: '1px solid #ECF2EF',
       }}
     >
       {/* top section */}
@@ -32,7 +68,7 @@ const Sidebar = () => {
           sx={{
             my: 4,
             borderColor: '#ECF2EF',
-            paddingX: '1rem',
+            marginX: '1rem',
           }}
         />
 
@@ -68,12 +104,7 @@ const Sidebar = () => {
           </Typography>
         </Box>
         <Box>
-          <Image
-            src="/icons/logout.png"
-            alt="language"
-            width={24}
-            height={24}
-          />
+          <Image src="/icons/logout.png" alt="logout" width={24} height={24} />
         </Box>
       </Box>
     </Box>

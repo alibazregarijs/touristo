@@ -8,6 +8,7 @@ import { getLocale } from 'next-intl/server';
 import { cookies } from 'next/headers';
 import { ConvexClientProvider } from '@/lib/ConvexClientProvider';
 import { SessionProvider } from 'next-auth/react';
+import 'leaflet/dist/leaflet.css';
 
 export const metadata: Metadata = {
   title: 'Touristo',
@@ -35,9 +36,14 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={locale} dir={direction} suppressHydrationWarning>
+    <html
+      lang={locale}
+      className="no-scrollbar"
+      dir={direction}
+      suppressHydrationWarning
+    >
       <body
-        className={`${inter.variable} ${fontVazir.variable}`}
+        className={`${inter.variable} ${fontVazir.variable} bg-[#F9FBFC]!`}
         suppressHydrationWarning
       >
         <SessionProvider>
