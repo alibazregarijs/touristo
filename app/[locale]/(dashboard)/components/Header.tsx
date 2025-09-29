@@ -1,14 +1,17 @@
 import React from 'react';
 import { Button, Grid, Typography } from '@mui/material';
+import Link from 'next/link';
 
 const Header = ({
   title,
   description,
   buttonTitle,
+  href,
 }: {
   title: string;
   description: string;
   buttonTitle: string;
+  href?: string;
 }) => {
   return (
     <Grid
@@ -33,9 +36,11 @@ const Header = ({
 
       {/* Right side */}
       <Grid size={{ xs: 12, md: 'auto' }}>
-        <Button fullWidth variant="contained">
-          {buttonTitle}
-        </Button>
+        <Link href={href || '#'}>
+          <Button fullWidth variant="contained" disabled={href ? true : false}>
+            {buttonTitle}
+          </Button>
+        </Link>
       </Grid>
     </Grid>
   );
