@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Grid, Typography, Divider, Stack } from '@mui/material';
 import Image from 'next/image';
-import { userData } from '@/constants';
 
 type itemT = {
   name: string;

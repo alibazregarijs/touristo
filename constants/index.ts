@@ -79,3 +79,71 @@ export const tripData = [
     image: '/images/trip-4.png',
   },
 ];
+
+// UserListManager data
+export const USER_INFO = [
+  {
+    name: 'John Doe',
+    email_address: 'johndoe@example.com',
+    data_joined: '2022-01-01',
+    itinerary_created: '10',
+    status: 'user',
+    image: '/images/user-profile.png',
+  },
+  {
+    name: 'Jane Smith',
+    email_address: 'janesmith@example.com',
+    data_joined: '2022-02-15',
+    itinerary_created: '05',
+    status: 'admin',
+    image: '/images/user-profile.png',
+  },
+  {
+    name: 'Ali Reza',
+    email_address: 'ali.reza@example.com',
+    data_joined: '2022-03-10',
+    itinerary_created: '07',
+    status: 'user',
+    image: '/images/user-profile.png',
+  },
+  {
+    name: 'Maria Garcia',
+    email_address: 'maria.garcia@example.com',
+    data_joined: '2022-04-05',
+    itinerary_created: '12',
+    status: 'user',
+    image: '/images/user-profile.png',
+  },
+  {
+    name: 'David Kim',
+    email_address: 'david.kim@example.com',
+    data_joined: '2022-05-20',
+    itinerary_created: '03',
+    status: 'admin',
+    image: '/images/user-profile.png',
+  },
+  {
+    name: 'Sophia Lee',
+    email_address: 'sophia.lee@example.com',
+    data_joined: '2022-06-18',
+    itinerary_created: '08',
+    status: 'user',
+    image: '/images/user-profile.png',
+  },
+  {
+    name: 'Michael Brown',
+    email_address: 'michael.brown@example.com',
+    data_joined: '2022-07-22',
+    itinerary_created: '15',
+    status: 'admin',
+    image: '/images/user-profile.png',
+  },
+  {
+    name: 'Emma Wilson',
+    email_address: 'emma.wilson@example.com',
+    data_joined: '2022-08-30',
+    itinerary_created: '06',
+    status: 'user',
+    image: '/images/user-profile.png',
+  },
+];

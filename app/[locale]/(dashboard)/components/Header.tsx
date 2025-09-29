@@ -1,7 +1,15 @@
 import React from 'react';
 import { Button, Grid, Typography } from '@mui/material';
 
-const Header = () => {
+const Header = ({
+  title,
+  description,
+  buttonTitle,
+}: {
+  title: string;
+  description: string;
+  buttonTitle: string;
+}) => {
   return (
     <Grid
       container
@@ -16,17 +24,17 @@ const Header = () => {
           className="text-black-1 font-semibold"
           fontWeight={600}
         >
-          Welcome Adrian 👋
+          {title}
         </Typography>
         <Typography className="text-white-2" fontSize="12px">
-          Track activity, trends, and popular destinations in real time
+          {description}
         </Typography>
       </Grid>
 
       {/* Right side */}
       <Grid size={{ xs: 12, md: 'auto' }}>
         <Button fullWidth variant="contained">
-          Create a trip
+          {buttonTitle}
         </Button>
       </Grid>
     </Grid>

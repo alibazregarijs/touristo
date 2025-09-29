@@ -8,16 +8,26 @@ import UserGrowthChart from './components/UserGrowthChart';
 import TripTrendsChart from './components/TripTrendsChart';
 import LatestUserSignups from './components/LatestUserSignups';
 import { tripData, userData } from '@/constants';
+import { useTheme } from '@mui/material/styles';
+import { useMediaQuery } from '@mui/material';
+
 const Page = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   return (
     <Box
       sx={{
-        maxHeight: '100vh',
+        maxHeight: { lg: '100%' },
         overflowY: 'auto', // 👈 enables vertical scrolling
       }}
       className="no-scrollbar" // 👈 prevents scrollbar
     >
-      <Header />
+      <Header
+        title="Welcome Adrian 👋"
+        description="Track activity, trends, and popular destinations in real time"
+        buttonTitle="Create a trip"
+      />
       <StatsCards />
       <TripsCard />
       <Grid container spacing={2} mt={4}>
