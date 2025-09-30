@@ -37,7 +37,13 @@ const Header = ({
       {/* Right side */}
       <Grid size={{ xs: 12, md: 'auto' }}>
         <Link href={href || '#'}>
-          <Button fullWidth variant="contained" disabled={href ? true : false}>
+          <Button
+            fullWidth
+            variant="contained"
+            disabled={
+              href === '/en/create-trip' || '/en/Ai-trips' ? false : true
+            }
+          >
             {buttonTitle}
           </Button>
         </Link>

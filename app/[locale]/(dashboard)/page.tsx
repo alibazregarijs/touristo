@@ -10,6 +10,7 @@ import LatestUserSignups from './components/LatestUserSignups';
 import { tripData, userData } from '@/constants';
 import { useTheme } from '@mui/material/styles';
 import { useMediaQuery } from '@mui/material';
+import { tripsObj } from '@/constants';
 
 const Page = () => {
   const theme = useTheme();
@@ -29,7 +30,7 @@ const Page = () => {
         buttonTitle="Create a trip"
       />
       <StatsCards />
-      <TripsCard />
+      <TripsCard items={tripsObj} />
       <Grid container spacing={2} mt={4}>
         <Grid size={{ xs: 12, lg: 6 }}>
           <UserGrowthChart />

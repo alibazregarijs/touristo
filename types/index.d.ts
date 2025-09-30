@@ -47,3 +47,13 @@ type TripT = {
   buttons: string[];
   image: string;
 };
+
+// User info type
+export interface UserInfoI {
+  name: string;
+  email_address: string;
+  data_joined: string;
+  itinerary_created: string;
+  status: string;
+  image: string;
+}

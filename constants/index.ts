@@ -184,3 +184,80 @@ export const COUNTRIES = [
   { code: 'DO', label: 'Dominican Republic', lat: 18.7357, lng: -70.1627 },
   { code: 'UY', label: 'Uruguay', lat: -32.5228, lng: -55.7658 },
 ];
+
+// TripsCard data
+export const tripsObj = [
+  {
+    title: 'Thornridge Cir. Shiloh',
+    location: 'St George’s Ln Singapore',
+    buttons: ['Mountains', 'City'],
+    image: '/images/trip-1.png',
+  },
+  {
+    title: 'Roraima Tepui',
+    location: 'Canaima Park, Venezuela',
+    buttons: ['Solo travel', 'Budget'],
+    image: '/images/trip-2.png',
+  },
+  {
+    title: 'Socotra Island',
+    location: 'Yemen',
+    buttons: ['Luxury', 'Beach'],
+    image: '/images/trip-3.png',
+  },
+  {
+    title: 'San Lake Baikal',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+  },
+  {
+    title: 'San Lake Baikal2',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+  },
+  {
+    title: 'San Lake Baikal3',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+  },
+  {
+    title: 'San Lake Baikal4',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+  },
+  {
+    title: 'San Lake Baikal5',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+  },
+
+  {
+    title: 'San Lake Baikal12',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+  },
+  {
+    title: 'San Lake Baikal13',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+  },
+  {
+    title: 'San Lake Baikal14',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+  },
+  {
+    title: 'San Lake Baikal15',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+  },
+];

@@ -1,23 +1,21 @@
 import React from 'react';
 import Header from '@/app/[locale]/(dashboard)/components/Header';
 import { Box } from '@mui/material';
-import CreateTrip from './components/CreateTrip';
 import TripsCard from '../components/Trips';
 import { tripsObj } from '@/constants';
-import ListTrips from './components/ListTrips';
+import CreateTrip from '../AI-trips/components/CreateTrip';
 
 const page = () => {
   return (
     <Box sx={{ maxHeight: '100%', overflowY: 'auto' }}>
       <Header
-        title="Trips"
+        title="Add new Trips"
         description="View and generate AI travel plans"
-        buttonTitle="Create a trip"
-        href="/en/create-trip"
+        buttonTitle="Show Trips"
+        href="/en/AI-trips"
       />
-      <ListTrips trips={tripsObj} />
 
-      {/* <CreateTrip /> */}
+      <CreateTrip />
     </Box>
   );
 };

@@ -5,8 +5,11 @@ import { Box, Stack, Button } from '@mui/material';
 import UserListHeader from './UserListHeader';
 import UserListRow from './UserListRow';
 import Pagination from './Pagination';
-const UserListManager = () => {
-  const [usersToShow, setUsersToShow] = React.useState(USER_INFO.slice(0, 4));
+import type { UserInfoI } from '@/types';
+
+const UserListManager = ({ users }: { users: UserInfoI[] }) => {
+  const [usersToShow, setUsersToShow] = React.useState(users.slice(0, 4));
+
   return (
     <Box
       sx={{
@@ -17,11 +20,12 @@ const UserListManager = () => {
       }}
     >
       <UserListHeader />
+
       {usersToShow.map((user, index) => (
         <UserListRow key={user.name} user={user} index={index} />
       ))}
 
-      <Pagination setUsersToShow={setUsersToShow} />
+      <Pagination setItemsToShow={setUsersToShow} dataItems={users} />
     </Box>
   );
 };

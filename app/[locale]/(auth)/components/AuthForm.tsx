@@ -50,7 +50,6 @@ const AuthForm = <T extends FieldValues>({
   const onSubmitForm: SubmitHandler<T> = async (data) => {
     setIsFormSubmitting(true);
     const res = await onSubmit(data);
-    console.log(res, 'response from onSubmit');
     if (!res.success) {
       setIsFormSubmitting(false);
       setErrorMessage(t(res.error as string) || t('submitionFailed'));
