@@ -40,9 +40,7 @@ const Header = ({
           <Button
             fullWidth
             variant="contained"
-            disabled={
-              href === '/en/create-trip' || '/en/Ai-trips' ? false : true
-            }
+            disabled={!(href === '/en/create-trip' || href === '/en/Ai-trips')}
           >
             {buttonTitle}
           </Button>
