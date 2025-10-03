@@ -261,3 +261,99 @@ export const tripsObj = [
     image: '/images/trip-4.png',
   },
 ];
+
+// days data
+
+export const itineraryData = [
+  {
+    title: 'Day 1: Arrival in Tokyo & Shibuya Exploration',
+    description: [
+      {
+        paragraph: 'Arrive at Narita/Haneda Airport & check-in at hotel',
+      },
+      {
+        paragraph: 'Visit Shibuya Crossing & Hachiko Statue',
+      },
+      {
+        paragraph:
+          'Explore Shinjuku for city views at Tokyo Metropolitan Govt. Building',
+      },
+      {
+        paragraph: 'Dinner at an Izakaya in Golden Gai',
+      },
+    ],
+  },
+
+  {
+    title: 'Day 2: Tokyo Sightseeing & Culture',
+    description: [
+      {
+        paragraph: 'Morning: Senso-ji Temple in Asakusa',
+      },
+      {
+        paragraph: 'Afternoon: Akihabara (tech & anime district)',
+      },
+      {
+        paragraph: 'Evening: Walk around Tokyo Tower & Roppongi',
+      },
+    ],
+  },
+  {
+    title: 'Day 3: Day Trip to Hakone (Mt. Fuji Views)',
+    description: [
+      {
+        paragraph: 'Take the Hakone Ropeway for a scenic view',
+      },
+      {
+        paragraph: 'Relax in an onsen (hot spring)',
+      },
+      {
+        paragraph: 'Visit Lake Ashi & see Fuji in the distance',
+      },
+    ],
+  },
+];
+
+export const bestTimeVisitData = [
+  {
+    title: 'Best Time to Visit:',
+    description: [
+      {
+        paragraph:
+          '🌸 Spring (March–May): Cherry blossoms in full bloom, mild temperatures.',
+      },
+      {
+        paragraph:
+          '🍁 Autumn (September–November): Beautiful fall foliage, comfortable weather.',
+      },
+      {
+        paragraph:
+          '❄ Winter (December–February): Quieter, with snow-covered temples creating a magical scene.',
+      },
+      {
+        paragraph:
+          '☀ Summer (June–August): Hot & humid but lively with festivals like Gion Matsuri.',
+      },
+    ],
+  },
+];
+
+export const weatherData = [
+  {
+    title: 'Weather Info:',
+    description: [
+      {
+        paragraph: 'Spring: 10°C – 20°C (50°F – 68°F)',
+      },
+      {
+        paragraph: 'Summer: 22°C – 33°C (72°F – 91°F)',
+      },
+      {
+        paragraph: 'Autumn: 12°C – 25°C (54°F – 77°F)',
+      },
+      {
+        paragraph: 'Winter: 0°C – 10°C (32°F – 50°F)',
+      },
+    ],
+  },
+];

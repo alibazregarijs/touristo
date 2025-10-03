@@ -1,14 +1,20 @@
-import { Box, Typography, Stack, Grid } from '@mui/material';
+import { Box, Typography, Stack, Grid, Button, Divider } from '@mui/material';
 import Header from '../../components/Header';
 import Image from 'next/image';
+import MButton from '@/components/Button';
+import StarRating from '@/components/Star';
+import Days from './components/Days';
+import { itineraryData, bestTimeVisitData, weatherData } from '@/constants';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+const BUTTONS = ['Luxury', 'Beach', 'Mountain', 'Budget'];
+
 const Page = async (props: PageProps) => {
   const params = await props.params;
-  console.log(params.slug[0]);
+  // console.log(params.slug[0]);
   return (
     <Box>
       <Header
@@ -67,7 +73,7 @@ const Page = async (props: PageProps) => {
                 fontWeight={'400'}
                 fontSize={'14px'}
                 lineHeight={'16px'}
-                className="text-white-1"
+                className="text-white-2"
               >
                 5 Day plan
               </Typography>
@@ -88,7 +94,7 @@ const Page = async (props: PageProps) => {
                 fontWeight={'400'}
                 fontSize={'14px'}
                 lineHeight={'16px'}
-                className="text-white-1"
+                className="text-white-2"
               >
                 Tokyo, Kyoto, Osaka
               </Typography>
@@ -154,6 +160,87 @@ const Page = async (props: PageProps) => {
                 </Grid>
               </Grid>
             </Grid>
+          </Grid>
+          <Grid container spacing={2} marginTop={2}>
+            {/* Category buttons */}
+            {BUTTONS.map((button) => (
+              <Grid size={{ xs: 6, sm: 4, lg: 2 }} key={button}>
+                <MButton title={button} type={button} />
+              </Grid>
+            ))}
+
+            {/* Star rating and text as two separate grid items (or combine if needed) */}
+            <Grid alignContent={'center'} size={{ xs: 6, sm: 4, lg: 2 }}>
+              <StarRating value={4} />
+            </Grid>
+
+            <Grid size={{ xs: 6, sm: 4, lg: 2 }}>
+              <MButton title="4.9 / 5.0" type="Sport" />
+            </Grid>
+          </Grid>
+          <Grid container spacing={1} marginTop={4}>
+            <Grid justifyContent={'space-between'} size={{ xs: 12, lg: 11 }}>
+              <Typography
+                className="text-black-1 font-semibold"
+                fontWeight={'600'}
+                fontSize={'24px'}
+                lineHeight={'28px'}
+              >
+                5-Day Japan Adventure
+              </Typography>
+            </Grid>
+            <Grid justifyContent={'space-between'} size={{ xs: 12, lg: 1 }}>
+              <Typography
+                fontWeight={'600'}
+                fontSize={'18px'}
+                lineHeight={'30px'}
+                className="text-black-1 font-semibold"
+              >
+                $604
+              </Typography>
+            </Grid>
+            <Typography className="text-white-2">
+              Luxury, Diversity, and Harmony
+            </Typography>
+            <Typography className="text-white-2">
+              Experience the best of Japan in 5 unforgettable days, traveling
+              through Tokyo, Kyoto, and Osaka. From the bustling streets of
+              Shibuya to the historic temples of Kyoto and the vibrant food
+              scene in Osaka, this itinerary blends culture, sightseeing, and
+              local flavors.
+            </Typography>
+            <Typography mt={2} className="text-white-2">
+              Relax in a Hakone onsen, explore ancient shrines, and indulge in
+              authentic Japanese cuisine—all while enjoying seamless travel on
+              the Shinkansen. 🚄✨
+            </Typography>
+
+            {/* DAYS */}
+            <Box mt={4}>
+              {itineraryData.map((day) => (
+                <Days key={day.title} data={day} />
+              ))}
+            </Box>
+
+            <Divider sx={{ border: '1px #E3F1FF solid', width: '100%' }} />
+
+            {/* BEST TIME VISIT */}
+            <Box mt={4}>
+              {bestTimeVisitData.map((bestTimeVisit) => (
+                <Days key={bestTimeVisit.title} data={bestTimeVisit} />
+              ))}
+            </Box>
+
+            <Divider sx={{ border: '1px #E3F1FF solid', width: '100%' }} />
+
+            {/* WEATHER */}
+            <Box mt={4}>
+              {weatherData.map((weather) => (
+                <Days key={weather.title} data={weather} />
+              ))}
+            </Box>
+
+            <Divider sx={{ border: '1px #E3F1FF solid', width: '100%' }} />
           </Grid>
         </Box>
       </Box>
