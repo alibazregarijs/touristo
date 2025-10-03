@@ -46,6 +46,9 @@ type TripT = {
   location: string;
   buttons: string[];
   image: string;
+  href: string;
+  lat: number;
+  lng: number;
 };
 
 // User info type

@@ -14,7 +14,6 @@ const page = () => {
         buttonTitle="Show Trips"
         href="/en/AI-trips"
       />
-
       <CreateTrip />
     </Box>
   );

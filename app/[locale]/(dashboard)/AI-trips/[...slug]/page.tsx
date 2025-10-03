@@ -1,20 +1,36 @@
-import { Box, Typography, Stack, Grid, Button, Divider } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Stack,
+  Grid,
+  Button,
+  Divider,
+  List,
+} from '@mui/material';
 import Header from '../../components/Header';
 import Image from 'next/image';
 import MButton from '@/components/Button';
 import StarRating from '@/components/Star';
 import Days from './components/Days';
 import { itineraryData, bestTimeVisitData, weatherData } from '@/constants';
+import { decodeAndClean } from '@/lib';
+import ClientMap from './components/ClientMap';
+import ListTrips from '../components/ListTrips';
+import { popularTrips } from '@/constants';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ lat: string; lng: string }>;
 }
 
 const BUTTONS = ['Luxury', 'Beach', 'Mountain', 'Budget'];
 
 const Page = async (props: PageProps) => {
   const params = await props.params;
-  // console.log(params.slug[0]);
+  const location = decodeAndClean(params.slug[0]);
+  const sp = await props.searchParams;
+  const lat = parseFloat(sp.lat);
+  const lng = parseFloat(sp.lng);
   return (
     <Box>
       <Header
@@ -239,9 +255,22 @@ const Page = async (props: PageProps) => {
                 <Days key={weather.title} data={weather} />
               ))}
             </Box>
-
-            <Divider sx={{ border: '1px #E3F1FF solid', width: '100%' }} />
           </Grid>
+          <ClientMap lat={lat} lng={lng} />
+          <Divider sx={{ border: '1px #E3F1FF solid', width: '100%', mt: 4 }} />
+          <Box mt={4}>
+            <Typography
+              className="text-black-1 font-semibold"
+              fontWeight={'600'}
+              fontSize="24px"
+              mb={2}
+            >
+              Popular Itineraries
+            </Typography>
+          </Box>
+        </Box>
+        <Box mt={4} px={{ lg: 18 }}>
+          <ListTrips trips={popularTrips} isPaginated={false} />
         </Box>
       </Box>
     </Box>
