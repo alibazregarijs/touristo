@@ -46,4 +46,37 @@ type TripT = {
   location: string;
   buttons: string[];
   image: string;
+  href: string;
+  lat: number;
+  lng: number;
 };
+
+// User info type
+export interface UserInfoI {
+  name: string;
+  email_address: string;
+  data_joined: string;
+  itinerary_created: string;
+  status: string;
+  image: string;
+}
+
+// Trip info type
+declare interface Trip {
+  id: string;
+  name: string;
+  description: string;
+  estimatedPrice: string;
+  duration: number;
+  budget: string;
+  travelStyle: string;
+  interests: string;
+  groupType: string;
+  country: string;
+  imageUrls: string[];
+  itinerary: DayPlan[];
+  bestTimeToVisit: string[];
+  weatherInfo: string[];
+  location: Location;
+  payment_link: string;
+}
