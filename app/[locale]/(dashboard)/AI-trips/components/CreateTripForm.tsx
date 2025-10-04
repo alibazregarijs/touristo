@@ -1,5 +1,6 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import {
   Box,
   Autocomplete,
@@ -13,6 +14,21 @@ import SelectField from './SelectField';
 import dynamic from 'next/dynamic';
 
 const flagUrl = (code: string) => `https://flagsapi.com/${code}/flat/32.png`;
+
+export type CountryOption = {
+  code: string;
+  label: string;
+  lat: number;
+  lng: number;
+};
+
+type TripFormValues = {
+  country: CountryOption | null;
+  groupType: string;
+  travelStyle: string;
+  interest: string;
+  budget: string;
+};
 
 const GROUP_TYPES = ['Solo', 'Couple', 'Family', 'Friends', 'Business'];
 const TRAVEL_STYLES = [
@@ -37,88 +53,99 @@ const INTEREST = [
 ];
 const BUDGET = ['Mid-Range', 'Luxury', 'Premium', 'Budget'];
 
-export type CountryOption = {
-  code: string;
-  label: string;
-  lat: number;
-  lng: number;
-};
-
-// Dynamically import the Map component with SSR disabled
 const Map = dynamic(() => import('@/components/Map'), {
   ssr: false,
-  loading: () => <p>Loading map...</p>, // Optional loading fallback
+  loading: () => <p>Loading map...</p>,
 });
 
 const CreateTripForm = () => {
-  const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(
-    COUNTRIES.find((c) => c.code === 'IR') ?? null
-  );
+  const {
+    register,
+    handleSubmit,
+    control,
+    getValues,
+    reset,
+    formState: { errors },
+  } = useForm<TripFormValues>({
+    defaultValues: {
+      country: COUNTRIES.find((c) => c.code === 'IR') ?? null,
+      groupType: '',
+      travelStyle: '',
+      interest: '',
+      budget: '',
+    },
+  });
 
-  const handleGenerateTrip = () => {
-    console.log('Generate a trip');
+  const onSubmit = (data: TripFormValues) => {
+    console.log('Form values:', data);
+    reset();
   };
 
   return (
-    <Box>
-      <Autocomplete
-        options={COUNTRIES}
-        onChange={(_, newValue) => setSelectedCountry(newValue)}
-        defaultValue={COUNTRIES.find((c) => c.code === 'IR')}
-        autoHighlight
-        getOptionLabel={(option) => option.label}
-        renderOption={(props, option) => {
-          const { key, ...rest } = props;
-          return (
-            <Box
-              component="li"
-              key={key}
-              {...rest}
-              sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-            >
-              <Image
-                src={flagUrl(option.code)}
-                alt={`${option.label} flag`}
-                width={24}
-                height={16}
-                style={{ objectFit: 'cover' }}
+    <form onSubmit={handleSubmit(onSubmit)}>
+      {/* Country Autocomplete */}
+      <Controller
+        name="country"
+        control={control}
+        rules={{ required: 'Country is required' }}
+        render={({ field }) => (
+          <Autocomplete
+            options={COUNTRIES}
+            value={field.value}
+            onChange={(_, newValue) => field.onChange(newValue)}
+            autoHighlight
+            getOptionLabel={(option) => option.label}
+            renderOption={(props, option) => (
+              <Box
+                component="li"
+                {...props}
+                sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+              >
+                <Image
+                  src={flagUrl(option.code)}
+                  alt={`${option.label} flag`}
+                  width={24}
+                  height={16}
+                  style={{ objectFit: 'cover' }}
+                />
+                {option.label} ({option.code})
+              </Box>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Country"
+                error={!!errors.country}
+                helperText={errors.country?.message}
+                InputProps={{
+                  ...params.InputProps,
+                  startAdornment: field.value ? (
+                    <InputAdornment position="start">
+                      <Image
+                        src={flagUrl(field.value.code)}
+                        alt={`${field.value.label} flag`}
+                        width={24}
+                        height={16}
+                        style={{ objectFit: 'cover' }}
+                      />
+                    </InputAdornment>
+                  ) : null,
+                }}
               />
-              {option.label} ({option.code})
-            </Box>
-          );
-        }}
-        renderInput={(params) => {
-          const selected = params.inputProps.value
-            ? COUNTRIES.find((c) => c.label === params.inputProps.value)
-            : null;
-
-          return (
-            <TextField
-              {...params}
-              label="Country"
-              InputProps={{
-                ...params.InputProps,
-                startAdornment: selected ? (
-                  <InputAdornment position="start">
-                    <Image
-                      src={flagUrl(selected.code)}
-                      alt={`${selected.label} flag`}
-                      width={24}
-                      height={16}
-                      style={{ objectFit: 'cover' }}
-                    />
-                  </InputAdornment>
-                ) : null,
-              }}
-            />
-          );
-        }}
+            )}
+          />
+        )}
       />
+
+      {/* Other fields */}
       <Box sx={{ mt: 3 }}>
         <SelectField
           label="Group Type"
           placeholder="Select a group type"
           options={GROUP_TYPES}
+          error={!!errors.groupType}
+          helperText={errors.groupType?.message}
+          {...register('groupType', { required: 'Group type is required' })}
         />
       </Box>
 
@@ -127,6 +154,9 @@ const CreateTripForm = () => {
           label="Travel Style"
           placeholder="Select your travel style"
           options={TRAVEL_STYLES}
+          error={!!errors.travelStyle}
+          helperText={errors.travelStyle?.message}
+          {...register('travelStyle', { required: 'Travel style is required' })}
         />
       </Box>
 
@@ -135,26 +165,39 @@ const CreateTripForm = () => {
           label="Interests"
           placeholder="Select your interests"
           options={INTEREST}
+          error={!!errors.interest}
+          helperText={errors.interest?.message}
+          {...register('interest', { required: 'Interest is required' })}
         />
       </Box>
+
       <Box sx={{ mt: 3 }}>
         <SelectField
           label="Budget Estimate"
           placeholder="Select your budget preference"
           options={BUDGET}
+          error={!!errors.budget}
+          helperText={errors.budget?.message}
+          {...register('budget', { required: 'Budget is required' })}
         />
       </Box>
+
+      {/* Map stays in its place */}
       <Box sx={{ mt: 3 }}>
-        {selectedCountry && (
-          <Map lat={selectedCountry.lat} lng={selectedCountry.lng} />
+        {getValues('country') && (
+          <Map
+            lat={getValues('country')!.lat}
+            lng={getValues('country')!.lng}
+          />
         )}
       </Box>
+
       <Box sx={{ mt: 3 }}>
         <Button
           fullWidth
           variant="contained"
           color="primary"
-          onClick={handleGenerateTrip}
+          type="submit"
           sx={{
             display: 'flex',
             alignItems: 'center',
@@ -166,7 +209,7 @@ const CreateTripForm = () => {
           Generate a trip
         </Button>
       </Box>
-    </Box>
+    </form>
   );
 };
 

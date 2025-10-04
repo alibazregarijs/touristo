@@ -6,6 +6,7 @@ type SelectFieldProps = {
   placeholder?: string;
   options: string[];
   defaultValue?: string;
+  [key: string]: any;
 };
 
 const SelectField: React.FC<SelectFieldProps> = ({
@@ -13,6 +14,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   placeholder,
   options,
   defaultValue,
+  ...props
 }) => {
   return (
     <Autocomplete
@@ -24,6 +26,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
           label={label}
           placeholder={placeholder}
           slotProps={{ inputLabel: { shrink: true } }}
+          {...props}
           fullWidth
         />
       )}
