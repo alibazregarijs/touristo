@@ -60,3 +60,23 @@ export interface UserInfoI {
   status: string;
   image: string;
 }
+
+// Trip info type
+declare interface Trip {
+  id: string;
+  name: string;
+  description: string;
+  estimatedPrice: string;
+  duration: number;
+  budget: string;
+  travelStyle: string;
+  interests: string;
+  groupType: string;
+  country: string;
+  imageUrls: string[];
+  itinerary: DayPlan[];
+  bestTimeToVisit: string[];
+  weatherInfo: string[];
+  location: Location;
+  payment_link: string;
+}

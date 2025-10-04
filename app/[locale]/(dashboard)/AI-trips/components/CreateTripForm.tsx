@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useTransition } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import {
   Box,
@@ -7,11 +7,14 @@ import {
   TextField,
   InputAdornment,
   Button,
+  CircularProgress,
 } from '@mui/material';
 import Image from 'next/image';
 import { COUNTRIES } from '@/constants';
 import SelectField from './SelectField';
 import dynamic from 'next/dynamic';
+import { createTrip } from '@/app/[locale]/(dashboard)/create-trip/actions';
+import { useSession } from 'next-auth/react';
 
 const flagUrl = (code: string) => `https://flagsapi.com/${code}/flat/32.png`;
 
@@ -22,12 +25,15 @@ export type CountryOption = {
   lng: number;
 };
 
-type TripFormValues = {
+export type TripFormValues = {
   country: CountryOption | null;
   groupType: string;
   travelStyle: string;
   interest: string;
   budget: string;
+  duration: string;
+  userId: string;
+  imageUrls: string[];
 };
 
 const GROUP_TYPES = ['Solo', 'Couple', 'Family', 'Friends', 'Business'];
@@ -59,6 +65,25 @@ const Map = dynamic(() => import('@/components/Map'), {
 });
 
 const CreateTripForm = () => {
+  const [isSubmitting, startTransition] = useTransition();
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
+  const getImages = async (
+    country: string,
+    interests: string,
+    travelStyle: string
+  ) => {
+    const unsplashApiKey = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
+    const imageResponse = await fetch(
+      `https://api.unsplash.com/search/photos?query=${country} ${interests} ${travelStyle}&client_id=${unsplashApiKey}`
+    );
+    const imageUrls = (await imageResponse.json()).results
+      .slice(0, 3)
+      .map((result: any) => result.urls?.regular || null);
+    return imageUrls;
+  };
+
   const {
     register,
     handleSubmit,
@@ -73,11 +98,24 @@ const CreateTripForm = () => {
       travelStyle: '',
       interest: '',
       budget: '',
+      duration: '',
+      userId: userId || '',
     },
   });
 
-  const onSubmit = (data: TripFormValues) => {
-    console.log('Form values:', data);
+  const onSubmit = async (data: TripFormValues) => {
+    startTransition(async () => {
+      if (!data?.country?.label || !data?.interest || !data?.travelStyle)
+        return;
+      const imageUrl = await getImages(
+        data?.country?.label,
+        data?.interest,
+        data?.travelStyle
+      );
+      const formData = { ...data, userId: userId || '', imageUrls: imageUrl };
+      const result = await createTrip(null, formData);
+      console.log('Form Data:', result);
+    });
     reset();
   };
 
@@ -95,22 +133,26 @@ const CreateTripForm = () => {
             onChange={(_, newValue) => field.onChange(newValue)}
             autoHighlight
             getOptionLabel={(option) => option.label}
-            renderOption={(props, option) => (
-              <Box
-                component="li"
-                {...props}
-                sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-              >
-                <Image
-                  src={flagUrl(option.code)}
-                  alt={`${option.label} flag`}
-                  width={24}
-                  height={16}
-                  style={{ objectFit: 'cover' }}
-                />
-                {option.label} ({option.code})
-              </Box>
-            )}
+            renderOption={(props, option) => {
+              const { key, ...otherProps } = props;
+              return (
+                <Box
+                  key={key} // ✅ pass key directly
+                  component="li"
+                  {...otherProps} // ✅ spread the rest
+                  sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                >
+                  <Image
+                    src={flagUrl(option.code)}
+                    alt={`${option.label} flag`}
+                    width={24}
+                    height={16}
+                    style={{ objectFit: 'cover' }}
+                  />
+                  {option.label} ({option.code})
+                </Box>
+              );
+            }}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -136,6 +178,18 @@ const CreateTripForm = () => {
           />
         )}
       />
+
+      <Box sx={{ mt: 3 }}>
+        <TextField
+          fullWidth
+          label="Duration"
+          placeholder="Enter number of days (e.g., 5, 12)"
+          error={!!errors.duration}
+          helperText={errors.duration?.message}
+          {...register('duration', { required: 'Duration is required' })}
+          slotProps={{ inputLabel: { shrink: true } }}
+        />
+      </Box>
 
       {/* Other fields */}
       <Box sx={{ mt: 3 }}>
@@ -198,6 +252,7 @@ const CreateTripForm = () => {
           variant="contained"
           color="primary"
           type="submit"
+          disabled={isSubmitting}
           sx={{
             display: 'flex',
             alignItems: 'center',
@@ -205,8 +260,12 @@ const CreateTripForm = () => {
             gap: 1,
           }}
         >
-          <Image src="/icons/star.png" alt="star" width={15} height={15} />
-          Generate a trip
+          {isSubmitting ? (
+            <CircularProgress size={16} sx={{ color: 'white' }} />
+          ) : (
+            <Image src="/icons/star.png" alt="star" width={15} height={15} />
+          )}
+          {isSubmitting ? 'Generating...' : 'Generate a trip'}
         </Button>
       </Box>
     </form>

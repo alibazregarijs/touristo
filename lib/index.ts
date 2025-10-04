@@ -1,3 +1,5 @@
+import type { Trip } from '@/types';
+
 export function decodeAndClean(str: string): string {
   // Step 1: Decode URL-encoded string (e.g., %20 → space)
   let decoded = decodeURIComponent(str);
@@ -7,4 +9,45 @@ export function decodeAndClean(str: string): string {
 
   // Step 3: Trim leading/trailing spaces
   return cleaned.trim();
+}
+
+export function parseMarkdownToJson(markdownText: string): unknown | null {
+  // Try to capture ```json ... ``` or ``` ... ```
+  const fenceRegex = /```(?:json)?\s*([\s\S]*?)\s*```/i;
+  const fenceMatch = markdownText.match(fenceRegex);
+
+  let jsonString: string | null = null;
+
+  if (fenceMatch && fenceMatch[1]) {
+    jsonString = fenceMatch[1].trim();
+  } else {
+    // Fallback: try to find the first { ... } block
+    const braceRegex = /{[\s\S]*}/;
+    const braceMatch = markdownText.match(braceRegex);
+    if (braceMatch) {
+      jsonString = braceMatch[0];
+    }
+  }
+
+  if (!jsonString) {
+    console.error('No valid JSON found in text.');
+    return null;
+  }
+
+  try {
+    return JSON.parse(jsonString);
+  } catch (error) {
+    console.error('Error parsing JSON:', error, '\nRaw string:', jsonString);
+    return null;
+  }
+}
+
+export function parseTripData(jsonString: string): Trip | null {
+  try {
+    const data: Trip = JSON.parse(jsonString);
+    return data;
+  } catch (error) {
+    console.error('Failed to parse trip data:', error);
+    return null;
+  }
 }
