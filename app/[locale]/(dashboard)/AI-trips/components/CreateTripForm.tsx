@@ -15,6 +15,9 @@ import SelectField from './SelectField';
 import dynamic from 'next/dynamic';
 import { createTrip } from '@/app/[locale]/(dashboard)/create-trip/actions';
 import { useSession } from 'next-auth/react';
+import { getGroqChatCompletion } from '@/convex/groqai';
+import { useAction, useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 const flagUrl = (code: string) => `https://flagsapi.com/${code}/flat/32.png`;
 
@@ -26,7 +29,7 @@ export type CountryOption = {
 };
 
 export type TripFormValues = {
-  country: CountryOption | null;
+  country: CountryOption;
   groupType: string;
   travelStyle: string;
   interest: string;
@@ -69,6 +72,8 @@ const CreateTripForm = () => {
   const { data: session } = useSession();
   const userId = session?.user?.id;
 
+  const getTripsAction = useAction(api.groqai.getTripsAction);
+
   const getImages = async (
     country: string,
     interests: string,
@@ -93,7 +98,7 @@ const CreateTripForm = () => {
     formState: { errors },
   } = useForm<TripFormValues>({
     defaultValues: {
-      country: COUNTRIES.find((c) => c.code === 'IR') ?? null,
+      country: COUNTRIES.find((c) => c.code === 'IR'),
       groupType: '',
       travelStyle: '',
       interest: '',
@@ -105,15 +110,23 @@ const CreateTripForm = () => {
 
   const onSubmit = async (data: TripFormValues) => {
     startTransition(async () => {
-      if (!data?.country?.label || !data?.interest || !data?.travelStyle)
-        return;
+      if (!data.country || !data.interest || !data.travelStyle) return;
+
       const imageUrl = await getImages(
-        data?.country?.label,
-        data?.interest,
-        data?.travelStyle
+        data.country.label,
+        data.interest,
+        data.travelStyle
       );
-      const formData = { ...data, userId: userId || '', imageUrls: imageUrl };
-      const result = await createTrip(null, formData);
+
+      const formData = {
+        ...data,
+        country: data.country, // non-null
+        duration: Number(data.duration), // number
+        userId: userId || '',
+        imageUrls: imageUrl as string[], // correct type
+      };
+
+      const result = await getTripsAction(formData);
       console.log('Form Data:', result);
     });
     reset();

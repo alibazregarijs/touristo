@@ -1,12 +1,21 @@
 import React from 'react';
 import Header from '@/app/[locale]/(dashboard)/components/Header';
 import { Box } from '@mui/material';
-import CreateTrip from './components/CreateTrip';
-import TripsCard from '../components/Trips';
 import { tripsObj } from '@/constants';
 import ListTrips from './components/ListTrips';
+import { convex } from '@/lib/Convex';
+import { api } from '@/convex/_generated/api';
+import { auth } from '@/auth';
+import { fetchQuery } from 'convex/nextjs';
 
-const page = () => {
+const page = async () => {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  const trips = await fetchQuery(api.trips.latestTripsForUser, {
+    userId: userId as string,
+  });
+
   return (
     <Box sx={{ maxHeight: '100%', overflowY: 'auto' }}>
       <Header
@@ -15,9 +24,7 @@ const page = () => {
         buttonTitle="Create a trip"
         href="/en/create-trip"
       />
-      <ListTrips trips={tripsObj} />
-
-      {/* <CreateTrip /> */}
+      <ListTrips trips={trips} />
     </Box>
   );
 };

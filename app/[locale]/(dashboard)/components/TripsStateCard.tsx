@@ -13,6 +13,7 @@ import { type TripT } from '@/types';
 import Link from 'next/link';
 
 const TripsStateCard = ({ trip }: { trip: TripT }) => {
+  console.log(trip, 'trip');
   return (
     <Link
       href={{

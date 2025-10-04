@@ -13,6 +13,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from 'convex/server';
+import type * as groqai from '../groqai.js';
 import type * as products from '../products.js';
 import type * as trips from '../trips.js';
 import type * as user from '../user.js';
@@ -26,6 +27,7 @@ import type * as user from '../user.js';
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  groqai: typeof groqai;
   products: typeof products;
   trips: typeof trips;
   user: typeof user;

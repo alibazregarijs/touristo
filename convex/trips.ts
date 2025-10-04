@@ -1,5 +1,6 @@
 import { mutation } from './_generated/server';
 import { v } from 'convex/values';
+import { query } from './_generated/server';
 
 export const addTrip = mutation({
   args: {
@@ -15,5 +16,16 @@ export const addTrip = mutation({
     });
     const trip = await ctx.db.get(tripId);
     return trip;
+  },
+});
+
+export const latestTripsForUser = query({
+  args: { userId: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query('trips')
+      .filter((q) => q.eq(q.field('userId'), args.userId))
+      .order('desc')
+      .take(4);
   },
 });

@@ -10,13 +10,13 @@ const ListTrips = ({
   isPaginated,
 }: {
   trips: TripT[];
-  isPaginated: boolean;
+  isPaginated?: boolean;
 }) => {
   const [tripsToShow, setTripsToShow] = React.useState(trips.slice(0, 8));
 
   return (
     <Box>
-      <TripsCard items={tripsToShow} isPaginated={isPaginated} />
+      <TripsCard items={tripsToShow} isPaginated={isPaginated || false} />
       {isPaginated && (
         <Pagination
           setItemsToShow={setTripsToShow}
