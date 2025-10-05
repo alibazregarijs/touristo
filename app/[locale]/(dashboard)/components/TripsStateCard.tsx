@@ -24,9 +24,7 @@ const TripsStateCard = ({
 }) => {
   return (
     <Link
-      href={{
-        pathname: trip?.name,
-      }}
+      href={'/en/AI-trips/' + trip.id}
       style={{ textDecoration: 'none', color: 'inherit' }}
       passHref
     >

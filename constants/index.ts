@@ -1,5 +1,9 @@
-import { State } from '@/types';
-
+import type {
+  Breakpoint,
+  ResponsiveValue,
+  ResponsiveHeight,
+  State,
+} from '@/types';
 export const sidebarItems = [
   {
     name: 'Dashboard',
@@ -457,6 +461,11 @@ export const COLORS_BUDGET = [
     bg: '#F0F9FF',
     color: '#026AA2',
   },
+  {
+    type: 'Sport',
+    bg: '#FFF4ED',
+    color: '#B93815',
+  },
 
   // 💰 Budget tiers with distinct palette
   {
@@ -480,3 +489,17 @@ export const COLORS_BUDGET = [
     color: '#C11574', // magenta text
   },
 ];
+
+export const SINGLE_IMAGE_HEIGHT: ResponsiveHeight = {
+  xs: '96px',
+  sm: '120px',
+  md: '147px',
+  lg: '147px',
+};
+
+export const DOUBLE_IMAGE_HEIGHT: ResponsiveHeight = {
+  xs: '207px',
+  sm: '255px',
+  md: '308px',
+  lg: '308px',
+};

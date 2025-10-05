@@ -13,24 +13,53 @@ import MButton from '@/components/Button';
 import StarRating from '@/components/Star';
 import Days from './components/Days';
 import { itineraryData, bestTimeVisitData, weatherData } from '@/constants';
-import { decodeAndClean } from '@/lib';
 import ClientMap from './components/ClientMap';
 import ListTrips from '../components/ListTrips';
-import { popularTrips } from '@/constants';
+import { fetchQuery } from 'convex/nextjs';
+import { auth } from '@/auth';
+import { api } from '@/convex/_generated/api';
+import { Id } from '@/convex/_generated/dataModel';
+import { ListImage } from './components/ListImage';
+import {
+  parseTripToTripDetails,
+  getRandomNumber,
+  convertItineraryToDisplayFormat,
+  extractInfo,
+} from '@/lib';
+import { Itinerary } from '@/types';
 
 interface PageProps {
-  params: Promise<{ slug: string }>;
-  searchParams: Promise<{ lat: string; lng: string }>;
+  params: Promise<{ id: string }>;
 }
 
 const BUTTONS = ['Luxury', 'Beach', 'Mountain', 'Budget'];
 
 const Page = async (props: PageProps) => {
   const params = await props.params;
-  const location = decodeAndClean(params.slug[0]);
-  const sp = await props.searchParams;
-  const lat = parseFloat(sp.lat);
-  const lng = parseFloat(sp.lng);
+  const id = params.id;
+
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  const tripQuery = await fetchQuery(api.trips.getTripById, {
+    tripId: id as Id<'trips'>,
+  });
+
+  const popularTripsQuery = await fetchQuery(api.trips.getRandomTripDetails);
+  const popularTrips = parseTripToTripDetails(popularTripsQuery);
+
+  const tripDetails = tripQuery ? parseTripToTripDetails([tripQuery]) : [];
+  const trip = tripDetails[0];
+  const formattedItinerary = convertItineraryToDisplayFormat(trip.itinerary);
+
+  const weatherInfo = extractInfo('Weather Info:', trip.weatherInfo);
+  const bestTimeToVisit = extractInfo(
+    'Best Time to Visit:',
+    trip.bestTimeToVisit
+  );
+
+  const rating = getRandomNumber();
+
   return (
     <Box>
       <Header
@@ -69,9 +98,7 @@ const Page = async (props: PageProps) => {
               },
             }}
             className="text-black-1 font-semibold"
-          >
-            5-Day Japan Highlights: Culture, Food and Adventure
-          </Typography>
+          ></Typography>
           <Stack direction={'row'} spacing={2} marginTop={2}>
             <Stack
               justifyContent={'center'}
@@ -91,7 +118,7 @@ const Page = async (props: PageProps) => {
                 lineHeight={'16px'}
                 className="text-white-2"
               >
-                5 Day plan
+                {`${trip.duration} Day plan`}
               </Typography>
             </Stack>
             <Stack
@@ -112,87 +139,32 @@ const Page = async (props: PageProps) => {
                 lineHeight={'16px'}
                 className="text-white-2"
               >
-                Tokyo, Kyoto, Osaka
+                {trip.country}
               </Typography>
             </Stack>
           </Stack>
           <Grid container mt={4} spacing={2}>
             {/* Left side */}
-            <Grid
+            <ListImage
+              image={trip?.imageUrls[0]!}
+              doubleImage={true}
               size={{ xs: 6, sm: 6, md: 8, lg: 8 }}
-              sx={{
-                position: 'relative',
-                height: { xs: '207px', sm: '255px', md: '308px', lg: '308px' },
-              }}
-            >
-              <Image
-                src="/images/trip-1.png"
-                alt="trip-1"
-                fill
-                className="rounded-[16px] object-cover"
-              />
-            </Grid>
-
+            />
             {/* Right side */}
             <Grid size={{ xs: 6, sm: 6, md: 4, lg: 4 }}>
               <Grid container spacing={1.5}>
-                <Grid
-                  size={{ xs: 12 }}
-                  sx={{
-                    position: 'relative',
-                    height: {
-                      xs: '96px',
-                      sm: '120px',
-                      md: '147px',
-                      lg: '147px',
-                    },
-                  }}
-                >
-                  <Image
-                    src="/images/trip-1.png"
-                    alt="trip-1"
-                    fill
-                    className="rounded-[16px] object-cover"
-                  />
-                </Grid>
-                <Grid
-                  size={{ xs: 12 }}
-                  sx={{
-                    position: 'relative',
-                    height: {
-                      xs: '96px',
-                      sm: '120px',
-                      md: '147px',
-                      lg: '147px',
-                    },
-                  }}
-                >
-                  <Image
-                    src="/images/trip-1.png"
-                    alt="trip-1"
-                    fill
-                    className="rounded-[16px] object-cover"
-                  />
-                </Grid>
+                {trip?.imageUrls.slice(1, 3).map((image, index) => (
+                  <ListImage key={index} image={image} size={{ xs: 12 }} />
+                ))}
               </Grid>
             </Grid>
           </Grid>
           <Grid container spacing={2} marginTop={2}>
-            {/* Category buttons */}
-            {BUTTONS.map((button) => (
-              <Grid size={{ xs: 6, sm: 4, lg: 2 }} key={button}>
-                <MButton title={button} type={button} />
-              </Grid>
-            ))}
-
-            {/* Star rating and text as two separate grid items (or combine if needed) */}
-            <Grid alignContent={'center'} size={{ xs: 6, sm: 4, lg: 2 }}>
-              <StarRating value={4} />
-            </Grid>
-
-            <Grid size={{ xs: 6, sm: 4, lg: 2 }}>
-              <MButton title="4.9 / 5.0" type="Sport" />
-            </Grid>
+            <MButton title={trip.travelStyle} type={trip.travelStyle} />
+            <MButton title={trip.budget} type={trip.budget} />
+            <MButton title={trip.groupType} type={trip.groupType} />
+            <StarRating value={rating} />
+            <MButton title={`${rating} / 5.0`} type="Sport" />
           </Grid>
           <Grid container spacing={1} marginTop={4}>
             <Grid justifyContent={'space-between'} size={{ xs: 12, lg: 11 }}>
@@ -202,7 +174,7 @@ const Page = async (props: PageProps) => {
                 fontSize={'24px'}
                 lineHeight={'28px'}
               >
-                5-Day Japan Adventure
+                {trip.name}
               </Typography>
             </Grid>
             <Grid justifyContent={'space-between'} size={{ xs: 12, lg: 1 }}>
@@ -212,28 +184,15 @@ const Page = async (props: PageProps) => {
                 lineHeight={'30px'}
                 className="text-black-1 font-semibold"
               >
-                $604
+                {trip.estimatedPrice}
               </Typography>
             </Grid>
-            <Typography className="text-white-2">
-              Luxury, Diversity, and Harmony
-            </Typography>
-            <Typography className="text-white-2">
-              Experience the best of Japan in 5 unforgettable days, traveling
-              through Tokyo, Kyoto, and Osaka. From the bustling streets of
-              Shibuya to the historic temples of Kyoto and the vibrant food
-              scene in Osaka, this itinerary blends culture, sightseeing, and
-              local flavors.
-            </Typography>
-            <Typography mt={2} className="text-white-2">
-              Relax in a Hakone onsen, explore ancient shrines, and indulge in
-              authentic Japanese cuisine—all while enjoying seamless travel on
-              the Shinkansen. 🚄✨
-            </Typography>
+            <Typography className="text-white-2">{trip.interests}</Typography>
+            <Typography className="text-white-2">{trip.description}</Typography>
 
             {/* DAYS */}
             <Box mt={4}>
-              {itineraryData.map((day) => (
+              {formattedItinerary.map((day) => (
                 <Days key={day.title} data={day} />
               ))}
             </Box>
@@ -242,7 +201,7 @@ const Page = async (props: PageProps) => {
 
             {/* BEST TIME VISIT */}
             <Box mt={4}>
-              {bestTimeVisitData.map((bestTimeVisit) => (
+              {bestTimeToVisit.map((bestTimeVisit) => (
                 <Days key={bestTimeVisit.title} data={bestTimeVisit} />
               ))}
             </Box>
@@ -251,12 +210,12 @@ const Page = async (props: PageProps) => {
 
             {/* WEATHER */}
             <Box mt={4}>
-              {weatherData.map((weather) => (
-                <Days key={weather.title} data={weather} />
+              {weatherInfo.map((weather: Itinerary, index: number) => (
+                <Days key={index} data={weather} />
               ))}
             </Box>
           </Grid>
-          <ClientMap lat={lat} lng={lng} />
+          {/* <ClientMap lat={lat} lng={lng} /> */}
           <Divider sx={{ border: '1px #E3F1FF solid', width: '100%', mt: 4 }} />
           <Box mt={4}>
             <Typography

@@ -1,4 +1,4 @@
-import type { Trip, tripDetailsObj } from '@/types';
+import type { Trip, tripDetailsObj, Itinerary } from '@/types';
 
 export function decodeAndClean(str: string): string {
   // Step 1: Decode URL-encoded string (e.g., %20 → space)
@@ -52,7 +52,7 @@ export function parseTripData(jsonString: string): Trip | null {
   }
 }
 
-export const getRandomTrips = (trips: tripDetailsObj[]): Trip[] => {
+export const parseTripToTripDetails = (trips: tripDetailsObj[]): Trip[] => {
   const randomTrips = trips
     .map((t) => {
       const parsed = parseTripData(t.tripDetails);
@@ -66,4 +66,35 @@ export const getRandomTrips = (trips: tripDetailsObj[]): Trip[] => {
     })
     .filter((t): t is Trip => t !== null);
   return randomTrips;
+};
+
+export const getRandomNumber = (): number => {
+  return Math.floor(Math.random() * 6); // 0, 1, 2, 3, 4, or 5
+};
+
+export const convertItineraryToDisplayFormat = (
+  itinerary: {
+    day: number;
+    location: string;
+    activities: { description: string }[];
+  }[]
+) => {
+  return itinerary.map((dayPlan) => ({
+    title: `Day ${dayPlan.day}: ${dayPlan.location}`,
+    description: dayPlan.activities.map((activity) => ({
+      paragraph: activity.description,
+    })),
+  }));
+};
+
+export const extractInfo = (title: string, info: string[]) => {
+  const obj: Itinerary[] = [
+    {
+      title,
+      description: info.map((i) => ({
+        paragraph: i,
+      })),
+    },
+  ];
+  return obj;
 };

@@ -7,7 +7,7 @@ import { convex } from '@/lib/Convex';
 import { api } from '@/convex/_generated/api';
 import { auth } from '@/auth';
 import { fetchQuery } from 'convex/nextjs';
-import { getRandomTrips } from '@/lib';
+import { parseTripToTripDetails } from '@/lib';
 
 const page = async () => {
   const session = await auth();
@@ -17,7 +17,7 @@ const page = async () => {
     userId: userId as string,
   });
 
-  const randomTrips = getRandomTrips(trips);
+  const randomTrips = parseTripToTripDetails(trips);
 
   return (
     <Box sx={{ maxHeight: '100%', overflowY: 'auto' }}>

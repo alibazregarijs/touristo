@@ -47,3 +47,16 @@ export const getRandomTripDetails = query({
     }));
   },
 });
+
+export const getTripById = query({
+  args: { tripId: v.id('trips') },
+  handler: async (ctx, args) => {
+    const trip = await ctx.db.get(args.tripId);
+    if (!trip) return null;
+    return {
+      id: trip._id,
+      tripDetails: trip.tripDetails,
+      imageUrls: trip.imageUrls,
+    };
+  },
+});

@@ -77,7 +77,10 @@ declare interface Trip {
   itinerary: DayPlan[];
   bestTimeToVisit: string[];
   weatherInfo: string[];
-  location: Location;
+  location: {
+    city: string;
+    coordinates: [number, number];
+  };
   payment_link: string;
 }
 
@@ -85,4 +88,19 @@ export interface tripDetailsObj {
   id: Id<'trips'>;
   tripDetails: string;
   imageUrls: string[];
+}
+
+export type Breakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type ResponsiveValue = Partial<Record<Breakpoint, number>>;
+export type ResponsiveHeight = Partial<Record<Breakpoint, string>>; // e.g., '96px', '207px'
+
+export interface Itinerary {
+  title: string;
+  description: {
+    paragraph: string;
+  }[];
+}
+
+export interface DaysProps {
+  data: Itinerary; // Accept one itinerary object
 }
