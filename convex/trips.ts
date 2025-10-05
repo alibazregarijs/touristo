@@ -29,3 +29,20 @@ export const latestTripsForUser = query({
       .take(4);
   },
 });
+
+export const getRandomTripDetails = query({
+  handler: async (ctx) => {
+    // Fetch a batch of trips (e.g., 20 for randomness)
+    const trips = await ctx.db.query('trips').take(20);
+
+    // Shuffle and select 4 random trips
+    const shuffled = trips.sort(() => 0.5 - Math.random()).slice(0, 3);
+
+    // Return id, tripDetails, and imageUrls fields
+    return shuffled.map((trip) => ({
+      id: trip._id,
+      tripDetails: trip.tripDetails,
+      imageUrls: trip.imageUrls,
+    }));
+  },
+});

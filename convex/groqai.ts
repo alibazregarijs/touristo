@@ -8,6 +8,14 @@ import { Id } from '@/convex/_generated/dataModel';
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
+export type TripRecord = {
+  _id: Id<'trips'>;
+  _creationTime: number;
+  tripDetails: string;
+  imageUrls: string[];
+  userId: string;
+};
+
 const countryValidator = v.object({
   code: v.string(),
   label: v.string(),
@@ -121,7 +129,7 @@ Now generate the full JSON for ${duration} days using the same tone, structure, 
     }
     const jsonString = textResult.slice(start, end + 1);
 
-    let trip: any;
+    let trip: Trip;
     try {
       trip = JSON.parse(jsonString);
     } catch (e) {
@@ -130,11 +138,11 @@ Now generate the full JSON for ${duration} days using the same tone, structure, 
     }
 
     // Save to Convex
-    const tripId: any = await convex.mutation(api.trips.addTrip, {
+    const tripId = (await convex.mutation(api.trips.addTrip, {
       tripDetails: JSON.stringify(trip),
       imageUrls: args.imageUrls,
       userId: args.userId,
-    });
+    })) as TripRecord;
 
     const priceStr = trip.estimatedPrice || '$0';
     const tripPrice = parseInt(priceStr.replace(/\D/g, ''), 10) || 0;

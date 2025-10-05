@@ -24,7 +24,7 @@ const page = async () => {
         buttonTitle="Create a trip"
         href="/en/create-trip"
       />
-      <ListTrips trips={trips} />
+      {/* <ListTrips trips={trips} /> */}
     </Box>
   );
 };

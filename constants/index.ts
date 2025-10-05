@@ -423,3 +423,5 @@ export const popularTrips = [
     lng: -60.7667,
   },
 ];
+
+export const BUTTONS = ['Luxury', 'Beach', 'Mountain', 'Budget'];
