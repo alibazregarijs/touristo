@@ -10,26 +10,13 @@ import { auth } from '@/auth';
 import { api } from '@/convex/_generated/api';
 import { fetchQuery } from 'convex/nextjs'; // server-safe convex query
 import { Trip } from '@/types';
-import { parseTripData } from '@/lib';
+import { getRandomTrips } from '@/lib';
 
 export default async function Page() {
   const session = await auth();
 
   const tripDetailsObj = await fetchQuery(api.trips.getRandomTripDetails);
-
-  console.log(tripDetailsObj.length);
-  const randomTrips = tripDetailsObj
-    .map((t) => {
-      const parsed = parseTripData(t.tripDetails);
-      if (!parsed) return null;
-
-      return {
-        ...parsed,
-        imageUrls: t.imageUrls,
-        id: t.id,
-      } as Trip;
-    })
-    .filter((t): t is Trip => t !== null);
+  const randomTrips = getRandomTrips(tripDetailsObj);
 
   return (
     <Box

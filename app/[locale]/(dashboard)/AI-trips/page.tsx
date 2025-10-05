@@ -7,14 +7,17 @@ import { convex } from '@/lib/Convex';
 import { api } from '@/convex/_generated/api';
 import { auth } from '@/auth';
 import { fetchQuery } from 'convex/nextjs';
+import { getRandomTrips } from '@/lib';
 
 const page = async () => {
   const session = await auth();
   const userId = session?.user?.id;
 
-  const trips = await fetchQuery(api.trips.latestTripsForUser, {
+  const trips = await fetchQuery(api.trips.allTripsForUser, {
     userId: userId as string,
   });
+
+  const randomTrips = getRandomTrips(trips);
 
   return (
     <Box sx={{ maxHeight: '100%', overflowY: 'auto' }}>
@@ -24,7 +27,7 @@ const page = async () => {
         buttonTitle="Create a trip"
         href="/en/create-trip"
       />
-      {/* <ListTrips trips={trips} /> */}
+      <ListTrips trips={randomTrips} isPaginated={true} />
     </Box>
   );
 };

@@ -19,26 +19,27 @@ export const addTrip = mutation({
   },
 });
 
-export const latestTripsForUser = query({
+export const allTripsForUser = query({
   args: { userId: v.string() },
   handler: async (ctx, args) => {
-    return await ctx.db
+    const trips = await ctx.db
       .query('trips')
       .filter((q) => q.eq(q.field('userId'), args.userId))
-      .order('desc')
-      .take(4);
+      .collect();
+
+    return trips.map((trip) => ({
+      id: trip._id,
+      tripDetails: trip.tripDetails,
+      imageUrls: trip.imageUrls,
+    }));
   },
 });
 
 export const getRandomTripDetails = query({
   handler: async (ctx) => {
-    // Fetch a batch of trips (e.g., 20 for randomness)
     const trips = await ctx.db.query('trips').take(20);
-
-    // Shuffle and select 4 random trips
     const shuffled = trips.sort(() => 0.5 - Math.random()).slice(0, 3);
 
-    // Return id, tripDetails, and imageUrls fields
     return shuffled.map((trip) => ({
       id: trip._id,
       tripDetails: trip.tripDetails,

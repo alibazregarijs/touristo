@@ -3,13 +3,13 @@ import React from 'react';
 import TripsCard from '@/app/[locale]/(dashboard)/components/Trips';
 import { Box } from '@mui/material';
 import Pagination from '../../all-user/components/Pagination';
-import type { TripT } from '@/types';
+import type { Trip } from '@/types';
 
 const ListTrips = ({
   trips,
   isPaginated,
 }: {
-  trips: TripT[];
+  trips: Trip[];
   isPaginated?: boolean;
 }) => {
   const [tripsToShow, setTripsToShow] = React.useState(trips.slice(0, 8));

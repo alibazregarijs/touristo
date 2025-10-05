@@ -15,7 +15,13 @@ import Link from 'next/link';
 import MButton from '@/components/Button';
 import { BUTTONS } from '@/constants';
 
-const TripsStateCard = ({ trip }: { trip: Trip }) => {
+const TripsStateCard = ({
+  trip,
+  isPaginated,
+}: {
+  trip: Trip;
+  isPaginated: boolean;
+}) => {
   return (
     <Link
       href={{
@@ -84,9 +90,21 @@ const TripsStateCard = ({ trip }: { trip: Trip }) => {
           </Stack>
 
           {/* Buttons row */}
-          <Stack direction="row" spacing={1} mt={2}>
-            <MButton title={trip.travelStyle} type={trip.travelStyle} />
-            <MButton title={trip.budget} type={trip.budget} />
+          <Stack
+            direction={{ xs: 'column', md: 'row' }} // 👈 column on xs/sm, row on md+
+            spacing={1}
+            mt={2}
+          >
+            <MButton
+              cssClass={isPaginated ? 'text-[12px]! p-1!' : undefined}
+              title={trip.travelStyle}
+              type={trip.travelStyle}
+            />
+            <MButton
+              cssClass={isPaginated ? 'text-[12px]! p-1!' : undefined}
+              title={trip.budget}
+              type={trip.budget}
+            />
           </Stack>
         </CardContent>
       </Card>

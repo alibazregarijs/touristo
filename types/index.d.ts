@@ -80,3 +80,9 @@ declare interface Trip {
   location: Location;
   payment_link: string;
 }
+
+export interface tripDetailsObj {
+  id: Id<'trips'>;
+  tripDetails: string;
+  imageUrls: string[];
+}
