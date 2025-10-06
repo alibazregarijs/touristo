@@ -26,7 +26,7 @@ export default async function Page() {
 
   const usersPerMonth = await fetchQuery(api.user.getUsersPerMonth);
   const tripsPerMonth = await fetchQuery(api.trips.getTripsPerMonth);
-  const onlineUsersCount = await fetchQuery(api.user.getOnlineUsers);
+  const onlineUsersCount = await fetchQuery(api.user.getOnlineUsersCount);
 
   return (
     <Box

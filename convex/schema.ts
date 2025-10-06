@@ -7,10 +7,12 @@ export default defineSchema({
     imageUrl: v.optional(v.string()),
     username: v.string(),
     password: v.string(),
-    lastSeen: v.optional(v.number()), // timestamp in ms
+    lastSeen: v.number(), // Unix timestamp
+    online: v.boolean(),
   })
     .index('by_username', ['username'])
-    .index('by_email', ['email']),
+    .index('by_email', ['email'])
+    .index('by_online', ['online']), // Add index for online status
 
   trips: defineTable({
     tripDetails: v.string(),

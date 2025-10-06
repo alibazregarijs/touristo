@@ -1,4 +1,3 @@
-// app/components/UserStatus.tsx
 'use client';
 
 import { useEffect } from 'react';
@@ -7,34 +6,62 @@ import { useMutation, useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
 
-const UserStatus = () => {
+// ✅ Define the hook
+function useUserStatus() {
   const { data: session, status } = useSession();
-  const updateLastSeen = useMutation(api.user.updateLastSeen);
-  const user = useQuery(api.user.getUserById, {
-    userId: session?.user?.id as Id<'users'>,
+  const updateUserStatus = useMutation(api.user.updateUserById);
+  const user = useQuery(api.user.getUserByEmail, {
+    email: session?.user?.email ?? '',
   });
 
   useEffect(() => {
-    if (!session?.user?.id || !user) return;
+    if (status === 'loading' || !session || !user) return;
 
-    const userId = session.user.id as Id<'users'>;
-
-    // Function to ping server
-    const tick = () => {
-      updateLastSeen({ userId });
+    const updateStatus = (online: boolean) => {
+      updateUserStatus({
+        userId: session?.user?.id as Id<'users'>,
+        online,
+      });
     };
 
-    // Initial ping
-    tick();
+    // Initial status update - mark as online
+    updateStatus(true);
 
-    // Refresh every 30s
-    const interval = setInterval(tick, 30_000);
+    // Set up interval to update last seen (only when tab is visible)
+    let interval: NodeJS.Timeout;
+    const setupInterval = () => {
+      interval = setInterval(() => {
+        if (!document.hidden) {
+          updateStatus(true);
+        }
+      }, 30000); // every 30s
+    };
+
+    setupInterval();
+
+    // Handle visibility change
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        updateStatus(false);
+        clearInterval(interval);
+      } else {
+        updateStatus(true);
+        setupInterval();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     // Cleanup
-    return () => clearInterval(interval);
-  }, [session, status, updateLastSeen]);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (session) {
+        updateStatus(false);
+      }
+    };
+  }, [session, status, updateUserStatus]);
+}
 
-  return null; // invisible component
-};
-
-export default UserStatus;
+// ✅ Export the hook correctly
+export default useUserStatus;

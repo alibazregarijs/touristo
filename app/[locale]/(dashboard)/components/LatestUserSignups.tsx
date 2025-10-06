@@ -1,11 +1,10 @@
 import React from 'react';
-import { Box, Grid, Typography, Divider, Stack } from '@mui/material';
-import Image from 'next/image';
+import { Box, Grid, Typography, Divider, Stack, Avatar } from '@mui/material';
 
 type itemT = {
   name: string;
   itineraryCreated: string;
-  image: string;
+  image?: string; // optional now
 };
 
 interface Props {
@@ -75,13 +74,19 @@ const LatestUserSignups = ({ lastUser = false, item }: Props) => {
               sx={{ backgroundColor: '#F9FBFC' }}
             >
               <Stack direction="row" spacing={1} alignItems="center">
-                <Image
-                  src={user.image}
-                  alt="user"
-                  className="rounded-full"
-                  width={40}
-                  height={40}
-                />
+                {/* Circle with first letter */}
+                <Avatar
+                  sx={{
+                    bgcolor: '#fd366e',
+                    width: 40,
+                    height: 40,
+                    fontSize: '16px',
+                    fontWeight: 600,
+                  }}
+                >
+                  {user.name.charAt(0).toUpperCase()}
+                </Avatar>
+
                 <Typography
                   className="text-black-1"
                   fontWeight={600}

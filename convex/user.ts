@@ -35,6 +35,7 @@ export const createUserIfNotExists = mutation({
       username: args.username,
       password: args.password,
       lastSeen: Date.now(),
+      online: true,
     });
     return { success: true, userId };
   },
@@ -78,6 +79,8 @@ export const storeOAuthUser = mutation({
       imageUrl: args.imageUrl,
       username: args.username,
       password: '',
+      lastSeen: Date.now(),
+      online: true,
     });
   },
 });
@@ -141,42 +144,14 @@ export const updateUserById = mutation({
   },
 });
 
-// these two function get online users count
-export const updateLastSeen = mutation({
-  args: { userId: v.id('users') },
-  handler: async (ctx, { userId }) => {
-    await ctx.db.patch(userId, { lastSeen: Date.now() });
-  },
-});
-// Query online users (seen in last 60s)
-export const getOnlineUsers = query({
+export const getOnlineUsersCount = query({
   args: {},
   handler: async (ctx) => {
-    const users = await ctx.db.query('users').collect();
-    const now = Date.now();
-    const THRESHOLD = 60 * 1000; // 60 seconds
+    const onlineUsers = await ctx.db
+      .query('users')
+      .withIndex('by_online', (q) => q.eq('online', true))
+      .collect();
 
-    const onlineUsers = users.filter(
-      (u) => u.lastSeen && now - u.lastSeen < THRESHOLD
-    );
-
-    return onlineUsers.length;
-  },
-});
-
-export const getUserById = query({
-  args: {
-    userId: v.id('users'), // enforce that it's a valid users table ID
-  },
-  handler: async (ctx, { userId }) => {
-    const user = await ctx.db.get(userId);
-
-    if (!user) {
-      return null; // or throw an error if you prefer
-    }
-
-    // ⚠️ Important: strip sensitive fields like password before returning
-    const { password, ...safeUser } = user;
-    return safeUser;
+    return onlineUsers.length; // just the number
   },
 });
