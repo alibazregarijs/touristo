@@ -1,9 +1,7 @@
 import React from 'react';
 import Header from '@/app/[locale]/(dashboard)/components/Header';
 import { Box } from '@mui/material';
-import TripsCard from '../components/Trips';
-import { tripsObj } from '@/constants';
-import CreateTrip from '../AI-trips/components/CreateTrip';
+import CreateTrip from '@/app/[locale]/(dashboard)/create-trip/components/CreateTrip';
 
 const page = () => {
   return (

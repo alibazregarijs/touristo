@@ -98,3 +98,22 @@ export const extractInfo = (title: string, info: string[]) => {
   ];
   return obj;
 };
+
+// CreateTripForm.tsx utils
+export const flagUrl = (code: string) =>
+  `https://flagsapi.com/${code}/flat/32.png`;
+
+export const getImages = async (
+  country: string,
+  interests: string,
+  travelStyle: string
+) => {
+  const unsplashApiKey = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
+  const imageResponse = await fetch(
+    `https://api.unsplash.com/search/photos?query=${country} ${interests} ${travelStyle}&client_id=${unsplashApiKey}`
+  );
+  const imageUrls = (await imageResponse.json()).results
+    .slice(0, 3)
+    .map((result: any) => result.urls?.regular || null);
+  return imageUrls;
+};

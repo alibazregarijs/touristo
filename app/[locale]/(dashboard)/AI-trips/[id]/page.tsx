@@ -32,8 +32,6 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-const BUTTONS = ['Luxury', 'Beach', 'Mountain', 'Budget'];
-
 const Page = async (props: PageProps) => {
   const params = await props.params;
   const id = params.id;
@@ -215,7 +213,10 @@ const Page = async (props: PageProps) => {
               ))}
             </Box>
           </Grid>
-          {/* <ClientMap lat={lat} lng={lng} /> */}
+          <ClientMap
+            lat={trip.location.coordinates[0]}
+            lng={trip.location.coordinates[1]}
+          />
           <Divider sx={{ border: '1px #E3F1FF solid', width: '100%', mt: 4 }} />
           <Box mt={4}>
             <Typography

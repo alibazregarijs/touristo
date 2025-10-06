@@ -104,3 +104,22 @@ export interface Itinerary {
 export interface DaysProps {
   data: Itinerary; // Accept one itinerary object
 }
+
+// CreateTripForm.tsx types
+export type CountryOption = {
+  code: string;
+  label: string;
+  lat: number;
+  lng: number;
+};
+
+export type TripFormValues = {
+  country: CountryOption;
+  groupType: string;
+  travelStyle: string;
+  interest: string;
+  budget: string;
+  duration: string;
+  userId: string;
+  imageUrls: string[];
+};

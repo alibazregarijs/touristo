@@ -30,6 +30,7 @@ export default async function Page() {
         title={`Welcome ${session?.user?.name ?? 'Guest'} 👋`}
         description="Track activity, trends, and popular destinations in real time"
         buttonTitle="Create a trip"
+        href="/en/create-trip"
       />
       <StatsCards />
       <TripsCard items={randomTrips} isPaginated={false} />

@@ -491,15 +491,51 @@ export const COLORS_BUDGET = [
 ];
 
 export const SINGLE_IMAGE_HEIGHT: ResponsiveHeight = {
-  xs: '96px',
-  sm: '120px',
-  md: '147px',
-  lg: '147px',
+  xs: '110px', // ↑ from 96px
+  sm: '136px', // ↑ from 120px
+  md: '168px', // ↑ from 147px
+  lg: '168px', // ↑ from 147px
 };
 
 export const DOUBLE_IMAGE_HEIGHT: ResponsiveHeight = {
-  xs: '207px',
-  sm: '255px',
-  md: '308px',
-  lg: '308px',
+  xs: '236px', // ↑ from 207px
+  sm: '290px', // ↑ from 255px
+  md: '350px', // ↑ from 308px
+  lg: '350px', // ↑ from 308px
+};
+
+// CreateTripForm.tsx constants
+export const GROUP_TYPES = ['Solo', 'Couple', 'Family', 'Friends', 'Business'];
+export const TRAVEL_STYLES = [
+  'RELAXED',
+  'Nature & Outdoors',
+  'City Exploration',
+  'Luxury',
+  'Adventure',
+  'Cultural',
+  'Relaxation',
+];
+export const INTEREST = [
+  'Food & Culinary',
+  'Hiking & Nature Walks',
+  'Historical Sites',
+  'Museums & Art',
+  'Beaches & Water Activities',
+  'Nightlife & Bars',
+  'Photography Spots',
+  'Shopping',
+  'Local Experiences',
+];
+export const BUDGET = ['Mid-Range', 'Luxury', 'Premium', 'Budget'];
+
+export const defaultValues = {
+  defaultValues: {
+    country: COUNTRIES.find((c) => c.code === 'IR'),
+    groupType: '',
+    travelStyle: '',
+    interest: '',
+    budget: '',
+    duration: '',
+    userId: '',
+  },
 };
