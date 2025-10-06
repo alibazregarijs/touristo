@@ -83,6 +83,7 @@ declare interface Trip {
     coordinates: [number, number];
   };
   payment_link: string;
+  creationTime: number;
 }
 
 export interface tripDetailsObj {
@@ -123,4 +124,16 @@ export type TripFormValues = {
   duration: string;
   userId: string;
   imageUrls: string[];
+};
+
+// LatestUserSignups.tsx types
+export type LatestUserSignupsType = {
+  _id: Id<'users'>;
+  _creationTime: number;
+  imageUrl?: string;
+  email: string;
+  username: string;
+  lastSeen: number;
+  online: boolean;
+  countOfItineraryCreated: number;
 };

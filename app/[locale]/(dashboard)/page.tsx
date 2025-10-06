@@ -27,6 +27,9 @@ export default async function Page() {
   const usersPerMonth = await fetchQuery(api.user.getUsersPerMonth);
   const tripsPerMonth = await fetchQuery(api.trips.getTripsPerMonth);
   const onlineUsersCount = await fetchQuery(api.user.getOnlineUsersCount);
+  const latestUsers = await fetchQuery(api.user.getLatestUsers);
+  const latestTripsQuery = await fetchQuery(api.trips.getNewestTripDetails);
+  const latestTrips = parseTripToTripDetails(latestTripsQuery);
 
   return (
     <Box
@@ -78,12 +81,12 @@ export default async function Page() {
       <Grid container spacing={2} mt={4}>
         <Grid size={{ xs: 12, lg: 6 }}>
           <Suspense fallback={<LatestUserSignupsSkeleton lastUser rows={4} />}>
-            <LatestUserSignups item={userData} lastUser />
+            <LatestUserSignups item={latestUsers} lastUser />
           </Suspense>
         </Grid>
         <Grid size={{ xs: 12, lg: 6 }}>
           <Suspense fallback={<LatestUserSignupsSkeleton rows={4} />}>
-            <LatestUserSignups item={tripData} />
+            <LatestUserSignups item={latestTrips} />
           </Suspense>
         </Grid>
       </Grid>

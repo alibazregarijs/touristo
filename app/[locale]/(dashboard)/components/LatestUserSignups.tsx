@@ -1,18 +1,18 @@
 import React from 'react';
 import { Box, Grid, Typography, Divider, Stack, Avatar } from '@mui/material';
+import type { LatestUserSignupsType, Trip } from '@/types';
+import { extractTripSummary } from '@/lib';
 
-type itemT = {
-  name: string;
-  itineraryCreated: string;
-  image?: string; // optional now
-};
-
-interface Props {
+interface Props<T> {
   lastUser?: boolean;
-  item: itemT[];
+  item: T[];
 }
 
-const LatestUserSignups = ({ lastUser = false, item }: Props) => {
+function LatestUserSignups<T>({ lastUser = false, item }: Props<T>) {
+  const items = !lastUser
+    ? (item as unknown as Trip[]).map((trip) => extractTripSummary(trip))
+    : item;
+
   return (
     <Box
       p={4}
@@ -20,7 +20,8 @@ const LatestUserSignups = ({ lastUser = false, item }: Props) => {
         backgroundColor: '#FFFFFF',
         boxShadow: '0px 2px 6px 0px #0D0A2C14',
         borderRadius: '20px',
-        maxHeight: '400px',
+        minHeight: '450px',
+        maxHeight: '500px',
       }}
     >
       {/* Title */}
@@ -60,10 +61,11 @@ const LatestUserSignups = ({ lastUser = false, item }: Props) => {
               {lastUser ? 'NAME' : 'BOOKING'}
             </Typography>
             <Typography fontWeight={400} fontSize="10px" lineHeight="14px">
-              {lastUser ? ' ITINERARY CREATED' : 'TRAVEL DATES'}
+              {lastUser ? 'ITINERARY CREATED' : 'TRAVEL DURATION'}
             </Typography>
           </Stack>
-          {item.map((user, index) => (
+
+          {items.map((entry: any, index) => (
             <Stack
               key={index}
               direction="row"
@@ -74,7 +76,6 @@ const LatestUserSignups = ({ lastUser = false, item }: Props) => {
               sx={{ backgroundColor: '#F9FBFC' }}
             >
               <Stack direction="row" spacing={1} alignItems="center">
-                {/* Circle with first letter */}
                 <Avatar
                   sx={{
                     bgcolor: '#fd366e',
@@ -84,7 +85,9 @@ const LatestUserSignups = ({ lastUser = false, item }: Props) => {
                     fontWeight: 600,
                   }}
                 >
-                  {user.name.charAt(0).toUpperCase()}
+                  {lastUser
+                    ? entry.username?.charAt(0).toUpperCase()
+                    : entry.name?.charAt(0).toUpperCase()}
                 </Avatar>
 
                 <Typography
@@ -93,17 +96,20 @@ const LatestUserSignups = ({ lastUser = false, item }: Props) => {
                   fontSize="12px"
                   lineHeight="14px"
                 >
-                  {user.name}
+                  {lastUser ? entry.username : entry.name}
                 </Typography>
               </Stack>
+
               <Typography
                 className="text-black-1"
                 fontWeight={400}
                 fontSize="10px"
                 lineHeight="14px"
-                paddingRight={lastUser ? '5.7rem' : '0'}
+                paddingRight={lastUser ? '5.7rem' : '3.5rem'}
               >
-                {user.itineraryCreated}
+                {lastUser
+                  ? entry.countOfItineraryCreated
+                  : (entry.travelDates ?? 'N/A')}
               </Typography>
             </Stack>
           ))}
@@ -111,6 +117,6 @@ const LatestUserSignups = ({ lastUser = false, item }: Props) => {
       </Grid>
     </Box>
   );
-};
+}
 
 export default LatestUserSignups;

@@ -115,3 +115,30 @@ export const getImages = async (
     .map((result: any) => result.urls?.regular || null);
   return imageUrls;
 };
+
+export function convertConvexTimeToDate(convexTime: number | string): string {
+  // Convert microseconds to milliseconds
+  const milliseconds = Number(convexTime) / 1000;
+  const date = new Date(milliseconds);
+
+  // Extract components
+  const month = date.getMonth() + 1; // getMonth() is 0-indexed
+  const day = date.getDate();
+  const year = date.getFullYear().toString().slice(-2); // Get last 2 digits of the year
+
+  // Format as M/D/YY
+  return `${month}/${day}/${year}`;
+}
+
+// Example usage:
+// const dateString = convertConvexTimeToDate(1759763760947.0603);
+// console.log(dateString); // Output format will depend on the actual date represented by the timestamp
+
+export function extractTripSummary(trip: Trip) {
+  const image = trip.imageUrls?.[0] ?? '';
+  let name = trip.name;
+  name = name.split(':')[0].trim();
+  const travelDates = trip.duration;
+
+  return { image, name, travelDates: `${travelDates} days` };
+}

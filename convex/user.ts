@@ -1,5 +1,7 @@
-import { mutation, query } from './_generated/server';
 import { v } from 'convex/values';
+import { Id } from './_generated/dataModel';
+import { mutation, query } from './_generated/server';
+import type { LatestUserSignupsType } from '@/types';
 
 export const createUserIfNotExists = mutation({
   args: {
@@ -153,5 +155,40 @@ export const getOnlineUsersCount = query({
       .collect();
 
     return onlineUsers.length; // just the number
+  },
+});
+
+export const getLatestUsers = query({
+  args: {},
+  handler: async (ctx): Promise<LatestUserSignupsType[]> => {
+    // Get the 4 newest users
+    const latestUsers = await ctx.db
+      .query('users')
+      .withIndex('by_creation_time')
+      .order('desc')
+      .take(4);
+
+    // For each user, count their trips
+    const enriched = await Promise.all(
+      latestUsers.map(async (user) => {
+        const trips = await ctx.db
+          .query('trips')
+          .filter((q) => q.eq(q.field('userId'), user._id.toString()))
+          .collect();
+
+        return {
+          _id: user._id,
+          _creationTime: user._creationTime,
+          imageUrl: user.imageUrl,
+          email: user.email,
+          username: user.username,
+          lastSeen: user.lastSeen,
+          online: user.online,
+          countOfItineraryCreated: trips.length,
+        };
+      })
+    );
+
+    return enriched;
   },
 });

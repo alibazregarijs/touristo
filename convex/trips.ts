@@ -43,6 +43,7 @@ export const getNewestTripDetails = query({
       id: trip._id,
       tripDetails: trip.tripDetails,
       imageUrls: trip.imageUrls,
+      creationTime: trip._creationTime,
     }));
   },
 });
