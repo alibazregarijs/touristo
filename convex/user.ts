@@ -34,6 +34,7 @@ export const createUserIfNotExists = mutation({
       email: args.email,
       username: args.username,
       password: args.password,
+      lastSeen: Date.now(),
     });
     return { success: true, userId };
   },
@@ -78,5 +79,104 @@ export const storeOAuthUser = mutation({
       username: args.username,
       password: '',
     });
+  },
+});
+
+export const getUsersPerMonth = query({
+  args: {},
+  handler: async (ctx) => {
+    // Fetch all users
+    const users = await ctx.db.query('users').collect();
+
+    // Group by month (assuming _creationTime is available on each doc)
+    const counts: Record<string, number> = {};
+
+    for (const user of users) {
+      const created = new Date(user._creationTime);
+      const month = created.toLocaleString('en-US', { month: 'short' }); // "Jan", "Feb", etc.
+      counts[month] = (counts[month] ?? 0) + 1;
+    }
+
+    // Return as an array in month order (example: Jan–Dec)
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return months.map((m) => counts[m] ?? 0);
+  },
+});
+
+export const updateUserById = mutation({
+  args: {
+    userId: v.id('users'), // Convex doc ID for the "users" table
+    email: v.optional(v.string()),
+    online: v.optional(v.boolean()),
+    imageUrl: v.optional(v.string()),
+    username: v.optional(v.string()),
+    password: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const { userId, ...fields } = args;
+
+    // Remove undefined values so we only patch provided fields
+    const updates: Record<string, any> = {};
+    for (const [key, value] of Object.entries(fields)) {
+      if (value !== undefined) updates[key] = value;
+    }
+    // Apply the patch
+    await ctx.db.patch(userId, updates);
+
+    // Return the updated user
+    return await ctx.db.get(userId);
+  },
+});
+
+// these two function get online users count
+export const updateLastSeen = mutation({
+  args: { userId: v.id('users') },
+  handler: async (ctx, { userId }) => {
+    await ctx.db.patch(userId, { lastSeen: Date.now() });
+  },
+});
+// Query online users (seen in last 60s)
+export const getOnlineUsers = query({
+  args: {},
+  handler: async (ctx) => {
+    const users = await ctx.db.query('users').collect();
+    const now = Date.now();
+    const THRESHOLD = 60 * 1000; // 60 seconds
+
+    const onlineUsers = users.filter(
+      (u) => u.lastSeen && now - u.lastSeen < THRESHOLD
+    );
+
+    return onlineUsers.length;
+  },
+});
+
+export const getUserById = query({
+  args: {
+    userId: v.id('users'), // enforce that it's a valid users table ID
+  },
+  handler: async (ctx, { userId }) => {
+    const user = await ctx.db.get(userId);
+
+    if (!user) {
+      return null; // or throw an error if you prefer
+    }
+
+    // ⚠️ Important: strip sensitive fields like password before returning
+    const { password, ...safeUser } = user;
+    return safeUser;
   },
 });

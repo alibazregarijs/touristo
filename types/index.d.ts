@@ -38,6 +38,7 @@ export type State = (typeof STATES)[keyof typeof STATES];
 export interface UsersCardProps {
   state: State;
   data: number[];
+  activeUserToday?: number;
 }
 
 // Trips card props type

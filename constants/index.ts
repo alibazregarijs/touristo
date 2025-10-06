@@ -33,8 +33,8 @@ export const STATES = {
 } as const;
 
 export const STATE_LABELS: Record<State, string> = {
-  total_user: 'Users',
-  total_trips: 'Trips',
+  total_user: 'Total Users',
+  total_trips: 'Total Trips',
   active_users_today: 'Active Users Today',
 };
 

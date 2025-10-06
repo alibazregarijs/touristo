@@ -35,12 +35,11 @@ export const allTripsForUser = query({
   },
 });
 
-export const getRandomTripDetails = query({
+export const getNewestTripDetails = query({
   handler: async (ctx) => {
-    const trips = await ctx.db.query('trips').take(20);
-    const shuffled = trips.sort(() => 0.5 - Math.random()).slice(0, 3);
+    const trips = await ctx.db.query('trips').order('desc').take(4);
 
-    return shuffled.map((trip) => ({
+    return trips.map((trip) => ({
       id: trip._id,
       tripDetails: trip.tripDetails,
       imageUrls: trip.imageUrls,
@@ -58,5 +57,39 @@ export const getTripById = query({
       tripDetails: trip.tripDetails,
       imageUrls: trip.imageUrls,
     };
+  },
+});
+
+export const getTripsPerMonth = query({
+  args: {},
+  handler: async (ctx) => {
+    // Fetch all trips
+    const trips = await ctx.db.query('trips').collect();
+
+    // Group by month using _creationTime
+    const counts: Record<string, number> = {};
+
+    for (const trip of trips) {
+      const created = new Date(trip._creationTime);
+      const month = created.toLocaleString('en-US', { month: 'short' }); // "Jan", "Feb", etc.
+      counts[month] = (counts[month] ?? 0) + 1;
+    }
+
+    // Return as an array in month order (Jan–Dec)
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return months.map((m) => counts[m] ?? 0);
   },
 });

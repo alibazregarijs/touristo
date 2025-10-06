@@ -7,6 +7,7 @@ export default defineSchema({
     imageUrl: v.optional(v.string()),
     username: v.string(),
     password: v.string(),
+    lastSeen: v.optional(v.number()), // timestamp in ms
   })
     .index('by_username', ['username'])
     .index('by_email', ['email']),
