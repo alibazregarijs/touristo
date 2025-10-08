@@ -1,12 +1,7 @@
 import React from 'react';
 import { Box, Grid, Typography, Divider, Stack, Avatar } from '@mui/material';
-import type { LatestUserSignupsType, Trip } from '@/types';
+import type { Trip, Props } from '@/types';
 import { extractTripSummary } from '@/lib';
-
-interface Props<T> {
-  lastUser?: boolean;
-  item: T[];
-}
 
 function LatestUserSignups<T>({ lastUser = false, item }: Props<T>) {
   const items = !lastUser

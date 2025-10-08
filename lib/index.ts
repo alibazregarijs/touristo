@@ -133,7 +133,6 @@ export function convertConvexTimeToDate(convexTime: number | string): string {
 // Example usage:
 // const dateString = convertConvexTimeToDate(1759763760947.0603);
 // console.log(dateString); // Output format will depend on the actual date represented by the timestamp
-
 export function extractTripSummary(trip: Trip) {
   const image = trip.imageUrls?.[0] ?? '';
   let name = trip.name;
@@ -142,3 +141,15 @@ export function extractTripSummary(trip: Trip) {
 
   return { image, name, travelDates: `${travelDates} days` };
 }
+
+export const splitIntoRanges = (value: number) => {
+  const r1 = Math.min(value, 800); // 0–800
+  const r2 = Math.min(Math.max(value - 800, 0), 1200); // 801–2000
+  const r3 = Math.max(value - 2000, 0); // 2001+
+  return { range1: r1, range2: r2, range3: r3 };
+};
+
+export const formatYAxis = (val: number): string => {
+  if (val >= 1000) return `${Math.round(val / 1000)}k`;
+  return val.toString();
+};

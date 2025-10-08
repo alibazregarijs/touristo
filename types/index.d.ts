@@ -137,3 +137,23 @@ export type LatestUserSignupsType = {
   online: boolean;
   countOfItineraryCreated: number;
 };
+
+export type UserGrowthType = {
+  month: string;
+  users: number;
+};
+
+export interface UserGrowthChartProps {
+  userGrowth: UserGrowthType[];
+}
+
+export interface TripGrowth {
+  name: string;
+  value: number;
+  highlight?: boolean;
+}
+
+export interface Props<T> {
+  lastUser?: boolean;
+  item: T[];
+}

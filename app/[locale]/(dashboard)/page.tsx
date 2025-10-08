@@ -21,19 +21,30 @@ import { parseTripToTripDetails } from '@/lib';
 export default async function Page() {
   const session = await auth();
 
-  const tripDetailsObj = await fetchQuery(api.trips.getNewestTripDetails);
+  // Run all queries in parallel
+  const [
+    tripDetailsObj,
+    usersPerMonth,
+    tripsPerMonth,
+    onlineUsersCount,
+    latestUsers,
+    latestTripsQuery,
+    userGrowth,
+    tripGrowth,
+  ] = await Promise.all([
+    fetchQuery(api.trips.getNewestTripDetails),
+    fetchQuery(api.user.getUsersPerMonth),
+    fetchQuery(api.trips.getTripsPerMonth),
+    fetchQuery(api.user.getOnlineUsersCount),
+    fetchQuery(api.user.getLatestUsers),
+    fetchQuery(api.trips.getNewestTripDetails),
+    fetchQuery(api.user.getUserGrowth),
+    fetchQuery(api.trips.getTripStats),
+  ]);
+
+  // Post‑process the ones that need parsing
   const randomTrips = parseTripToTripDetails(tripDetailsObj);
-
-  const usersPerMonth = await fetchQuery(api.user.getUsersPerMonth);
-  const tripsPerMonth = await fetchQuery(api.trips.getTripsPerMonth);
-  const onlineUsersCount = await fetchQuery(api.user.getOnlineUsersCount);
-  const latestUsers = await fetchQuery(api.user.getLatestUsers);
-  const latestTripsQuery = await fetchQuery(api.trips.getNewestTripDetails);
   const latestTrips = parseTripToTripDetails(latestTripsQuery);
-  const userGrowth = await fetchQuery(api.user.getUserGrowth);
-  const tripGrowth = await fetchQuery(api.trips.getTripStats);
-
-  console.log(tripGrowth);
 
   return (
     <Box

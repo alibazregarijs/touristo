@@ -11,38 +11,8 @@ import {
   CartesianGrid,
   Tooltip,
 } from 'recharts';
-
-// const userGrowthRaw = [
-//   { month: 'Jan', users: 2800 },
-//   { month: 'Feb', users: 1500 },
-//   { month: 'Mar', users: 3200 },
-//   { month: 'Apr', users: 1200 },
-//   { month: 'May', users: 1800 },
-//   { month: 'Jun', users: 2000 },
-// ];
-// helper: split a value into ranges
-const splitIntoRanges = (value: number) => {
-  const r1 = Math.min(value, 800); // 0–800
-  const r2 = Math.min(Math.max(value - 800, 0), 1200); // 801–2000
-  const r3 = Math.max(value - 2000, 0); // 2001+
-  return { range1: r1, range2: r2, range3: r3 };
-};
-
-// preprocess dataset
-
-const formatYAxis = (val: number): string => {
-  if (val >= 1000) return `${Math.round(val / 1000)}k`;
-  return val.toString();
-};
-
-type UserGrowthType = {
-  month: string;
-  users: number;
-};
-
-interface UserGrowthChartProps {
-  userGrowth: UserGrowthType[];
-}
+import { splitIntoRanges, formatYAxis } from '@/lib';
+import type { UserGrowthType } from '@/types';
 
 export default function UserGrowthChart({
   userGrowth,
