@@ -250,8 +250,6 @@ test('renders error message when sign-in submit fails', async () => {
   );
 
   const submitButton = screen.getByRole('button', { name: /Sign In/ });
-  screen.logTestingPlaygroundURL();
-
   // Click submit
   await userEvent.click(submitButton);
 
@@ -281,7 +279,6 @@ test('renders error message when sign-in submit fails', async () => {
   );
 
   const submitButton = screen.getByRole('button', { name: /Sign In/ });
-  screen.logTestingPlaygroundURL();
 
   // Click submit
   await userEvent.click(submitButton);

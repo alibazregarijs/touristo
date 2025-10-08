@@ -1,5 +1,5 @@
 'use client';
-
+import { useState } from 'react';
 import { Card, CardContent, Typography, Box, Divider } from '@mui/material';
 import {
   BarChart,
@@ -11,48 +11,15 @@ import {
   LabelList,
   Cell,
 } from 'recharts';
-import type { TooltipProps } from 'recharts';
+import type { TripGrowth } from '@/types';
 
-const data = [
-  { name: 'Beach', value: 25 },
-  { name: 'Cultural', value: 30 },
-  { name: 'City', value: 35 },
-  { name: 'Nature', value: 20 },
-  { name: 'Culinary', value: 40, highlight: true },
-  { name: 'Relax', value: 28 },
-  { name: 'Adventure', value: 32 },
-];
+export default function TripTrendsChart({
+  tripGrowth,
+}: {
+  tripGrowth: TripGrowth[];
+}) {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-interface CustomTooltipProps {
-  active?: boolean;
-  payload?: Array<{
-    value: number;
-    name: string;
-  }>;
-  label?: string;
-}
-
-const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
-  if (active && payload && payload.length > 0) {
-    const value = payload[0].value;
-    return (
-      <Box
-        sx={{
-          backgroundColor: '#1E1E2F',
-          color: '#fff',
-          p: 2,
-          borderRadius: '8px',
-          boxShadow: '0px 2px 8px rgba(0,0,0,0.15)',
-        }}
-      >
-        {value}%
-      </Box>
-    );
-  }
-  return null;
-};
-
-export default function TripTrendsChart() {
   return (
     <Card
       sx={{
@@ -83,17 +50,28 @@ export default function TripTrendsChart() {
         />
         <Box sx={{ height: 280 }}>
           <ResponsiveContainer>
-            <BarChart data={data}>
+            <BarChart data={tripGrowth}>
               <XAxis dataKey="name" />
               <YAxis domain={[0, 50]} tickFormatter={(val) => `${val}%`} />
-              <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                {data.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={entry.highlight ? '#4A3AFF' : '#E5EAFC'}
-                  />
-                ))}
+              <Tooltip />
+              <Bar
+                dataKey="value"
+                radius={[4, 4, 0, 0]}
+                onMouseLeave={() => setActiveIndex(null)}
+              >
+                {tripGrowth.map((entry, index) => {
+                  const baseFill = entry.highlight ? '#4A3AFF' : '#E5EAFC';
+                  const isActive = index === activeIndex;
+                  return (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={isActive ? '#7C6CFF' : baseFill} // darker on hover
+                      stroke={isActive ? '#4A3AFF' : 'none'} // border on hover
+                      strokeWidth={isActive ? 2 : 0}
+                      onMouseEnter={() => setActiveIndex(index)}
+                    />
+                  );
+                })}
                 <LabelList
                   dataKey="value"
                   position="top"

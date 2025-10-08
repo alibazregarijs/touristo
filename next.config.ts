@@ -7,9 +7,15 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'flagsapi.com',
-        pathname: '/**', // allow all paths under flagsapi.com
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
       },
     ],
+    minimumCacheTTL: 60 * 60 * 24,
   },
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import CreateTripForm from './CreateTripForm';
+import CreateTripForm from '@/app/[locale]/(dashboard)/create-trip/components/CreateTripForm';
 
 const CreateTrip = () => {
   return (

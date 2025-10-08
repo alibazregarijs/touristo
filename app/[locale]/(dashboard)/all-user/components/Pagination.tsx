@@ -1,26 +1,23 @@
 import React, { useEffect } from 'react';
-import { USER_INFO } from '@/constants';
 import usePagination from '@mui/material/usePagination';
 import { Box, Stack, Button } from '@mui/material';
 
-interface UserInfoI {
-  name: string;
-  email_address: string;
-  data_joined: string;
-  itinerary_created: string;
-  status: string;
-  image: string;
-}
+type PaginationProps<T> = {
+  setItemsToShow: React.Dispatch<React.SetStateAction<T[]>>;
+  dataItems: T[];
+  pageSize?: number;
+};
 
-const Pagination = ({
-  setUsersToShow,
-}: {
-  setUsersToShow: React.Dispatch<React.SetStateAction<UserInfoI[]>>;
-}) => {
+// Arrow function with generic
+const Pagination = <T,>({
+  setItemsToShow,
+  dataItems,
+  pageSize,
+}: PaginationProps<T>) => {
   const [page, setPage] = React.useState(1);
-  const PER_PAGE = 4;
+  const PER_PAGE = pageSize ? pageSize : 4; // Default to 4 if pageSize is not provided
 
-  const count = Math.ceil(USER_INFO.length / PER_PAGE);
+  const count = Math.ceil(dataItems.length / PER_PAGE);
 
   const { items } = usePagination({
     count,
@@ -30,11 +27,12 @@ const Pagination = ({
 
   const start = (page - 1) * PER_PAGE;
   const end = start + PER_PAGE;
-  const usersToShow = USER_INFO.slice(start, end);
+  const itemsToShow = dataItems.slice(start, end);
 
   useEffect(() => {
-    setUsersToShow(usersToShow);
-  }, [page]);
+    setItemsToShow(itemsToShow);
+  }, [page, dataItems, setItemsToShow]);
+
   return (
     <Box>
       <Stack
@@ -43,7 +41,6 @@ const Pagination = ({
         alignItems="center"
         p={2}
       >
-        {/* Previous button on the left */}
         <Button
           variant="outlined"
           disabled={page === 1}
@@ -52,7 +49,6 @@ const Pagination = ({
           Previous
         </Button>
 
-        {/* Page numbers in the middle */}
         <Stack direction="row" spacing={1}>
           {items.map(({ page: p, type, selected, ...item }, index) => {
             if (type === 'page') {
@@ -73,11 +69,10 @@ const Pagination = ({
                 </span>
               );
             }
-            return null; // skip previous/next here
+            return null;
           })}
         </Stack>
 
-        {/* Next button on the right */}
         <Button
           variant="outlined"
           disabled={page === count}

@@ -1,5 +1,9 @@
-import { State } from '@/types';
-
+import type {
+  Breakpoint,
+  ResponsiveValue,
+  ResponsiveHeight,
+  State,
+} from '@/types';
 export const sidebarItems = [
   {
     name: 'Dashboard',
@@ -29,8 +33,8 @@ export const STATES = {
 } as const;
 
 export const STATE_LABELS: Record<State, string> = {
-  total_user: 'Users',
-  total_trips: 'Trips',
+  total_user: 'Total Users',
+  total_trips: 'Total Trips',
   active_users_today: 'Active Users Today',
 };
 
@@ -184,3 +188,354 @@ export const COUNTRIES = [
   { code: 'DO', label: 'Dominican Republic', lat: 18.7357, lng: -70.1627 },
   { code: 'UY', label: 'Uruguay', lat: -32.5228, lng: -55.7658 },
 ];
+
+// TripsCard data
+export const tripsObj = [
+  {
+    title: 'Thornridge Cir. Shiloh',
+    location: 'St George’s Ln Singapore',
+    buttons: ['Mountains', 'City'],
+    image: '/images/trip-1.png',
+    href: '/en/AI-trips/Thornridge Cir. Shiloh',
+    lat: 38.575,
+    lng: -89.935,
+  },
+  {
+    title: 'Roraima Tepui',
+    location: 'Canaima Park, Venezuela',
+    buttons: ['Solo travel', 'Budget'],
+    image: '/images/trip-2.png',
+    href: '/en/AI-trips/Roraima Tepui',
+    lat: 5.1667,
+    lng: -60.7667,
+  },
+  {
+    title: 'Socotra Island',
+    location: 'Yemen',
+    buttons: ['Luxury', 'Beach'],
+    image: '/images/trip-3.png',
+    href: '/en/AI-trips/Socotra Island',
+    lat: 12.5,
+    lng: 53.5,
+  },
+  {
+    title: 'San Lake Baikal',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+    href: '/en/AI-trips/San Lake Baikal',
+    lat: 53.5,
+    lng: 108.0,
+  },
+  {
+    title: 'San Lake Baikal2',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+    href: '/en/AI-trips/San Lake Baikal2',
+    lat: 53.5,
+    lng: 108.0,
+  },
+  {
+    title: 'San Lake Baikal3',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+    href: '/en/AI-trips/San Lake Baikal3',
+    lat: 53.5,
+    lng: 108.0,
+  },
+  {
+    title: 'San Lake Baikal4',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+    href: '/en/AI-trips/San Lake Baikal4',
+    lat: 53.5,
+    lng: 108.0,
+  },
+  {
+    title: 'San Lake Baikal5',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+    href: '/en/AI-trips/San Lake Baikal5',
+    lat: 53.5,
+    lng: 108.0,
+  },
+
+  {
+    title: 'San Lake Baikal12',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+    href: '/en/AI-trips/San Lake Baikal12',
+    lat: 53.5,
+    lng: 108.0,
+  },
+  {
+    title: 'San Lake Baikal13',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+    href: '/en/AI-trips/San Lake Baikal13',
+    lat: 53.5,
+    lng: 108.0,
+  },
+  {
+    title: 'San Lake Baikal14',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+    href: '/en/AI-trips/San Lake Baikal14',
+    lat: 53.5,
+    lng: 108.0,
+  },
+  {
+    title: 'San Lake Baikal15',
+    location: 'Siberia, Russia',
+    buttons: ['Sports', 'Adventurous'],
+    image: '/images/trip-4.png',
+    href: '/en/AI-trips/San Lake Baikal15',
+    lat: 53.5,
+    lng: 108.0,
+  },
+];
+
+// days data
+
+export const itineraryData = [
+  {
+    title: 'Day 1: Arrival in Tokyo & Shibuya Exploration',
+    description: [
+      {
+        paragraph: 'Arrive at Narita/Haneda Airport & check-in at hotel',
+      },
+      {
+        paragraph: 'Visit Shibuya Crossing & Hachiko Statue',
+      },
+      {
+        paragraph:
+          'Explore Shinjuku for city views at Tokyo Metropolitan Govt. Building',
+      },
+      {
+        paragraph: 'Dinner at an Izakaya in Golden Gai',
+      },
+    ],
+  },
+
+  {
+    title: 'Day 2: Tokyo Sightseeing & Culture',
+    description: [
+      {
+        paragraph: 'Morning: Senso-ji Temple in Asakusa',
+      },
+      {
+        paragraph: 'Afternoon: Akihabara (tech & anime district)',
+      },
+      {
+        paragraph: 'Evening: Walk around Tokyo Tower & Roppongi',
+      },
+    ],
+  },
+  {
+    title: 'Day 3: Day Trip to Hakone (Mt. Fuji Views)',
+    description: [
+      {
+        paragraph: 'Take the Hakone Ropeway for a scenic view',
+      },
+      {
+        paragraph: 'Relax in an onsen (hot spring)',
+      },
+      {
+        paragraph: 'Visit Lake Ashi & see Fuji in the distance',
+      },
+    ],
+  },
+];
+
+export const bestTimeVisitData = [
+  {
+    title: 'Best Time to Visit:',
+    description: [
+      {
+        paragraph:
+          '🌸 Spring (March–May): Cherry blossoms in full bloom, mild temperatures.',
+      },
+      {
+        paragraph:
+          '🍁 Autumn (September–November): Beautiful fall foliage, comfortable weather.',
+      },
+      {
+        paragraph:
+          '❄ Winter (December–February): Quieter, with snow-covered temples creating a magical scene.',
+      },
+      {
+        paragraph:
+          '☀ Summer (June–August): Hot & humid but lively with festivals like Gion Matsuri.',
+      },
+    ],
+  },
+];
+
+export const weatherData = [
+  {
+    title: 'Weather Info:',
+    description: [
+      {
+        paragraph: 'Spring: 10°C – 20°C (50°F – 68°F)',
+      },
+      {
+        paragraph: 'Summer: 22°C – 33°C (72°F – 91°F)',
+      },
+      {
+        paragraph: 'Autumn: 12°C – 25°C (54°F – 77°F)',
+      },
+      {
+        paragraph: 'Winter: 0°C – 10°C (32°F – 50°F)',
+      },
+    ],
+  },
+];
+
+export const popularTrips = [
+  {
+    title: 'Thornridge Cir. Shiloh',
+    location: 'St George’s Ln Singapore',
+    buttons: ['Mountains', 'City'],
+    image: '/images/trip-1.png',
+    href: '/en/AI-trips/Thornridge Cir. Shiloh',
+    lat: 38.575,
+    lng: -89.935,
+  },
+  {
+    title: 'Roraima Tepui',
+    location: 'Canaima Park, Venezuela',
+    buttons: ['Solo travel', 'Budget'],
+    image: '/images/trip-2.png',
+    href: '/en/AI-trips/Roraima Tepui',
+    lat: 5.1667,
+    lng: -60.7667,
+  },
+  {
+    title: 'Roraima Tepuiy',
+    location: 'Canaima Park, Venezuela',
+    buttons: ['Solo travel', 'Budget'],
+    image: '/images/trip-2.png',
+    href: '/en/AI-trips/Roraima Tepui',
+    lat: 5.1667,
+    lng: -60.7667,
+  },
+];
+
+export const BUTTONS = ['Luxury', 'Beach', 'Mountain', 'Budget'];
+
+export const COLORS_BUDGET = [
+  {
+    type: 'RELAXED',
+    bg: '#F7EDF6',
+    color: '#C11574',
+  },
+  {
+    type: 'Nature & Outdoors',
+    bg: '#E9F3FB',
+    color: '#175CD3',
+  },
+  {
+    type: 'City Exploration',
+    bg: '#ECFDF3',
+    color: '#027A48',
+  },
+  {
+    type: 'Adventure',
+    bg: '#FFF1F3',
+    color: '#C01048',
+  },
+  {
+    type: 'Cultural',
+    bg: '#FFF4ED',
+    color: '#B93815',
+  },
+  {
+    type: 'Relaxation',
+    bg: '#F0F9FF',
+    color: '#026AA2',
+  },
+  {
+    type: 'Sport',
+    bg: '#FFF4ED',
+    color: '#B93815',
+  },
+
+  // 💰 Budget tiers with distinct palette
+  {
+    type: 'Mid-Range',
+    bg: '#FFF7E6', // warm amber background
+    color: '#B54708', // deep orange text
+  },
+  {
+    type: 'Luxury',
+    bg: '#F3F0FF', // soft lavender background
+    color: '#6941C6', // royal purple text
+  },
+  {
+    type: 'Premium',
+    bg: '#E6FFFA', // aqua background
+    color: '#0F766E', // teal text
+  },
+  {
+    type: 'Budget',
+    bg: '#FFF0F6', // light pink background
+    color: '#C11574', // magenta text
+  },
+];
+
+export const SINGLE_IMAGE_HEIGHT: ResponsiveHeight = {
+  xs: '110px', // ↑ from 96px
+  sm: '136px', // ↑ from 120px
+  md: '168px', // ↑ from 147px
+  lg: '168px', // ↑ from 147px
+};
+
+export const DOUBLE_IMAGE_HEIGHT: ResponsiveHeight = {
+  xs: '236px', // ↑ from 207px
+  sm: '290px', // ↑ from 255px
+  md: '350px', // ↑ from 308px
+  lg: '350px', // ↑ from 308px
+};
+
+// CreateTripForm.tsx constants
+export const GROUP_TYPES = ['Solo', 'Couple', 'Family', 'Friends', 'Business'];
+export const TRAVEL_STYLES = [
+  'RELAXED',
+  'Nature & Outdoors',
+  'City Exploration',
+  'Luxury',
+  'Adventure',
+  'Cultural',
+  'Relaxation',
+];
+export const INTEREST = [
+  'Food & Culinary',
+  'Hiking & Nature Walks',
+  'Historical Sites',
+  'Museums & Art',
+  'Beaches & Water Activities',
+  'Nightlife & Bars',
+  'Photography Spots',
+  'Shopping',
+  'Local Experiences',
+];
+export const BUDGET = ['Mid-Range', 'Luxury', 'Premium', 'Budget'];
+
+export const defaultValues = {
+  defaultValues: {
+    country: COUNTRIES.find((c) => c.code === 'IR'),
+    groupType: '',
+    travelStyle: '',
+    interest: '',
+    budget: '',
+    duration: '',
+    userId: '',
+  },
+};
