@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useTransition } from 'react';
+import React, { useTransition } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import {
   Box,
@@ -10,54 +10,21 @@ import {
   CircularProgress,
 } from '@mui/material';
 import Image from 'next/image';
-import { COUNTRIES } from '@/constants';
-import SelectField from './SelectField';
+import SelectField from '@/app/[locale]/(dashboard)/AI-trips/components/SelectField';
 import dynamic from 'next/dynamic';
-import { createTrip } from '@/app/[locale]/(dashboard)/create-trip/actions';
 import { useSession } from 'next-auth/react';
-
-const flagUrl = (code: string) => `https://flagsapi.com/${code}/flat/32.png`;
-
-export type CountryOption = {
-  code: string;
-  label: string;
-  lat: number;
-  lng: number;
-};
-
-export type TripFormValues = {
-  country: CountryOption | null;
-  groupType: string;
-  travelStyle: string;
-  interest: string;
-  budget: string;
-  duration: string;
-  userId: string;
-  imageUrls: string[];
-};
-
-const GROUP_TYPES = ['Solo', 'Couple', 'Family', 'Friends', 'Business'];
-const TRAVEL_STYLES = [
-  'RELAXED',
-  'Nature & Outdoors',
-  'City Exploration',
-  'Luxury',
-  'Adventure',
-  'Cultural',
-  'Relaxation',
-];
-const INTEREST = [
-  'Food & Culinary',
-  'Hiking & Nature Walks',
-  'Historical Sites',
-  'Museums & Art',
-  'Beaches & Water Activities',
-  'Nightlife & Bars',
-  'Photography Spots',
-  'Shopping',
-  'Local Experiences',
-];
-const BUDGET = ['Mid-Range', 'Luxury', 'Premium', 'Budget'];
+import { useAction } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import { flagUrl, getImages } from '@/lib';
+import { TripFormValues } from '@/types';
+import {
+  COUNTRIES,
+  GROUP_TYPES,
+  TRAVEL_STYLES,
+  INTEREST,
+  BUDGET,
+  defaultValues,
+} from '@/constants';
 
 const Map = dynamic(() => import('@/components/Map'), {
   ssr: false,
@@ -69,51 +36,38 @@ const CreateTripForm = () => {
   const { data: session } = useSession();
   const userId = session?.user?.id;
 
-  const getImages = async (
-    country: string,
-    interests: string,
-    travelStyle: string
-  ) => {
-    const unsplashApiKey = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
-    const imageResponse = await fetch(
-      `https://api.unsplash.com/search/photos?query=${country} ${interests} ${travelStyle}&client_id=${unsplashApiKey}`
-    );
-    const imageUrls = (await imageResponse.json()).results
-      .slice(0, 3)
-      .map((result: any) => result.urls?.regular || null);
-    return imageUrls;
-  };
+  const getTripsAction = useAction(api.groqai.getTripsAction);
 
   const {
     register,
     handleSubmit,
     control,
-    getValues,
     reset,
+    watch,
     formState: { errors },
-  } = useForm<TripFormValues>({
-    defaultValues: {
-      country: COUNTRIES.find((c) => c.code === 'IR') ?? null,
-      groupType: '',
-      travelStyle: '',
-      interest: '',
-      budget: '',
-      duration: '',
-      userId: userId || '',
-    },
-  });
+  } = useForm<TripFormValues>(defaultValues);
+
+  const selectedCountry = watch('country');
 
   const onSubmit = async (data: TripFormValues) => {
     startTransition(async () => {
-      if (!data?.country?.label || !data?.interest || !data?.travelStyle)
-        return;
+      if (!data.country || !data.interest || !data.travelStyle) return;
+
       const imageUrl = await getImages(
-        data?.country?.label,
-        data?.interest,
-        data?.travelStyle
+        data.country.label,
+        data.interest,
+        data.travelStyle
       );
-      const formData = { ...data, userId: userId || '', imageUrls: imageUrl };
-      const result = await createTrip(null, formData);
+
+      const formData = {
+        ...data,
+        country: data.country, // non-null
+        duration: Number(data.duration), // number
+        userId: userId || '',
+        imageUrls: imageUrl as string[], // correct type
+      };
+
+      const result = await getTripsAction(formData);
       console.log('Form Data:', result);
     });
     reset();
@@ -238,11 +192,8 @@ const CreateTripForm = () => {
 
       {/* Map stays in its place */}
       <Box sx={{ mt: 3 }}>
-        {getValues('country') && (
-          <Map
-            lat={getValues('country')!.lat}
-            lng={getValues('country')!.lng}
-          />
+        {selectedCountry && (
+          <Map lat={selectedCountry!.lat} lng={selectedCountry!.lng} />
         )}
       </Box>
 

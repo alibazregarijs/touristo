@@ -1,19 +1,21 @@
+'use client';
 import React from 'react';
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import TripsStateCard from '@/app/[locale]/(dashboard)/components/TripsStateCard';
+import { Trip } from '@/types';
 
 const TripsCard = ({
   items,
   isPaginated,
 }: {
-  items: any;
+  items: Trip[];
   isPaginated: boolean;
 }) => {
   return (
     <Grid container spacing={2} mt={4}>
-      {items.map((item: any) => (
-        <Grid size={{ xs: 6, lg: !isPaginated ? 4 : 3 }} key={item.title}>
-          <TripsStateCard trip={item} />
+      {items.map((item) => (
+        <Grid size={{ xs: 6, lg: !isPaginated ? 4 : 3 }} key={item.id}>
+          <TripsStateCard trip={item} isPaginated={isPaginated} />
         </Grid>
       ))}
     </Grid>

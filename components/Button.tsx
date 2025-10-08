@@ -1,47 +1,18 @@
 import React from 'react';
 import { Button } from '@mui/material';
+import { COLORS_BUDGET } from '@/constants';
 
-const COLORS = [
-  {
-    type: 'Luxury',
-    bg: '#F7EDF6',
-    color: '#C11574',
-  },
-  {
-    type: 'Beach',
-    bg: '#E9F3FB',
-    color: '#175CD3',
-  },
-  {
-    type: 'Mountain',
-    bg: '#ECFDF3',
-    color: '#027A48',
-  },
-  {
-    type: 'Budget',
-    bg: '#F0F9FF',
-    color: '#026AA2',
-  },
-  {
-    type: 'Adventurous',
-    bg: '#FFF1F3',
-    color: '#C01048',
-  },
-  {
-    type: 'Sport',
-    bg: '#FFF4ED',
-    color: '#B93815',
-  },
-  {
-    type: 'Solo Travel',
-    bg: '#F0F9FF',
-    color: '#026AA2',
-  },
-];
-
-const MButton = ({ type, title }: { type: string; title: string }) => {
+const MButton = ({
+  type,
+  title,
+  cssClass,
+}: {
+  type: string;
+  title: string;
+  cssClass?: string | undefined;
+}) => {
   // Find the matching color config
-  const colorConfig = COLORS.find((color) => color.type === type);
+  const colorConfig = COLORS_BUDGET.find((color) => color.type === type);
 
   // Optional: handle case when type is not found
   if (!colorConfig) {
@@ -52,6 +23,7 @@ const MButton = ({ type, title }: { type: string; title: string }) => {
   return (
     <Button
       variant="contained"
+      className={cssClass}
       sx={{
         borderRadius: '40px',
         backgroundColor: colorConfig.bg,

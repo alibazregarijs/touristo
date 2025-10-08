@@ -1,17 +1,7 @@
 // Days.tsx
 import React from 'react';
 import { ListItem, ListItemText, Box, Typography } from '@mui/material';
-
-interface Itinerary {
-  title: string;
-  description: {
-    paragraph: string;
-  }[];
-}
-
-interface DaysProps {
-  data: Itinerary; // Accept one itinerary object
-}
+import { DaysProps } from '@/types';
 
 const Days = ({ data }: DaysProps) => {
   return (

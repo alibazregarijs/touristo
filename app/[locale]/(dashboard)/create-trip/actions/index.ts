@@ -2,24 +2,13 @@
 
 import { TripFormValues } from '@/app/[locale]/(dashboard)/AI-trips/components/CreateTripForm';
 import { parseMarkdownToJson, parseTripData } from '@/lib';
-import OpenAI from 'openai';
 import { api } from '@/convex/_generated/api';
 import type { Trip } from '@/types';
 import { Id } from '@/convex/_generated/dataModel';
-import { ConvexHttpClient } from 'convex/browser';
+import Groq from 'groq-sdk';
+import { convex } from '@/lib/Convex';
 
-// Initialize Convex client
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
-
-// Initialize OpenRouter client
-const openai = new OpenAI({
-  baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: process.env.OPENROUTER_API_KEY, // ✅ Set in .env.local
-  defaultHeaders: {
-    'HTTP-Referer': process.env.SITE_URL || 'http://localhost:3000', // Optional
-    'X-Title': process.env.SITE_NAME || 'Travel Planner',
-  },
-});
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export const createTrip = async (
   prevState: TripFormValues | null,
@@ -87,43 +76,38 @@ Return the itinerary and lowest estimated price in a clean, non-markdown JSON fo
   ]
 }`;
 
-    // ✅ Call OpenRouter via OpenAI SDK
-    const completion = await openai.chat.completions.create({
-      model: 'openai/gpt-4o', // or 'anthropic/claude-3.5-sonnet' etc.
-      messages: [
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
+    // ✅ Call Groq instead of OpenAI
+    const completion = await groq.chat.completions.create({
+      model: 'llama-3.3-70b-versatile', // Groq model
+      messages: [{ role: 'user', content: prompt }],
       temperature: 0.7,
+      max_tokens: 1000,
     });
 
-    const responseText = completion.choices[0].message.content;
+    const responseText = completion.choices[0]?.message?.content;
     if (!responseText) {
-      throw new Error('Empty response from OpenRouter');
+      throw new Error('Empty response from Groq');
     }
 
-    let trip;
-    try {
-      trip = parseMarkdownToJson(responseText);
-    } catch (parseError) {
-      console.error('Failed to parse AI response:', responseText);
+    // ✅ Parse AI response
+    const trip = parseMarkdownToJson(responseText);
+    if (!trip) {
       throw new Error('Invalid AI response format');
     }
 
+    // ✅ Save trip in Convex
     const tripId = await convex.mutation(api.trips.addTrip, {
       tripDetails: JSON.stringify(trip),
       imageUrls,
       userId,
     });
 
-    // Parse trip data to extract price
+    // ✅ Parse trip data to extract price
     const tripDetail = parseTripData(JSON.stringify(trip)) as Trip;
     const priceStr = tripDetail.estimatedPrice || '$0';
     const tripPrice = parseInt(priceStr.replace(/\D/g, ''), 10) || 0;
 
-    // Create product
+    // ✅ Create product linked to trip
     await convex.mutation(api.products.addProduct, {
       name: tripDetail.name || 'Untitled Trip',
       description: tripDetail.description || '',

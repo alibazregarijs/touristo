@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Button, Grid, Typography } from '@mui/material';
 import Link from 'next/link';
@@ -37,11 +38,7 @@ const Header = ({
       {/* Right side */}
       <Grid size={{ xs: 12, md: 'auto' }}>
         <Link href={href || '#'}>
-          <Button
-            fullWidth
-            variant="contained"
-            disabled={!(href === '/en/create-trip' || href === '/en/Ai-trips')}
-          >
+          <Button fullWidth variant="contained">
             {buttonTitle}
           </Button>
         </Link>

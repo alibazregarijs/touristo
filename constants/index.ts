@@ -1,5 +1,9 @@
-import { State } from '@/types';
-
+import type {
+  Breakpoint,
+  ResponsiveValue,
+  ResponsiveHeight,
+  State,
+} from '@/types';
 export const sidebarItems = [
   {
     name: 'Dashboard',
@@ -29,8 +33,8 @@ export const STATES = {
 } as const;
 
 export const STATE_LABELS: Record<State, string> = {
-  total_user: 'Users',
-  total_trips: 'Trips',
+  total_user: 'Total Users',
+  total_trips: 'Total Trips',
   active_users_today: 'Active Users Today',
 };
 
@@ -423,3 +427,115 @@ export const popularTrips = [
     lng: -60.7667,
   },
 ];
+
+export const BUTTONS = ['Luxury', 'Beach', 'Mountain', 'Budget'];
+
+export const COLORS_BUDGET = [
+  {
+    type: 'RELAXED',
+    bg: '#F7EDF6',
+    color: '#C11574',
+  },
+  {
+    type: 'Nature & Outdoors',
+    bg: '#E9F3FB',
+    color: '#175CD3',
+  },
+  {
+    type: 'City Exploration',
+    bg: '#ECFDF3',
+    color: '#027A48',
+  },
+  {
+    type: 'Adventure',
+    bg: '#FFF1F3',
+    color: '#C01048',
+  },
+  {
+    type: 'Cultural',
+    bg: '#FFF4ED',
+    color: '#B93815',
+  },
+  {
+    type: 'Relaxation',
+    bg: '#F0F9FF',
+    color: '#026AA2',
+  },
+  {
+    type: 'Sport',
+    bg: '#FFF4ED',
+    color: '#B93815',
+  },
+
+  // 💰 Budget tiers with distinct palette
+  {
+    type: 'Mid-Range',
+    bg: '#FFF7E6', // warm amber background
+    color: '#B54708', // deep orange text
+  },
+  {
+    type: 'Luxury',
+    bg: '#F3F0FF', // soft lavender background
+    color: '#6941C6', // royal purple text
+  },
+  {
+    type: 'Premium',
+    bg: '#E6FFFA', // aqua background
+    color: '#0F766E', // teal text
+  },
+  {
+    type: 'Budget',
+    bg: '#FFF0F6', // light pink background
+    color: '#C11574', // magenta text
+  },
+];
+
+export const SINGLE_IMAGE_HEIGHT: ResponsiveHeight = {
+  xs: '110px', // ↑ from 96px
+  sm: '136px', // ↑ from 120px
+  md: '168px', // ↑ from 147px
+  lg: '168px', // ↑ from 147px
+};
+
+export const DOUBLE_IMAGE_HEIGHT: ResponsiveHeight = {
+  xs: '236px', // ↑ from 207px
+  sm: '290px', // ↑ from 255px
+  md: '350px', // ↑ from 308px
+  lg: '350px', // ↑ from 308px
+};
+
+// CreateTripForm.tsx constants
+export const GROUP_TYPES = ['Solo', 'Couple', 'Family', 'Friends', 'Business'];
+export const TRAVEL_STYLES = [
+  'RELAXED',
+  'Nature & Outdoors',
+  'City Exploration',
+  'Luxury',
+  'Adventure',
+  'Cultural',
+  'Relaxation',
+];
+export const INTEREST = [
+  'Food & Culinary',
+  'Hiking & Nature Walks',
+  'Historical Sites',
+  'Museums & Art',
+  'Beaches & Water Activities',
+  'Nightlife & Bars',
+  'Photography Spots',
+  'Shopping',
+  'Local Experiences',
+];
+export const BUDGET = ['Mid-Range', 'Luxury', 'Premium', 'Budget'];
+
+export const defaultValues = {
+  defaultValues: {
+    country: COUNTRIES.find((c) => c.code === 'IR'),
+    groupType: '',
+    travelStyle: '',
+    interest: '',
+    budget: '',
+    duration: '',
+    userId: '',
+  },
+};
