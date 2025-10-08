@@ -86,7 +86,7 @@ declare interface Trip {
   creationTime: number;
 }
 
-export interface tripDetailsObj {
+export interface TripDetailObj {
   id: Id<'trips'>;
   tripDetails: string;
   imageUrls: string[];

@@ -23,6 +23,11 @@ const data = [
   { name: 'Adventure', value: 32 },
 ];
 
+interface tripGrowth {
+  name: string;
+  value: number;
+}
+
 interface CustomTooltipProps {
   active?: boolean;
   payload?: Array<{
@@ -52,7 +57,11 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   return null;
 };
 
-export default function TripTrendsChart() {
+export default function TripTrendsChart({
+  tripGrowth,
+}: {
+  tripGrowth: tripGrowth[];
+}) {
   return (
     <Card
       sx={{
@@ -83,7 +92,7 @@ export default function TripTrendsChart() {
         />
         <Box sx={{ height: 280 }}>
           <ResponsiveContainer>
-            <BarChart data={data}>
+            <BarChart data={tripGrowth}>
               <XAxis dataKey="name" />
               <YAxis domain={[0, 50]} tickFormatter={(val) => `${val}%`} />
               <Tooltip content={<CustomTooltip />} />

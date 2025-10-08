@@ -192,3 +192,46 @@ export const getLatestUsers = query({
     return enriched;
   },
 });
+
+export const getUserGrowth = query({
+  args: {},
+  handler: async (ctx) => {
+    const users = await ctx.db.query('users').collect();
+
+    // group by month
+    const counts: Record<string, number> = {};
+
+    users.forEach((u) => {
+      const date = new Date(u._creationTime); // Convex gives ms timestamp
+      const month = date.toLocaleString('en-US', { month: 'short' }); // "Jan", "Feb", ...
+      counts[month] = (counts[month] || 0) + 1;
+    });
+
+    // turn into array
+    const result = Object.entries(counts).map(([month, users]) => ({
+      month,
+      users,
+    }));
+
+    // sort by calendar order
+    const monthOrder = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    result.sort(
+      (a, b) => monthOrder.indexOf(a.month) - monthOrder.indexOf(b.month)
+    );
+
+    return result;
+  },
+});

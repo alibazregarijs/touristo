@@ -12,15 +12,14 @@ import {
   Tooltip,
 } from 'recharts';
 
-export const userGrowthRaw = [
-  { month: 'Jan', users: 2800 },
-  { month: 'Feb', users: 1500 },
-  { month: 'Mar', users: 3200 },
-  { month: 'Apr', users: 1200 },
-  { month: 'May', users: 1800 },
-  { month: 'Jun', users: 2000 },
-];
-
+// const userGrowthRaw = [
+//   { month: 'Jan', users: 2800 },
+//   { month: 'Feb', users: 1500 },
+//   { month: 'Mar', users: 3200 },
+//   { month: 'Apr', users: 1200 },
+//   { month: 'May', users: 1800 },
+//   { month: 'Jun', users: 2000 },
+// ];
 // helper: split a value into ranges
 const splitIntoRanges = (value: number) => {
   const r1 = Math.min(value, 800); // 0–800
@@ -30,18 +29,32 @@ const splitIntoRanges = (value: number) => {
 };
 
 // preprocess dataset
-const userGrowth = userGrowthRaw.map((d) => ({
-  month: d.month,
-  ...splitIntoRanges(d.users),
-  users: d.users,
-}));
 
 const formatYAxis = (val: number): string => {
   if (val >= 1000) return `${Math.round(val / 1000)}k`;
   return val.toString();
 };
 
-export default function UserGrowthChart() {
+type UserGrowthType = {
+  month: string;
+  users: number;
+};
+
+interface UserGrowthChartProps {
+  userGrowth: UserGrowthType[];
+}
+
+export default function UserGrowthChart({
+  userGrowth,
+}: {
+  userGrowth: UserGrowthType[];
+}) {
+  const userGrowthObj = userGrowth.map((d) => ({
+    month: d.month,
+    ...splitIntoRanges(d.users),
+    users: d.users,
+  }));
+
   return (
     <Card
       sx={{
@@ -73,7 +86,7 @@ export default function UserGrowthChart() {
         <Box sx={{ height: 280 }}>
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
-              data={userGrowth}
+              data={userGrowthObj}
               margin={{ top: 16, right: 24, bottom: 0, left: 0 }}
             >
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -83,7 +96,13 @@ export default function UserGrowthChart() {
                 tickFormatter={formatYAxis}
                 domain={[0, 3200]}
               />
-              <Tooltip />
+              <Tooltip
+                formatter={(value, name) => {
+                  if (name !== 'users') return null; // hide range1/2/3
+                  return [value, 'Users'];
+                }}
+              />
+
               {/* stacked bars for each range */}
               <Bar
                 dataKey="range1"

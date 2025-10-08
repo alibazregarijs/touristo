@@ -1,4 +1,4 @@
-import type { Trip, tripDetailsObj, Itinerary } from '@/types';
+import type { Trip, TripDetailObj, Itinerary } from '@/types';
 
 export function decodeAndClean(str: string): string {
   // Step 1: Decode URL-encoded string (e.g., %20 → space)
@@ -50,7 +50,7 @@ export function parseTripData(jsonString: string): Trip | null {
   }
 }
 
-export const parseTripToTripDetails = (trips: tripDetailsObj[]): Trip[] => {
+export const parseTripToTripDetails = (trips: TripDetailObj[]): Trip[] => {
   const randomTrips = trips
     .map((t) => {
       const parsed = parseTripData(t.tripDetails);
