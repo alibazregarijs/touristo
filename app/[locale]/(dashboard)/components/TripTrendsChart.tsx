@@ -12,12 +12,16 @@ import {
   Cell,
 } from 'recharts';
 import type { TripGrowth } from '@/types';
+import { useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 
 export default function TripTrendsChart({
   tripGrowth,
 }: {
   tripGrowth: TripGrowth[];
 }) {
+  const t = useTranslations();
+  const rtl = useLocale();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
@@ -38,7 +42,7 @@ export default function TripTrendsChart({
           fontWeight="600"
           className="text-black-1 font-semibold"
         >
-          User Growth
+          {t('TripGrowthChart.title')}
         </Typography>
         <Divider
           variant="fullWidth"
@@ -52,10 +56,18 @@ export default function TripTrendsChart({
           <ResponsiveContainer>
             <BarChart data={tripGrowth}>
               <XAxis dataKey="name" />
-              <YAxis domain={[0, 50]} tickFormatter={(val) => `${val}%`} />
+              <YAxis
+                domain={[0, 50]}
+                tickFormatter={(val) => `${val}%`}
+                tick={{
+                  fontSize: 12,
+                  textAnchor: rtl === 'fa' ? 'start' : 'end',
+                  dx: rtl === 'fa' ? 0 : -8,
+                }}
+              />
               <Tooltip />
               <Bar
-                dataKey="value"
+                dataKey="count"
                 radius={[4, 4, 0, 0]}
                 onMouseLeave={() => setActiveIndex(null)}
               >

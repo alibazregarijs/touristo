@@ -40,5 +40,29 @@
     "last_month": "vs last month",
     "trending_up": "Trending up",
     "trending_down": "Trending down"
+  },
+  "UserGrowthChart": {
+    "title": "User Growth",
+    "description": "Monthly growth of active users"
+  },
+  "TripGrowthChart": {
+    "title": "Trip Growth",
+    "description": "Monthly growth of active trips"
+  },
+  "LatestUserSignups": {
+    "title": "Latest user signups",
+    "name": "NAME",
+    "Itinerary": "ITINERARY CREATED",
+    "duration": "TRAVEL DURATION"
+  },
+  "LatestTripBookings": {
+    "title": "Latest trip bookings",
+    "name": "BOOKING"
+  },
+
+  "Sidebar": {
+    "Dashboard": "Dashboard",
+    "All_Users": "All Users",
+    "AI_Trips": "AI Trips"
   }
 }

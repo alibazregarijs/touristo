@@ -7,20 +7,23 @@ import type {
 export const sidebarItems = [
   {
     name: 'Dashboard',
-    href: '/en',
+    enHref: '/en',
+    faHref: '/fa',
     icon: '/icons/home.png',
     icon_hover: '/icons/home-hover.png',
   },
 
   {
-    name: 'All Users',
-    href: '/en/all-user',
+    name: 'All_Users',
+    enHref: '/en/all-user',
+    faHref: '/fa/all-user',
     icon: '/icons/profile-2user.png',
     icon_hover: '/icons/profile-2user-hover.png',
   },
   {
-    name: 'AI Trips',
-    href: '/en/AI-trips',
+    name: 'AI_Trips',
+    enHref: '/en/AI-trips',
+    faHref: '/fa/AI-trips',
     icon: '/icons/map.png',
     icon_hover: '/icons/map-hover.png',
   },

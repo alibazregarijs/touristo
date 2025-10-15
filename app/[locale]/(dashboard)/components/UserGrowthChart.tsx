@@ -13,12 +13,15 @@ import {
 } from 'recharts';
 import { splitIntoRanges, formatYAxis } from '@/lib';
 import type { UserGrowthType } from '@/types';
+import { useLocale, useTranslations } from 'next-intl';
 
 export default function UserGrowthChart({
   userGrowth,
 }: {
   userGrowth: UserGrowthType[];
 }) {
+  const rtl = useLocale();
+  const t = useTranslations();
   const userGrowthObj = userGrowth.map((d) => ({
     month: d.month,
     ...splitIntoRanges(d.users),
@@ -35,14 +38,14 @@ export default function UserGrowthChart({
       }}
     >
       <Typography
-        ml={2}
+        mx={2}
         mt={4}
         lineHeight={'24px'}
         fontSize={'18px'}
         fontWeight={'600'}
         className="text-black-1 font-semibold"
       >
-        User Growth
+        {t('UserGrowthChart.title')}
       </Typography>
       <Divider
         variant="fullWidth"
@@ -62,10 +65,15 @@ export default function UserGrowthChart({
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="month" tick={{ fontSize: 12 }} />
               <YAxis
-                tick={{ fontSize: 12 }}
+                tick={{
+                  fontSize: 12,
+                  textAnchor: rtl === 'fa' ? 'start' : 'end',
+                  dx: rtl === 'fa' ? 0 : -8,
+                }}
                 tickFormatter={formatYAxis}
                 domain={[0, 3200]}
               />
+
               <Tooltip
                 formatter={(value, name) => {
                   if (name !== 'users') return null; // hide range1/2/3

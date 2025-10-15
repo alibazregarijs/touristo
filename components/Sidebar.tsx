@@ -5,13 +5,15 @@ import { useTheme } from '@mui/material/styles';
 import Image from 'next/image';
 import SidebarItems from '@/components/SidebarItems';
 import MobileNavbar from '@/components/MobileNavbar';
+import { useLocale } from 'next-intl';
 
 const Sidebar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const locale = useLocale();
+  const isRTL = locale === 'fa';
 
   if (isMobile) {
-    // --- Mobile layout ---
     return (
       <Box
         sx={{
@@ -21,23 +23,24 @@ const Sidebar = () => {
           px: 2,
           py: 1,
           borderBottom: '1px solid #ECF2EF',
+          direction: isRTL ? 'rtl' : 'ltr', // 👈 set text direction
         }}
       >
-        {/* Left: logo + text */}
-        <Stack direction="row" alignItems="center" spacing={0.5}>
+        <Stack
+          direction={isRTL ? 'row-reverse' : 'row'} // 👈 flip logo/text order
+          alignItems="center"
+          gap={0.5}
+        >
           <Image src="/images/logo.png" alt="logo" width={30} height={30} />
           <Typography className="text-black-1" fontWeight={600}>
             Touristo
           </Typography>
         </Stack>
-
-        {/* Right: mobile navbar (hamburger/drawer) */}
         <MobileNavbar />
       </Box>
     );
   }
 
-  // --- Desktop layout ---
   return (
     <Box
       sx={{
@@ -46,14 +49,15 @@ const Sidebar = () => {
         width: '100%',
         paddingTop: '1rem',
         alignContent: 'space-between',
-        borderRight: '1px solid #ECF2EF',
+        borderRight: isRTL ? 'none' : '1px solid #ECF2EF', // 👈 border side
+        borderLeft: isRTL ? '1px solid #ECF2EF' : 'none',
         borderBottom: '1px solid #ECF2EF',
+        direction: isRTL ? 'rtl' : 'ltr', // 👈 set text direction
       }}
     >
-      {/* top section */}
       <Box>
         <Stack
-          direction="row"
+          direction={isRTL ? 'row-reverse' : 'row'}
           justifyContent="start"
           alignItems="center"
           spacing={0.5}
@@ -77,7 +81,6 @@ const Sidebar = () => {
         </Box>
       </Box>
 
-      {/* bottom section */}
       <Box sx={{ p: '1rem', display: 'flex', alignItems: 'center', gap: 1 }}>
         <Image
           className="hidden rounded-full lg:flex"

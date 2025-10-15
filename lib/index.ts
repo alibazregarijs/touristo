@@ -40,9 +40,9 @@ export function parseMarkdownToJson(markdownText: string): unknown | null {
   }
 }
 
-export function parseTripData(jsonString: string): Trip | null {
+export function parseTripData(jsonString: string): Trip[] | null {
   try {
-    const data: Trip = JSON.parse(jsonString);
+    const data: Trip[] = JSON.parse(jsonString);
     return data;
   } catch (error) {
     console.error('Failed to parse trip data:', error);
@@ -50,19 +50,28 @@ export function parseTripData(jsonString: string): Trip | null {
   }
 }
 
-export const parseTripToTripDetails = (trips: TripDetailObj[]): Trip[] => {
+export const parseTripToTripDetails = (
+  trips: TripDetailObj[],
+  language: string
+): Trip[] => {
+  const lng = language === 'en' ? 0 : 1;
   const randomTrips = trips
     .map((t) => {
       const parsed = parseTripData(t.tripDetails);
       if (!parsed) return null;
 
+      // 👇 pick English version (index 0) or Farsi (index 1)
+      const enTrip = parsed[lng];
+      // const faTrip = parsed[1];
+
       return {
-        ...parsed,
+        ...enTrip,
         imageUrls: t.imageUrls,
         id: t.id,
       } as Trip;
     })
     .filter((t): t is Trip => t !== null);
+
   return randomTrips;
 };
 
@@ -152,4 +161,28 @@ export const splitIntoRanges = (value: number) => {
 export const formatYAxis = (val: number): string => {
   if (val >= 1000) return `${Math.round(val / 1000)}k`;
   return val.toString();
+};
+
+export const getTripJson = (textResult: string) => {
+  if (!textResult) {
+    throw new Error('Empty response from Groq');
+  }
+
+  // Extract and parse pure JSON
+  const start = textResult.indexOf('{');
+  const end = textResult.lastIndexOf('}');
+  if (start === -1 || end === -1 || end <= start) {
+    throw new Error('No valid JSON found in response');
+  }
+  const jsonString = textResult.slice(start, end + 1);
+
+  let trip: Trip;
+  try {
+    trip = JSON.parse(jsonString);
+  } catch (e) {
+    console.error('Failed to parse:', jsonString);
+    throw new Error('Invalid JSON from AI');
+  }
+
+  return trip;
 };

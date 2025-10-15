@@ -16,11 +16,12 @@ import { auth } from '@/auth';
 import { api } from '@/convex/_generated/api';
 import { fetchQuery } from 'convex/nextjs';
 import { parseTripToTripDetails } from '@/lib';
-import { getTranslations } from 'next-intl/server';
 import LocaleSwitcher from '@/components/LocaleSwitcher';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 export default async function Page() {
   const session = await auth();
+  const language = await getLocale();
   const t = await getTranslations();
   // Run all queries in parallel
   const [
@@ -42,7 +43,8 @@ export default async function Page() {
   ]);
 
   // Post‑process the ones that need parsing
-  const latestTrips = parseTripToTripDetails(latestTripsQuery);
+
+  const latestTrips = parseTripToTripDetails(latestTripsQuery, language);
 
   return (
     <Box
@@ -52,8 +54,8 @@ export default async function Page() {
       }}
       className="no-scrollbar"
     >
-      <LocaleSwitcher />
       {/* Header */}
+      <LocaleSwitcher />
       <Suspense fallback={<HeaderSkeleton />}>
         <Header
           title={t('DashboardPage.title', {

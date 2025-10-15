@@ -138,7 +138,7 @@ export const getTripStats = query({
     // Step 6: return in desired format
     const result = categories.map((travelStyle) => ({
       name: travelStyle,
-      value: counts[travelStyle],
+      count: counts[travelStyle],
     }));
 
     return result;

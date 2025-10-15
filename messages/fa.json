@@ -40,5 +40,29 @@
     "last_month": "نسبت به ماه گذشته",
     "trending_up": "در حال پیشرفت",
     "trending_down": "در حال پسرفت"
+  },
+  "UserGrowthChart": {
+    "title": "رشد کاربران",
+    "description": "رشد کاربران فعال"
+  },
+  "TripGrowthChart": {
+    "title": "رشد مسافرت ها",
+    "description": "رشد مسافرت های فعال"
+  },
+  "LatestUserSignups": {
+    "title": "آخرین ثبت نامی کاربران",
+    "name": "نام کاربری",
+    "Itinerary": "تعداد سفر های انجام شده ",
+    "duration": "مدت زمان مسافرت"
+  },
+  "LatestTripBookings": {
+    "title": "آخرین مسافرت های کاربران",
+    "name": "مسافرت"
+  },
+
+  "Sidebar": {
+    "Dashboard": "داشبورد",
+    "All_Users": "تمامی کاربران",
+    "AI_Trips": "سفر ها"
   }
 }

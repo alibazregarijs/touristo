@@ -149,7 +149,7 @@ export interface UserGrowthChartProps {
 
 export interface TripGrowth {
   name: string;
-  value: number;
+  count: number;
   highlight?: boolean;
 }
 

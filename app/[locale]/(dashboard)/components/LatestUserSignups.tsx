@@ -2,8 +2,10 @@ import React from 'react';
 import { Box, Grid, Typography, Divider, Stack, Avatar } from '@mui/material';
 import type { Trip, Props } from '@/types';
 import { extractTripSummary } from '@/lib';
+import { useTranslations } from 'next-intl';
 
 function LatestUserSignups<T>({ lastUser = false, item }: Props<T>) {
+  const t = useTranslations();
   const items = !lastUser
     ? (item as unknown as Trip[]).map((trip) => extractTripSummary(trip))
     : item;
@@ -28,7 +30,9 @@ function LatestUserSignups<T>({ lastUser = false, item }: Props<T>) {
             fontWeight={600}
             className="text-black-1"
           >
-            {lastUser ? 'Latest user signups' : 'Latest trip bookings'}
+            {lastUser
+              ? t('LatestUserSignups.title')
+              : t('LatestTripBookings.title')}
           </Typography>
         </Grid>
       </Grid>
@@ -53,10 +57,14 @@ function LatestUserSignups<T>({ lastUser = false, item }: Props<T>) {
             mb={1}
           >
             <Typography fontWeight={400} fontSize="10px" lineHeight="14px">
-              {lastUser ? 'NAME' : 'BOOKING'}
+              {lastUser
+                ? t('LatestUserSignups.name')
+                : t('LatestTripBookings.name')}
             </Typography>
             <Typography fontWeight={400} fontSize="10px" lineHeight="14px">
-              {lastUser ? 'ITINERARY CREATED' : 'TRAVEL DURATION'}
+              {lastUser
+                ? t('LatestUserSignups.Itinerary')
+                : t('LatestUserSignups.duration')}
             </Typography>
           </Stack>
 

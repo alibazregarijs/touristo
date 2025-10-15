@@ -5,23 +5,26 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { sidebarItems } from '@/constants';
-
+import { useTranslations } from 'next-intl';
 const SidebarItems = ({ isDrawer }: { isDrawer?: boolean }) => {
   const pathname = usePathname();
+  const t = useTranslations();
   let isDrawerClass;
   if (isDrawer) {
     isDrawerClass = 'bg-[#70243c] text-white hover:bg-[#5a1d30]';
   } else {
     isDrawerClass = 'text-white-2';
   }
+
   return (
     <Box>
       {sidebarItems.map((item) => {
-        const isActive = pathname === item.href;
+        const isActive = pathname === item.enHref || pathname === item.faHref;
+
         return (
           <Box key={item.name} sx={{ marginX: '0.5rem', paddingY: '0.5rem' }}>
             <Link
-              href={item.href}
+              href={item.enHref}
               className={`flex h-[50px] items-center gap-2 rounded-[10px] ${
                 isActive
                   ? 'bg-[#70243c] text-white hover:bg-[#5a1d30]' // active (drawer or not)
@@ -46,7 +49,7 @@ const SidebarItems = ({ isDrawer }: { isDrawer?: boolean }) => {
                 className="text-[14px]! leading-[24px] font-semibold lg:text-[16px]!"
                 component="span"
               >
-                {item.name}
+                {t(`Sidebar.${item.name}`)}
               </Typography>
             </Link>
           </Box>
