@@ -6,7 +6,9 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { sidebarItems } from '@/constants';
 import { useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 const SidebarItems = ({ isDrawer }: { isDrawer?: boolean }) => {
+  const isRtl = useLocale() === 'fa';
   const pathname = usePathname();
   const t = useTranslations();
   let isDrawerClass;
@@ -25,7 +27,7 @@ const SidebarItems = ({ isDrawer }: { isDrawer?: boolean }) => {
           <Box key={item.name} sx={{ marginX: '0.5rem', paddingY: '0.5rem' }}>
             <Link
               href={item.enHref}
-              className={`flex h-[50px] items-center gap-2 rounded-[10px] ${
+              className={`flex ${isRtl ? 'justify-end' : 'justify-start'} h-[50px] items-center gap-2 rounded-[10px] ${
                 isActive
                   ? 'bg-[#70243c] text-white hover:bg-[#5a1d30]' // active (drawer or not)
                   : isDrawer

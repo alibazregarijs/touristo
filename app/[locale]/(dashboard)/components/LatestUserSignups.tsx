@@ -3,9 +3,11 @@ import { Box, Grid, Typography, Divider, Stack, Avatar } from '@mui/material';
 import type { Trip, Props } from '@/types';
 import { extractTripSummary } from '@/lib';
 import { useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 
 function LatestUserSignups<T>({ lastUser = false, item }: Props<T>) {
   const t = useTranslations();
+  const isRtl = useLocale() === 'fa';
   const items = !lastUser
     ? (item as unknown as Trip[]).map((trip) => extractTripSummary(trip))
     : item;
@@ -108,11 +110,11 @@ function LatestUserSignups<T>({ lastUser = false, item }: Props<T>) {
                 fontWeight={400}
                 fontSize="10px"
                 lineHeight="14px"
-                paddingRight={lastUser ? '5.7rem' : '3.5rem'}
+                align="center" // 👈 this is the right prop
               >
                 {lastUser
                   ? entry.countOfItineraryCreated
-                  : (entry.travelDates ?? 'N/A')}
+                  : `${entry.travelDates?.match(/\d+/)?.[0] ?? 'N/A'} ${t('LatestUserSignups.Days')}`}
               </Typography>
             </Stack>
           ))}

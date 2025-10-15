@@ -49,7 +49,7 @@ const Sidebar = () => {
         width: '100%',
         paddingTop: '1rem',
         alignContent: 'space-between',
-        borderRight: isRTL ? 'none' : '1px solid #ECF2EF', // 👈 border side
+        borderRight: isRTL ? 'none' : '1px solid #f2efecff', // 👈 border side
         borderLeft: isRTL ? '1px solid #ECF2EF' : 'none',
         borderBottom: '1px solid #ECF2EF',
         direction: isRTL ? 'rtl' : 'ltr', // 👈 set text direction
@@ -58,9 +58,9 @@ const Sidebar = () => {
       <Box>
         <Stack
           direction={isRTL ? 'row-reverse' : 'row'}
-          justifyContent="start"
+          justifyContent={isRTL ? 'end' : 'start'}
           alignItems="center"
-          spacing={0.5}
+          gap={0.5}
           sx={{ paddingX: '1rem' }}
         >
           <Image src="/images/logo.png" alt="logo" width={30} height={30} />
@@ -76,7 +76,7 @@ const Sidebar = () => {
           }}
         />
 
-        <Box justifyContent="center">
+        <Box>
           <SidebarItems />
         </Box>
       </Box>

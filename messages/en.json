@@ -53,7 +53,8 @@
     "title": "Latest user signups",
     "name": "NAME",
     "Itinerary": "ITINERARY CREATED",
-    "duration": "TRAVEL DURATION"
+    "duration": "TRAVEL DURATION",
+    "Days": "Day"
   },
   "LatestTripBookings": {
     "title": "Latest trip bookings",
