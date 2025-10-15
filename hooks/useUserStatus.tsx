@@ -61,7 +61,6 @@ function useUserStatus() {
       }
     };
   }, [session, status, updateUserStatus]);
-  return null;
 }
 
 // ✅ Export the hook correctly

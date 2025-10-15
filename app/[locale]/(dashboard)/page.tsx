@@ -12,18 +12,18 @@ import TripTrendsChart from './components/TripTrendsChart';
 import TripTrendsChartSkeleton from '@/skeletons/TripTrendsChartSkeleton';
 import LatestUserSignups from './components/LatestUserSignups';
 import LatestUserSignupsSkeleton from '@/skeletons/LatestUserSignupsSkeleton';
+import { tripData, userData } from '@/constants';
 import { auth } from '@/auth';
 import { api } from '@/convex/_generated/api';
 import { fetchQuery } from 'convex/nextjs';
 import { parseTripToTripDetails } from '@/lib';
-import { getTranslations } from 'next-intl/server';
-import LocaleSwitcher from '@/components/LocaleSwitcher';
 
 export default async function Page() {
   const session = await auth();
-  const t = await getTranslations();
+
   // Run all queries in parallel
   const [
+    tripDetailsObj,
     usersPerMonth,
     tripsPerMonth,
     onlineUsersCount,
@@ -32,6 +32,7 @@ export default async function Page() {
     userGrowth,
     tripGrowth,
   ] = await Promise.all([
+    fetchQuery(api.trips.getNewestTripDetails),
     fetchQuery(api.user.getUsersPerMonth),
     fetchQuery(api.trips.getTripsPerMonth),
     fetchQuery(api.user.getOnlineUsersCount),
@@ -42,6 +43,7 @@ export default async function Page() {
   ]);
 
   // Post‑process the ones that need parsing
+  const randomTrips = parseTripToTripDetails(tripDetailsObj);
   const latestTrips = parseTripToTripDetails(latestTripsQuery);
 
   return (
@@ -52,15 +54,12 @@ export default async function Page() {
       }}
       className="no-scrollbar"
     >
-      <LocaleSwitcher />
       {/* Header */}
       <Suspense fallback={<HeaderSkeleton />}>
         <Header
-          title={t('DashboardPage.title', {
-            name: session?.user?.name ?? 'Guest',
-          })}
-          description={t('DashboardPage.description')}
-          buttonTitle={t('DashboardPage.buttonTitle')}
+          title={`Welcome ${session?.user?.name ?? 'Guest'} 👋`}
+          description="Track activity, trends, and popular destinations in real time"
+          buttonTitle="Create a trip"
           href="/en/create-trip"
         />
       </Suspense>
@@ -76,7 +75,7 @@ export default async function Page() {
 
       {/* Trips */}
       <Suspense fallback={<TripsCardSkeleton isPaginated={false} />}>
-        <TripsCard items={latestTrips} isPaginated={false} />
+        <TripsCard items={randomTrips} isPaginated={false} />
       </Suspense>
 
       {/* Charts */}

@@ -12,12 +12,9 @@ export default function UsersCard({
   data,
   activeUserToday,
 }: UsersCardProps) {
-  const t = useTranslations();
   const isUp = data[data.length - 1] > data[0];
   const lineColor = isUp ? '#12B76A' : '#F04438';
-  const totalItems = !activeUserToday
-    ? data.reduce((acc, curr) => acc + curr, 0)
-    : activeUserToday;
+  const totalItems = data.reduce((acc, curr) => acc + curr, 0);
 
   return (
     <Card
@@ -30,7 +27,7 @@ export default function UsersCard({
       <CardContent>
         <Typography variant="subtitle2">{t(`UserCard.${state}`)}</Typography>
         <Typography variant="h5" fontWeight={600}>
-          {totalItems}
+          {!activeUserToday ? totalItems : activeUserToday}
         </Typography>
 
         <Box sx={{ mt: 1 }}>
