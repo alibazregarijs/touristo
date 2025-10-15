@@ -27,5 +27,18 @@
       "usernameMinLength": "Username must be at least 3 characters",
       "usernameMaxLength": "Username must be less than 20 characters"
     }
+  },
+  "DashboardPage": {
+    "title": "Welcome {name} 👋",
+    "description": "Track activity, trends, and popular destinations in real time",
+    "buttonTitle": "Create a trip"
+  },
+  "UserCard": {
+    "total_user": "Total Users",
+    "total_trips": "Total Trips",
+    "active_users_today": "Active Users Today",
+    "last_month": "vs last month",
+    "trending_up": "Trending up",
+    "trending_down": "Trending down"
   }
 }

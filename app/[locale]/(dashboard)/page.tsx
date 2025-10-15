@@ -16,10 +16,12 @@ import { auth } from '@/auth';
 import { api } from '@/convex/_generated/api';
 import { fetchQuery } from 'convex/nextjs';
 import { parseTripToTripDetails } from '@/lib';
+import { getTranslations } from 'next-intl/server';
+import LocaleSwitcher from '@/components/LocaleSwitcher';
 
 export default async function Page() {
   const session = await auth();
-
+  const t = await getTranslations();
   // Run all queries in parallel
   const [
     usersPerMonth,
@@ -50,12 +52,15 @@ export default async function Page() {
       }}
       className="no-scrollbar"
     >
+      <LocaleSwitcher />
       {/* Header */}
       <Suspense fallback={<HeaderSkeleton />}>
         <Header
-          title={`Welcome ${session?.user?.name ?? 'Guest'} 👋`}
-          description="Track activity, trends, and popular destinations in real time"
-          buttonTitle="Create a trip"
+          title={t('DashboardPage.title', {
+            name: session?.user?.name ?? 'Guest',
+          })}
+          description={t('DashboardPage.description')}
+          buttonTitle={t('DashboardPage.buttonTitle')}
           href="/en/create-trip"
         />
       </Suspense>

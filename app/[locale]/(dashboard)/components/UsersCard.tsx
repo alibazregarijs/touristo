@@ -5,12 +5,14 @@ import { SparkLineChart } from '@mui/x-charts/SparkLineChart';
 import Image from 'next/image';
 import { STATE_LABELS } from '@/constants';
 import { UsersCardProps } from '@/types';
+import { useTranslations } from 'next-intl';
 
 export default function UsersCard({
   state,
   data,
   activeUserToday,
 }: UsersCardProps) {
+  const t = useTranslations();
   const isUp = data[data.length - 1] > data[0];
   const lineColor = isUp ? '#12B76A' : '#F04438';
   const totalItems = !activeUserToday
@@ -26,7 +28,7 @@ export default function UsersCard({
       }}
     >
       <CardContent>
-        <Typography variant="subtitle2">{STATE_LABELS[state]}</Typography>
+        <Typography variant="subtitle2">{t(`UserCard.${state}`)}</Typography>
         <Typography variant="h5" fontWeight={600}>
           {totalItems}
         </Typography>
@@ -43,11 +45,11 @@ export default function UsersCard({
             height={12}
             style={{ marginRight: 4 }}
           />
-          <Typography variant="body2" sx={{ color: lineColor }}>
-            {isUp ? 'Trending up' : 'Trending down'}
+          <Typography variant="body2" sx={{ color: lineColor, ml: 0.5 }}>
+            {isUp ? t('UserCard.trending_up') : t('UserCard.trending_down')}
           </Typography>
           <Typography variant="body2" sx={{ color: '#7F7E83', ml: 1 }}>
-            vs last month
+            {t('UserCard.last_month')}
           </Typography>
         </Box>
       </CardContent>
