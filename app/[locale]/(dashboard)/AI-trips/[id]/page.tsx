@@ -1,18 +1,9 @@
-import {
-  Box,
-  Typography,
-  Stack,
-  Grid,
-  Button,
-  Divider,
-  List,
-} from '@mui/material';
+import { Box, Typography, Stack, Grid, Divider } from '@mui/material';
 import Header from '../../components/Header';
 import Image from 'next/image';
 import MButton from '@/components/Button';
 import StarRating from '@/components/Star';
 import Days from './components/Days';
-import { itineraryData, bestTimeVisitData, weatherData } from '@/constants';
 import ClientMap from './components/ClientMap';
 import ListTrips from '../components/ListTrips';
 import { fetchQuery } from 'convex/nextjs';
@@ -27,6 +18,7 @@ import {
   extractInfo,
 } from '@/lib';
 import { Itinerary } from '@/types';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -35,24 +27,36 @@ interface PageProps {
 const Page = async (props: PageProps) => {
   const params = await props.params;
   const id = params.id;
-
+  const language = await getLocale();
   const session = await auth();
   const userId = session?.user?.id;
+  const t = await getTranslations();
 
+  console.log(language, 'language');
   const tripQuery = await fetchQuery(api.trips.getTripById, {
     tripId: id as Id<'trips'>,
   });
 
-  const popularTripsQuery = await fetchQuery(api.trips.getRandomTripDetails);
-  const popularTrips = parseTripToTripDetails(popularTripsQuery);
+  const popularTripsQuery = await fetchQuery(api.trips.getNewestTripDetails);
+  const popularTrips = parseTripToTripDetails(popularTripsQuery, language);
 
-  const tripDetails = tripQuery ? parseTripToTripDetails([tripQuery]) : [];
+  const tripDetails = tripQuery
+    ? parseTripToTripDetails([tripQuery], language)
+    : [];
   const trip = tripDetails[0];
-  const formattedItinerary = convertItineraryToDisplayFormat(trip.itinerary);
 
-  const weatherInfo = extractInfo('Weather Info:', trip.weatherInfo);
+  const formattedItinerary = convertItineraryToDisplayFormat(
+    trip.itinerary,
+    t(`AItripHeader.duration`)
+  );
+
+  const weatherInfo = extractInfo(
+    t(`AItripHeader.weatherInfo`),
+    trip.weatherInfo
+  );
+
   const bestTimeToVisit = extractInfo(
-    'Best Time to Visit:',
+    t(`AItripHeader.bestTimeToVisit`),
     trip.bestTimeToVisit
   );
 
@@ -61,10 +65,10 @@ const Page = async (props: PageProps) => {
   return (
     <Box>
       <Header
-        title="Trips"
-        description="View and edit AI-generated travel plans"
+        title={t('AItripHeader.title')}
+        description={t('AItripHeader.description')}
         href="#"
-        buttonTitle="Create Trip"
+        buttonTitle={t('AItripHeader.buttonTitle')}
       />
       <Box>
         <Box
@@ -116,7 +120,7 @@ const Page = async (props: PageProps) => {
                 lineHeight={'16px'}
                 className="text-white-2"
               >
-                {`${trip.duration} Day plan`}
+                {`${trip.duration} ${t('AItripHeader.duration')}`}
               </Typography>
             </Stack>
             <Stack
@@ -137,7 +141,7 @@ const Page = async (props: PageProps) => {
                 lineHeight={'16px'}
                 className="text-white-2"
               >
-                {trip.country}
+                {t(`Countries.${trip.country}`)}
               </Typography>
             </Stack>
           </Stack>
@@ -165,28 +169,39 @@ const Page = async (props: PageProps) => {
             <MButton title={`${rating} / 5.0`} type="Sport" />
           </Grid>
           <Grid container spacing={1} marginTop={4}>
-            <Grid justifyContent={'space-between'} size={{ xs: 12, lg: 11 }}>
+            <Stack
+              direction="row"
+              justifyContent="space-between" // keeps them apart horizontally
+              alignItems="center" // 👈 vertical centering
+              spacing={2}
+              sx={{ width: '100%' }}
+              marginTop={2}
+            >
               <Typography
                 className="text-black-1 font-semibold"
-                fontWeight={'600'}
-                fontSize={'24px'}
-                lineHeight={'28px'}
+                fontWeight={600}
+                fontSize="24px"
               >
                 {trip.name}
               </Typography>
-            </Grid>
-            <Grid justifyContent={'space-between'} size={{ xs: 12, lg: 1 }}>
+
               <Typography
-                fontWeight={'600'}
-                fontSize={'18px'}
-                lineHeight={'30px'}
                 className="text-black-1 font-semibold"
+                fontWeight={600}
+                fontSize="18px"
               >
                 {trip.estimatedPrice}
               </Typography>
+            </Stack>
+
+            <Grid>
+              <Typography className="text-white-2">
+                {t(`Interest.${trip.interests}`)}
+              </Typography>
+              <Typography className="text-white-2">
+                {trip.description}
+              </Typography>
             </Grid>
-            <Typography className="text-white-2">{trip.interests}</Typography>
-            <Typography className="text-white-2">{trip.description}</Typography>
 
             {/* DAYS */}
             <Box mt={4}>
@@ -225,7 +240,7 @@ const Page = async (props: PageProps) => {
               fontSize="24px"
               mb={2}
             >
-              Popular Itineraries
+              {t(`AItripHeader.popularItineraries`)}
             </Typography>
           </Box>
         </Box>

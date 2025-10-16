@@ -17,14 +17,9 @@ import { useAction } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { flagUrl, getImages } from '@/lib';
 import { TripFormValues } from '@/types';
-import {
-  COUNTRIES,
-  GROUP_TYPES,
-  TRAVEL_STYLES,
-  INTEREST,
-  BUDGET,
-  defaultValues,
-} from '@/constants';
+import { COUNTRIES, defaultValues } from '@/constants';
+import { useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 
 const Map = dynamic(() => import('@/components/Map'), {
   ssr: false,
@@ -32,6 +27,8 @@ const Map = dynamic(() => import('@/components/Map'), {
 });
 
 const CreateTripForm = () => {
+  const t = useTranslations();
+  const isRTL = useLocale() === 'fa';
   const [isSubmitting, startTransition] = useTransition();
   const { data: session } = useSession();
   const userId = session?.user?.id;
@@ -79,7 +76,7 @@ const CreateTripForm = () => {
       <Controller
         name="country"
         control={control}
-        rules={{ required: 'Country is required' }}
+        rules={{ required: t('CreateTrip.CountryRequired') }}
         render={({ field }) => (
           <Autocomplete
             options={COUNTRIES}
@@ -110,7 +107,7 @@ const CreateTripForm = () => {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Country"
+                label={t('CreateTrip.countryLable')}
                 error={!!errors.country}
                 helperText={errors.country?.message}
                 InputProps={{
@@ -136,11 +133,13 @@ const CreateTripForm = () => {
       <Box sx={{ mt: 3 }}>
         <TextField
           fullWidth
-          label="Duration"
-          placeholder="Enter number of days (e.g., 5, 12)"
+          label={t('CreateTrip.durationLable')}
+          placeholder={t('CreateTrip.durationHolder')}
           error={!!errors.duration}
           helperText={errors.duration?.message}
-          {...register('duration', { required: 'Duration is required' })}
+          {...register('duration', {
+            required: t('CreateTrip.DurationRequired'),
+          })}
           slotProps={{ inputLabel: { shrink: true } }}
         />
       </Box>
@@ -148,45 +147,51 @@ const CreateTripForm = () => {
       {/* Other fields */}
       <Box sx={{ mt: 3 }}>
         <SelectField
-          label="Group Type"
-          placeholder="Select a group type"
-          options={GROUP_TYPES}
+          label={t('CreateTrip.groupTypeLable')}
+          placeholder={t('CreateTrip.groupTypeHolder')}
+          options={Object.values(t.raw('GroupType'))}
           error={!!errors.groupType}
           helperText={errors.groupType?.message}
-          {...register('groupType', { required: 'Group type is required' })}
+          {...register('groupType', {
+            required: t('CreateTrip.GroupTypeRequired'),
+          })}
         />
       </Box>
 
       <Box sx={{ mt: 3 }}>
         <SelectField
-          label="Travel Style"
-          placeholder="Select your travel style"
-          options={TRAVEL_STYLES}
+          label={t('CreateTrip.travelStyleLable')}
+          placeholder={t('CreateTrip.travelStyleHolder')}
+          options={Object.values(t.raw('TravelStyle'))}
           error={!!errors.travelStyle}
           helperText={errors.travelStyle?.message}
-          {...register('travelStyle', { required: 'Travel style is required' })}
+          {...register('travelStyle', {
+            required: t('CreateTrip.TravelStyleRequired'),
+          })}
         />
       </Box>
 
       <Box sx={{ mt: 3 }}>
         <SelectField
-          label="Interests"
-          placeholder="Select your interests"
-          options={INTEREST}
+          label={t('CreateTrip.interestLable')}
+          placeholder={t('CreateTrip.interestHolder')}
+          options={Object.values(t.raw('Interest'))}
           error={!!errors.interest}
           helperText={errors.interest?.message}
-          {...register('interest', { required: 'Interest is required' })}
+          {...register('interest', {
+            required: t('CreateTrip.InterestRequired'),
+          })}
         />
       </Box>
 
       <Box sx={{ mt: 3 }}>
         <SelectField
-          label="Budget Estimate"
-          placeholder="Select your budget preference"
-          options={BUDGET}
+          label={t('CreateTrip.budgetLable')}
+          placeholder={t('CreateTrip.budgetHolder')}
+          options={Object.values(t.raw('Budget'))}
           error={!!errors.budget}
           helperText={errors.budget?.message}
-          {...register('budget', { required: 'Budget is required' })}
+          {...register('budget', { required: t('CreateTrip.BudgetRequired') })}
         />
       </Box>
 
@@ -209,6 +214,7 @@ const CreateTripForm = () => {
             alignItems: 'center',
             justifyContent: 'center',
             gap: 1,
+            flexDirection: isRTL ? 'row-reverse' : 'row', // 👈 flip order in RTL
           }}
         >
           {isSubmitting ? (
@@ -216,7 +222,7 @@ const CreateTripForm = () => {
           ) : (
             <Image src="/icons/star.png" alt="star" width={15} height={15} />
           )}
-          {isSubmitting ? 'Generating...' : 'Generate a trip'}
+          {isSubmitting ? t('CreateTrip.generating') : t('CreateTrip.generate')}
         </Button>
       </Box>
     </form>

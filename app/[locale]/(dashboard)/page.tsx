@@ -39,7 +39,7 @@ export default async function Page() {
     fetchQuery(api.user.getLatestUsers),
     fetchQuery(api.trips.getNewestTripDetails),
     fetchQuery(api.user.getUserGrowth),
-    fetchQuery(api.trips.getTripStats),
+    fetchQuery(api.trips.getTripStats, { language }),
   ]);
 
   // Post‑process the ones that need parsing

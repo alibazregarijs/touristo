@@ -98,8 +98,10 @@ export const getTripsPerMonth = query({
 });
 
 export const getTripStats = query({
-  args: {},
-  handler: async (ctx) => {
+  args: {
+    language: v.optional(v.string()), // 👈 add language argument (optional)
+  },
+  handler: async (ctx, args) => {
     // Step 1: fetch raw trips from Convex
     const trips: TripDetailObj[] = (await ctx.db.query('trips').collect()).map(
       (t) => ({
@@ -110,7 +112,7 @@ export const getTripStats = query({
     );
 
     // Step 2: parse into full Trip objects
-    const parsedTrips: Trip[] = parseTripToTripDetails(trips);
+    const parsedTrips: Trip[] = parseTripToTripDetails(trips, args.language!);
 
     // Step 3: define categories you care about
     const categories = [

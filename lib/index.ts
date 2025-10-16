@@ -84,10 +84,11 @@ export const convertItineraryToDisplayFormat = (
     day: number;
     location: string;
     activities: { description: string }[];
-  }[]
+  }[],
+  title: string
 ) => {
   return itinerary.map((dayPlan) => ({
-    title: `Day ${dayPlan.day}: ${dayPlan.location}`,
+    title: `${title} ${dayPlan.day}: ${dayPlan.location}`,
     description: dayPlan.activities.map((activity) => ({
       paragraph: activity.description,
     })),
