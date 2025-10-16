@@ -61,11 +61,11 @@ export const parseTripToTripDetails = (
       if (!parsed) return null;
 
       // 👇 pick English version (index 0) or Farsi (index 1)
-      const enTrip = parsed[lng];
+      const trip = parsed[lng];
       // const faTrip = parsed[1];
 
       return {
-        ...enTrip,
+        ...trip,
         imageUrls: t.imageUrls,
         id: t.id,
       } as Trip;
