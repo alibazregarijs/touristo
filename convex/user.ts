@@ -11,6 +11,7 @@ export const createUserIfNotExists = mutation({
   },
   handler: async (ctx, args) => {
     // Query for existing user by email
+    const now = Date.now();
     const existingUser = await ctx.db
       .query('users')
       .withIndex('by_email', (q) => q.eq('email', args.email))
@@ -38,6 +39,7 @@ export const createUserIfNotExists = mutation({
       password: args.password,
       lastSeen: Date.now(),
       online: true,
+      dateJoined: now,
     });
     return { success: true, userId };
   },
@@ -233,5 +235,37 @@ export const getUserGrowth = query({
     );
 
     return result;
+  },
+});
+
+export const getAllUsers = query({
+  args: {},
+  handler: async (ctx) => {
+    // Fetch all users
+    const users = await ctx.db.query('users').collect();
+
+    // For each user, also count their trips
+    const results = await Promise.all(
+      users.map(async (user) => {
+        const trips = await ctx.db
+          .query('trips')
+          .filter((q) => q.eq(q.field('userId'), user._id))
+          .collect();
+
+        console.log(user._creationTime, 'creationTime');
+
+        return {
+          name: user.username,
+          email_address: user.email,
+          // ⚠️ You don’t have a `createdAt` field yet, so this uses `lastSeen` as a placeholder
+          date_joined: new Date(user.dateJoined!).toISOString().split('T')[0],
+          itinerary_created: trips.length.toString(),
+          status: 'user', // static unless you add a role field
+          image: user.imageUrl || '/images/user-profile.png',
+        };
+      })
+    );
+
+    return results;
   },
 });

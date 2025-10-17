@@ -9,6 +9,7 @@ export default defineSchema({
     password: v.string(),
     lastSeen: v.number(), // Unix timestamp
     online: v.boolean(),
+    dateJoined: v.optional(v.number()),
   })
     .index('by_username', ['username'])
     .index('by_email', ['email'])

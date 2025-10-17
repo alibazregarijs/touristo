@@ -6,6 +6,8 @@ type PaginationProps<T> = {
   setItemsToShow: React.Dispatch<React.SetStateAction<T[]>>;
   dataItems: T[];
   pageSize?: number;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 };
 
 // Arrow function with generic
@@ -13,8 +15,9 @@ const Pagination = <T,>({
   setItemsToShow,
   dataItems,
   pageSize,
+  page,
+  setPage,
 }: PaginationProps<T>) => {
-  const [page, setPage] = React.useState(1);
   const PER_PAGE = pageSize ? pageSize : 4; // Default to 4 if pageSize is not provided
 
   const count = Math.ceil(dataItems.length / PER_PAGE);

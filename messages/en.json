@@ -167,5 +167,10 @@
     "Puerto Rico": "Puerto Rico",
     "Dominican Republic": "Dominican Republic",
     "Uruguay": "Uruguay"
+  },
+  "AllUser": {
+    "title": "Manage Users",
+    "description": "Filter, sort, and access detailed user profiles",
+    "buttonTitle": "Add new user"
   }
 }

@@ -9,6 +9,7 @@ import { cookies } from 'next/headers';
 import { ConvexClientProvider } from '@/lib/ConvexClientProvider';
 import { SessionProvider } from 'next-auth/react';
 import 'leaflet/dist/leaflet.css';
+import { UserFilterProvider } from '@/contexts/UserFilterProvider';
 
 export const metadata: Metadata = {
   title: 'Touristo',
@@ -50,7 +51,9 @@ export default async function RootLayout({
           <ConvexClientProvider>
             <DirectionProvider initialDirection={direction}>
               <TranslationProvider>
-                <MuiThemeProvider>{children}</MuiThemeProvider>
+                <MuiThemeProvider>
+                  <UserFilterProvider>{children}</UserFilterProvider>
+                </MuiThemeProvider>
               </TranslationProvider>
             </DirectionProvider>
           </ConvexClientProvider>

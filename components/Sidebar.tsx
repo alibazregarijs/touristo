@@ -8,7 +8,6 @@ import MobileNavbar from '@/components/MobileNavbar';
 import { useLocale } from 'next-intl';
 
 const Sidebar = () => {
-  const theme = useTheme();
   const locale = useLocale();
   const isRTL = locale === 'fa';
 

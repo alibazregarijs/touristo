@@ -33,6 +33,8 @@ const CreateTripForm = () => {
   const { data: session } = useSession();
   const userId = session?.user?.id;
 
+  console.log(userId, 'userId');
+
   const getTripsAction = useAction(api.groqai.getTripsAction);
 
   const {
@@ -56,18 +58,19 @@ const CreateTripForm = () => {
         data.travelStyle
       );
 
-      const formData = {
-        ...data,
-        country: data.country, // non-null
-        duration: Number(data.duration), // number
-        userId: userId || '',
-        imageUrls: imageUrl as string[], // correct type
-      };
-
-      const result = await getTripsAction(formData);
-      console.log('Form Data:', result);
+      if (userId) {
+        const formData = {
+          ...data,
+          country: data.country, // non-null
+          duration: Number(data.duration), // number
+          userId: userId,
+          imageUrls: imageUrl as string[], // correct type
+        };
+        const result = await getTripsAction(formData);
+        reset();
+        console.log('Form Data:', result);
+      }
     });
-    reset();
   };
 
   return (

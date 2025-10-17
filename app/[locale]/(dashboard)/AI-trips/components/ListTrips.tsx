@@ -13,6 +13,7 @@ const ListTrips = ({
   isPaginated?: boolean;
 }) => {
   const [tripsToShow, setTripsToShow] = React.useState(trips.slice(0, 8));
+  const [page, setPage] = React.useState(1);
 
   return (
     <Box>
@@ -21,7 +22,9 @@ const ListTrips = ({
         <Pagination
           setItemsToShow={setTripsToShow}
           dataItems={trips}
-          pageSize={8}
+          pageSize={4}
+          page={page}
+          setPage={setPage}
         />
       )}
     </Box>

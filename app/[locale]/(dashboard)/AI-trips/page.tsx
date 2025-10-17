@@ -8,23 +8,26 @@ import { api } from '@/convex/_generated/api';
 import { auth } from '@/auth';
 import { fetchQuery } from 'convex/nextjs';
 import { parseTripToTripDetails } from '@/lib';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 const page = async () => {
+  const locale = await getLocale();
   const session = await auth();
   const userId = session?.user?.id;
+  const t = await getTranslations();
 
   const trips = await fetchQuery(api.trips.allTripsForUser, {
     userId: userId as string,
   });
 
-  const randomTrips = parseTripToTripDetails(trips);
+  const randomTrips = parseTripToTripDetails(trips, locale);
 
   return (
     <Box sx={{ maxHeight: '100%', overflowY: 'auto' }}>
       <Header
-        title="Trips"
-        description="View and generate AI travel plans"
-        buttonTitle="Create a trip"
+        title={t('AItripHeader.title')}
+        description={t('AItripHeader.description')}
+        buttonTitle={t('AItripHeader.buttonTitle')}
         href="/en/create-trip"
       />
       <ListTrips trips={randomTrips} isPaginated={true} />

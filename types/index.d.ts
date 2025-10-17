@@ -56,7 +56,7 @@ type TripT = {
 export interface UserInfoI {
   name: string;
   email_address: string;
-  data_joined: string;
+  date_joined: string;
   itinerary_created: string;
   status: string;
   image: string;
