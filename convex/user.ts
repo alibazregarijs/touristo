@@ -255,6 +255,7 @@ export const getAllUsers = query({
         console.log(user._creationTime, 'creationTime');
 
         return {
+          id: user._id,
           name: user.username,
           email_address: user.email,
           // ⚠️ You don’t have a `createdAt` field yet, so this uses `lastSeen` as a placeholder
@@ -267,5 +268,17 @@ export const getAllUsers = query({
     );
 
     return results;
+  },
+});
+
+export const deleteUser = mutation({
+  // Expect the caller to pass the user id
+  args: {
+    id: v.id('users'), // 👈 ensures it's a valid Id<"users">
+  },
+  handler: async (ctx, args) => {
+    // Delete the user by id
+    await ctx.db.delete(args.id);
+    return { success: true };
   },
 });

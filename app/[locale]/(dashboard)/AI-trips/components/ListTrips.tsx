@@ -2,7 +2,7 @@
 import React from 'react';
 import TripsCard from '@/app/[locale]/(dashboard)/components/Trips';
 import { Box } from '@mui/material';
-import Pagination from '../../all-user/components/Pagination';
+import Pagination from '../../../../../components/Pagination';
 import type { Trip } from '@/types';
 
 const ListTrips = ({

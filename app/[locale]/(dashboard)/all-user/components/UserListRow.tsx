@@ -1,10 +1,28 @@
 import React from 'react';
 import Image from 'next/image';
-import { Grid, Stack, Typography } from '@mui/material';
+import { Grid, Stack, Typography, Avatar } from '@mui/material';
+import { useLocale } from 'next-intl';
+import type { UserInfoI } from '@/types';
+import { useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import { Id } from '@/convex/_generated/dataModel';
 
-const UserListRow = ({ user, index }: { user: any; index: number }) => {
-  const setFilter = (value: string) => {
-    console.log(value, 'value');
+const UserListRow = ({
+  user,
+  index,
+  setUsersToShow,
+}: {
+  user: any;
+  index: number;
+  setUsersToShow: React.Dispatch<React.SetStateAction<UserInfoI[]>>;
+}) => {
+  const locale = useLocale();
+  const isRTL = locale === 'fa';
+  const deleteUser = useMutation(api.user.deleteUser);
+
+  const removeUser = (userId: string) => {
+    setUsersToShow((prev) => prev.filter((u) => u.id !== userId));
+    deleteUser({ id: userId as Id<'users'> });
   };
 
   return (
@@ -21,14 +39,24 @@ const UserListRow = ({ user, index }: { user: any; index: number }) => {
     >
       {/* NAME */}
       <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Image
-            className="rounded-full"
-            src={user.image}
-            alt={user.name}
-            width={32}
-            height={32}
-          />
+        <Stack
+          direction={isRTL ? 'row-reverse' : 'row'}
+          spacing={1}
+          alignItems="center"
+          justifyContent={isRTL ? 'flex-end' : 'flex-start'}
+        >
+          <Avatar
+            sx={{
+              bgcolor: '#fd366e',
+              width: 32,
+              height: 32,
+              fontSize: '14px',
+              fontWeight: 600,
+            }}
+          >
+            {user.name?.charAt(0).toUpperCase()}
+          </Avatar>
+
           <Typography fontWeight={400} fontSize="14px" noWrap>
             {user.name}
           </Typography>
@@ -60,14 +88,14 @@ const UserListRow = ({ user, index }: { user: any; index: number }) => {
       </Grid>
 
       {/* ITINERARY CREATED */}
-      <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+      <Grid px={{ lg: 4.5, md: 1.5 }} size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
         <Typography fontWeight={400} fontSize="14px">
           {user.itinerary_created}
         </Typography>
       </Grid>
 
       {/* STATUS */}
-      <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+      <Grid px={{ lg: 1 }} size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
         <Typography fontWeight={400} fontSize="14px">
           {user.status}
         </Typography>
@@ -81,7 +109,14 @@ const UserListRow = ({ user, index }: { user: any; index: number }) => {
           justifyContent: { xs: 'flex-start', lg: 'center' },
         }}
       >
-        <Image src="/icons/trash.png" alt="trash" width={22} height={22} />
+        <Image
+          onClick={() => removeUser(user.id)}
+          src="/icons/trash.png"
+          alt="trash"
+          width={22}
+          height={22}
+          className="cursor-pointer"
+        />
       </Grid>
     </Grid>
   );

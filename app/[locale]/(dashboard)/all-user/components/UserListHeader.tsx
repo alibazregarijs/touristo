@@ -2,17 +2,19 @@ import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import { useFilter } from '@/contexts/UserFilterProvider';
 import type { FilterOption } from '@/contexts/UserFilterProvider';
+import { useTranslations } from 'next-intl';
+
 const TITLES = [
   'NAME',
   'EMAIL ADDRESS',
   'DATE JOINED',
   'ITINERARY CREATED',
   'STATUS',
-  '', // for trash column
 ];
 
 const UserListHeader = () => {
-  const { filters, setSort } = useFilter();
+  const t = useTranslations();
+  const { setSort } = useFilter();
   const setFilter = (value: FilterOption) => {
     setSort({ sortOrder: 'asc', sortOption: value });
   };
@@ -33,7 +35,7 @@ const UserListHeader = () => {
                 px: 0.5, // optional padding
               }}
             >
-              {title}
+              {t(`AllUser.${title}`)}
             </Typography>
           </Grid>
         );

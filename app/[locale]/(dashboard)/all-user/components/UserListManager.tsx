@@ -4,12 +4,14 @@ import { USER_INFO } from '@/constants';
 import { Box, Stack, Button } from '@mui/material';
 import UserListHeader from './UserListHeader';
 import UserListRow from './UserListRow';
-import Pagination from './Pagination';
+import Pagination from '../../../../../components/Pagination';
 import type { UserInfoI } from '@/types';
 import { useFilter } from '@/contexts/UserFilterProvider';
 
 const UserListManager = ({ users }: { users: UserInfoI[] }) => {
-  const [usersToShow, setUsersToShow] = React.useState(users.slice(0, 4));
+  const [usersToShow, setUsersToShow] = React.useState<UserInfoI[]>(
+    users.slice(0, 4)
+  );
   const [page, setPage] = React.useState(1);
   const { filters } = useFilter();
 
@@ -75,7 +77,12 @@ const UserListManager = ({ users }: { users: UserInfoI[] }) => {
       <UserListHeader />
 
       {usersToShow.map((user, index) => (
-        <UserListRow key={user.name} user={user} index={index} />
+        <UserListRow
+          setUsersToShow={setUsersToShow}
+          key={user.name}
+          user={user}
+          index={index}
+        />
       ))}
 
       <Pagination

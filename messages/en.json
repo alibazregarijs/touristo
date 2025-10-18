@@ -171,6 +171,15 @@
   "AllUser": {
     "title": "Manage Users",
     "description": "Filter, sort, and access detailed user profiles",
-    "buttonTitle": "Add new user"
+    "buttonTitle": "Add new user",
+    "NAME": "NAME",
+    "EMAIL ADDRESS": "EMAIL ADDRESS",
+    "DATE JOINED": "DATE JOINED",
+    "ITINERARY CREATED": "ITINERARY CREATED",
+    "STATUS": "STATUS"
+  },
+  "Pagination": {
+    "previous": "Previous",
+    "next": "Next"
   }
 }

@@ -54,6 +54,7 @@ type TripT = {
 
 // User info type
 export interface UserInfoI {
+  id: Id<'users'>;
   name: string;
   email_address: string;
   date_joined: string;

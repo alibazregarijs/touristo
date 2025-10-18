@@ -172,6 +172,15 @@
   "AllUser": {
     "title": "مدیریت کاربران",
     "description": "فیلتر کردن و مرتب سازی و دسترسی به نمایه کاربران",
-    "buttonTitle": "اضافه کردن کاربر"
+    "buttonTitle": "اضافه کردن کاربر",
+    "NAME": "نام",
+    "EMAIL ADDRESS": "آدرس ایمیل",
+    "DATE JOINED": "تاریخ ورود",
+    "ITINERARY CREATED": "تعداد مسافرت ها",
+    "STATUS": "وضعیت"
+  },
+  "Pagination": {
+    "previous": "قبل",
+    "next": "بعد"
   }
 }

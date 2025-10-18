@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import usePagination from '@mui/material/usePagination';
 import { Box, Stack, Button } from '@mui/material';
+import { useTranslations, useLocale } from 'next-intl';
 
 type PaginationProps<T> = {
   setItemsToShow: React.Dispatch<React.SetStateAction<T[]>>;
@@ -18,6 +19,10 @@ const Pagination = <T,>({
   page,
   setPage,
 }: PaginationProps<T>) => {
+  const t = useTranslations();
+  const locale = useLocale();
+  const isRTL = locale === 'fa';
+
   const PER_PAGE = pageSize ? pageSize : 4; // Default to 4 if pageSize is not provided
 
   const count = Math.ceil(dataItems.length / PER_PAGE);
@@ -39,7 +44,7 @@ const Pagination = <T,>({
   return (
     <Box>
       <Stack
-        direction="row"
+        direction={isRTL ? 'row-reverse' : 'row'}
         justifyContent="space-between"
         alignItems="center"
         p={2}
@@ -49,10 +54,10 @@ const Pagination = <T,>({
           disabled={page === 1}
           onClick={() => setPage((prev) => prev - 1)}
         >
-          Previous
+          {t('Pagination.previous')}
         </Button>
 
-        <Stack direction="row" spacing={1}>
+        <Stack direction={isRTL ? 'row-reverse' : 'row'} spacing={1}>
           {items.map(({ page: p, type, selected, ...item }, index) => {
             if (type === 'page') {
               return (
@@ -81,7 +86,7 @@ const Pagination = <T,>({
           disabled={page === count}
           onClick={() => setPage((prev) => prev + 1)}
         >
-          Next
+          {t('Pagination.next')}
         </Button>
       </Stack>
     </Box>
