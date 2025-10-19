@@ -5,17 +5,42 @@ import { api } from '@/convex/_generated/api';
 import { auth } from '@/auth';
 import { fetchQuery } from 'convex/nextjs';
 
-// Mock next-auth (with your original path)
+// ✅ Mock next-intl/server (critical for getLocale & getTranslations)
+jest.mock('next-intl/server', () => ({
+  getTranslations: () => {
+    return (key: string, params?: Record<string, string | number>) => {
+      const baseTranslations: Record<string, string> = {
+        'DashboardPage.title': 'Welcome {name}',
+        'DashboardPage.description': 'Your dashboard overview',
+        'DashboardPage.buttonTitle': 'Create New Trip',
+      };
+
+      let str = baseTranslations[key] || key;
+
+      // Simple interpolation for {name}, etc.
+      if (params) {
+        Object.entries(params).forEach(([param, value]) => {
+          str = str.replace(new RegExp(`{${param}}`, 'g'), String(value));
+        });
+      }
+
+      return str;
+    };
+  },
+  getLocale: () => Promise.resolve('en'),
+}));
+
+// ✅ Mock auth
 jest.mock('/auth.ts', () => ({
   auth: jest.fn(),
 }));
 
-// Mock convex/nextjs
+// ✅ Mock Convex
 jest.mock('convex/nextjs', () => ({
   fetchQuery: jest.fn(),
 }));
 
-// Mock the Convex API structure
+// ✅ Mock Convex API structure
 jest.mock('/convex/_generated/api', () => ({
   api: {
     user: {
@@ -32,7 +57,12 @@ jest.mock('/convex/_generated/api', () => ({
   },
 }));
 
-// Mock child components
+// ✅ Mock parsing utility
+jest.mock('/lib', () => ({
+  parseTripToTripDetails: jest.fn((data) => data),
+}));
+
+// ✅ Mock child components
 jest.mock('/app/[locale]/(dashboard)/components/Header', () => ({
   __esModule: true,
   default: ({ title }: { title: string }) => (
@@ -113,25 +143,26 @@ jest.mock('/skeletons/LatestUserSignupsSkeleton', () => ({
   ),
 }));
 
-// Mock the parsing utility
-jest.mock('/lib/index.ts', () => ({
-  parseTripToTripDetails: jest.fn((data) => data),
+// ✅ Mock LocaleSwitcher (used in Page)
+jest.mock('/components/LocaleSwitcher', () => ({
+  __esModule: true,
+  default: () => <div data-testid="locale-switcher">Locale Switcher</div>,
 }));
 
-// Mock MUI components to avoid issues
-
-// Mock Suspense
-jest.mock('react', () => ({
-  ...jest.requireActual('react'),
-  Suspense: ({ children }: any) => children,
-}));
+// ✅ Mock React Suspense to render children directly
+jest.mock('react', () => {
+  const actual = jest.requireActual('react');
+  return {
+    ...actual,
+    Suspense: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  };
+});
 
 describe('Page', () => {
   beforeEach(() => {
-    // Reset mocks before each test
     jest.clearAllMocks();
 
-    // Provide a fake session
+    // Mock session
     (auth as jest.Mock).mockResolvedValue({
       user: { name: 'ali', email: 'ali@example.com' },
       expires: '2099-01-01T00:00:00.000Z',
@@ -161,72 +192,55 @@ describe('Page', () => {
         return Promise.resolve({ total: 42 });
       }
       return Promise.resolve(null);
-
-      // we can also do mock testing for fetchQuery like this :
-      //import * as userQueries from "@/convex/user";
-      // (userQueries.getUsersPerMonth as jest.Mock).mockResolvedValue([
-      // { month: "Jan", count: 10 }]);
-
-      // (userQueries.getOnlineUsersCount as jest.Mock).mockResolvedValue(3);
     });
   });
 
   it('renders with mocked session and Convex data', async () => {
-    // Render the async Server Component
     const PageResolved = await Page();
     render(PageResolved);
 
-    // Check that the welcome message appears
     await waitFor(() => {
-      expect(screen.getByText(/Welcome ali/i)).toBeInTheDocument();
+      expect(screen.getByText('Welcome ali')).toBeInTheDocument();
     });
 
-    // Use getAllByText for duplicate content or query within specific containers
-    const tripTexts = screen.getAllByText('Trip to Tehran');
-    expect(tripTexts).toHaveLength(2); // One in trips card, one in latest trips
+    // Check trips appear in both places
+    expect(screen.getByTestId('trips')).toHaveTextContent('Trip to Tehran');
+    expect(screen.getByTestId('latest-trips')).toHaveTextContent(
+      'Trip to Tehran'
+    );
 
-    // Or be more specific by querying within a container
-    const tripsCard = screen.getByTestId('trips');
-    expect(tripsCard).toHaveTextContent('Trip to Tehran');
+    // Check latest users
+    expect(screen.getByTestId('latest-users')).toHaveTextContent('ali');
 
-    const latestTrips = screen.getByTestId('latest-trips');
-    expect(latestTrips).toHaveTextContent('Trip to Tehran');
-
-    // Check that user name appears in latest signups
-    const latestUsers = screen.getByTestId('latest-users');
-    expect(latestUsers).toHaveTextContent('ali');
-
-    // Verify all components rendered
+    // Check all components rendered
     expect(screen.getByTestId('header')).toBeInTheDocument();
     expect(screen.getByTestId('stats')).toBeInTheDocument();
     expect(screen.getByTestId('user-growth')).toBeInTheDocument();
     expect(screen.getByTestId('trip-trends')).toBeInTheDocument();
+    expect(screen.getByTestId('locale-switcher')).toBeInTheDocument();
   });
 
   it('calls all Convex queries in parallel', async () => {
     await Page();
-
-    // Verify fetchQuery was called 7 times (once for each query)
     expect(fetchQuery).toHaveBeenCalledTimes(7);
-
-    // Verify specific queries were called
     expect(fetchQuery).toHaveBeenCalledWith('user.getUsersPerMonth');
     expect(fetchQuery).toHaveBeenCalledWith('trips.getTripsPerMonth');
     expect(fetchQuery).toHaveBeenCalledWith('user.getOnlineUsersCount');
     expect(fetchQuery).toHaveBeenCalledWith('user.getLatestUsers');
     expect(fetchQuery).toHaveBeenCalledWith('trips.getNewestTripDetails');
     expect(fetchQuery).toHaveBeenCalledWith('user.getUserGrowth');
-    expect(fetchQuery).toHaveBeenCalledWith('trips.getTripStats');
+    expect(fetchQuery).toHaveBeenCalledWith('trips.getTripStats', {
+      language: 'en',
+    });
   });
 
   it('handles guest user when no session', async () => {
     (auth as jest.Mock).mockResolvedValue(null);
-
     const PageResolved = await Page();
     render(PageResolved);
 
     await waitFor(() => {
-      expect(screen.getByText(/Welcome Guest/i)).toBeInTheDocument();
+      expect(screen.getByText('Welcome Guest')).toBeInTheDocument();
     });
   });
 
@@ -246,10 +260,7 @@ describe('Page', () => {
     const PageResolved = await Page();
     render(PageResolved);
 
-    const latestUsers = screen.getByTestId('latest-users');
-    const latestTrips = screen.getByTestId('latest-trips');
-
-    expect(latestUsers).toBeInTheDocument();
-    expect(latestTrips).toBeInTheDocument();
+    expect(screen.getByTestId('latest-users')).toBeInTheDocument();
+    expect(screen.getByTestId('latest-trips')).toBeInTheDocument();
   });
 });

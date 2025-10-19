@@ -1,42 +1,43 @@
-// components/TripsStateCard.test.tsx
+// src/app/[locale]/(dashboard)/components/TripsStateCard.test.tsx
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import TripsStateCard from '@/app/[locale]/(dashboard)/components/TripsStateCard';
-import { Trip } from '@/types';
 
-// ✅ Fixed next/image mock with proper alt handling and display name
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: function MockImage(props: any) {
-    const {
-      fill,
-      unoptimized,
-      quality,
-      placeholder,
-      blurDataURL,
-      ...imgProps
-    } = props;
-    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
-    return <img {...imgProps} />;
-  },
-}));
+// Mock next/image
+jest.mock('next/image', () => {
+  const MockImage = ({ src, alt, width, height }: any) => (
+    <img
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      data-testid="image"
+    />
+  );
+  MockImage.displayName = 'MockImage';
+  return MockImage;
+});
 
-// ✅ Fixed next/link mock with display name
-jest.mock('next/link', () => ({
-  __esModule: true,
-  default: function MockLink({ children, href, passHref, ...props }: any) {
-    return (
-      <a href={href} {...props}>
-        {children}
-      </a>
-    );
-  },
-}));
+// Mock next/link
+jest.mock('next/link', () => {
+  const MockLink = ({
+    children,
+    href,
+  }: {
+    children: React.ReactNode;
+    href: string;
+  }) => (
+    <a href={href} data-testid="trip-link">
+      {children}
+    </a>
+  );
+  MockLink.displayName = 'MockLink';
+  return MockLink;
+});
 
-// ✅ Fixed Button mock with display name
-jest.mock('/components/Button', () => ({
-  __esModule: true,
-  default: function MockButton({
+// Mock MButton
+jest.mock('@/components/Button', () => {
+  const MockMButton = ({
     title,
     type,
     cssClass,
@@ -44,97 +45,110 @@ jest.mock('/components/Button', () => ({
     title: string;
     type: string;
     cssClass?: string;
-  }) {
-    return (
-      <button data-testid={`mbutton-${type}`} className={cssClass}>
-        {title}
-      </button>
-    );
-  },
-}));
+  }) => (
+    <button
+      data-testid="m-button"
+      data-type={type}
+      className={cssClass}
+      title={title}
+    >
+      {title}
+    </button>
+  );
+  MockMButton.displayName = 'MockMButton';
+  return MockMButton;
+});
 
-interface DayPlan {
-  location: string;
-}
-
-describe('TripsStateCard', () => {
-  const mockTrip: Trip = {
-    id: 'trip-789',
-    name: 'Mountain Escape in Switzerland',
-    description: 'A serene alpine adventure...',
-    estimatedPrice: '$2,500',
-    duration: 7,
-    budget: 'Luxury',
-    travelStyle: 'Relaxation',
-    interests: 'Nature, Hiking',
-    groupType: 'Couples',
-    country: 'Switzerland',
-    imageUrls: ['https://example.com/swiss-mountains.jpg'],
-    itinerary: [{ location: 'Zermatt, Switzerland' } as DayPlan],
-    bestTimeToVisit: ['June', 'July'],
-    weatherInfo: ['Mild temperatures', 'Sunny days'],
-    location: { city: 'Zermatt', coordinates: [46.0207, 7.7491] },
-    payment_link: 'https://example.com/pay/trip-789',
-    creationTime: Date.now(),
+describe('TripsStateCard Component', () => {
+  const mockTrip = {
+    id: 'trip-123',
+    name: 'Paris Adventure',
+    imageUrls: ['https://example.com/paris.jpg    '], // 2 trailing spaces
+    itinerary: [{ location: 'Paris, France' }],
+    travelStyle: 'Luxury',
+    budget: 'High',
   };
 
-  it('renders trip card with correct content and link', () => {
-    render(<TripsStateCard trip={mockTrip} isPaginated={false} />);
+  it('renders trip name, location, and image', () => {
+    render(<TripsStateCard trip={mockTrip as any} isPaginated={false} />);
 
-    const link = screen.getByRole('link');
-    expect(link).toHaveAttribute('href', '/en/AI-trips/trip-789');
-    expect(
-      screen.getByText('Mountain Escape in Switzerland')
-    ).toBeInTheDocument();
-    expect(screen.getByText('Zermatt, Switzerland')).toBeInTheDocument();
+    expect(screen.getByText('Paris Adventure')).toBeInTheDocument();
+    expect(screen.getByText('Paris, France')).toBeInTheDocument();
 
-    const mainImage = screen.getByAltText('Mountain Escape in Switzerland');
-    expect(mainImage).toBeInTheDocument();
-    expect(mainImage).toHaveAttribute(
-      'src',
-      'https://example.com/swiss-mountains.jpg'
-    );
+    const images = screen.getAllByTestId('image');
+    expect(images).toHaveLength(2);
 
-    expect(screen.getByTestId('mbutton-Relaxation')).toHaveTextContent(
-      'Relaxation'
-    );
-    expect(screen.getByTestId('mbutton-Luxury')).toHaveTextContent('Luxury');
-    expect(screen.getByTestId('mbutton-Relaxation')).not.toHaveClass(
-      'text-[12px]!'
-    );
+    const mainImage = images[0];
+    expect(mainImage).toHaveAttribute('src', mockTrip.imageUrls[0].trim()); // ✅ consider trimming in component
+    expect(mainImage).toHaveAttribute('alt', 'Paris Adventure');
+
+    expect(images[1]).toHaveAttribute('src', '/icons/location.png');
   });
 
-  it('applies compact button styles when isPaginated=true', () => {
-    render(<TripsStateCard trip={mockTrip} isPaginated={true} />);
+  it('links to correct trip detail page', () => {
+    render(<TripsStateCard trip={mockTrip as any} isPaginated={false} />);
 
-    const styleBtn = screen.getByTestId('mbutton-Relaxation');
-    const budgetBtn = screen.getByTestId('mbutton-Luxury');
-
-    expect(styleBtn).toHaveClass('text-[12px]!');
-    expect(styleBtn).toHaveClass('p-1!');
-    expect(budgetBtn).toHaveClass('text-[12px]!');
-    expect(budgetBtn).toHaveClass('p-1!');
+    const link = screen.getByTestId('trip-link');
+    expect(link).toHaveAttribute('href', '/en/AI-trips/trip-123');
   });
 
-  it('uses trip name as image alt text', () => {
-    render(<TripsStateCard trip={mockTrip} isPaginated={false} />);
-    expect(screen.getByAltText(mockTrip.name)).toBeInTheDocument();
+  it('renders two MButtons with correct titles and types', () => {
+    render(<TripsStateCard trip={mockTrip as any} isPaginated={false} />);
+
+    const buttons = screen.getAllByTestId('m-button');
+    expect(buttons).toHaveLength(2);
+
+    expect(buttons[0]).toHaveTextContent('Luxury');
+    expect(buttons[0]).toHaveAttribute('data-type', 'Luxury');
+
+    expect(buttons[1]).toHaveTextContent('High');
+    expect(buttons[1]).toHaveAttribute('data-type', 'High');
   });
 
-  it('uses first image URL when multiple are provided', () => {
-    const tripWithMultipleImages: Trip = {
+  it('applies smaller button styles when isPaginated=true', () => {
+    render(<TripsStateCard trip={mockTrip as any} isPaginated={true} />);
+
+    const buttons = screen.getAllByTestId('m-button');
+    buttons.forEach((btn) => {
+      expect(btn).toHaveClass('text-[12px]!');
+      expect(btn).toHaveClass('p-1!');
+    });
+  });
+
+  it('handles missing itinerary gracefully', () => {
+    const tripWithoutItinerary = {
+      ...mockTrip,
+      itinerary: [],
+    };
+
+    render(
+      <TripsStateCard trip={tripWithoutItinerary as any} isPaginated={false} />
+    );
+
+    expect(screen.queryByText('Paris, France')).not.toBeInTheDocument();
+  });
+
+  it('uses first image URL from imageUrls', () => {
+    const tripWithMultipleImages = {
       ...mockTrip,
       imageUrls: [
-        'https://example.com/image1.jpg',
-        'https://example.com/image2.jpg',
+        'https://example.com/first.jpg          ',
+        'https://example.com/second.jpg          ',
       ],
     };
 
     render(
-      <TripsStateCard trip={tripWithMultipleImages} isPaginated={false} />
+      <TripsStateCard
+        trip={tripWithMultipleImages as any}
+        isPaginated={false}
+      />
     );
 
-    const img = screen.getByAltText(tripWithMultipleImages.name);
-    expect(img).toHaveAttribute('src', 'https://example.com/image1.jpg');
+    const images = screen.getAllByTestId('image');
+    const mainImage = images[0];
+    expect(mainImage).toHaveAttribute(
+      'src',
+      tripWithMultipleImages.imageUrls[0].trim()
+    );
   });
 });

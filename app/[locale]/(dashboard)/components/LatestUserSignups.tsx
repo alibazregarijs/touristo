@@ -82,6 +82,7 @@ function LatestUserSignups<T>({ lastUser = false, item }: Props<T>) {
             >
               <Stack direction="row" spacing={1} alignItems="center">
                 <Avatar
+                  data-testid="initials-avatar"
                   sx={{
                     bgcolor: '#fd366e',
                     width: 40,

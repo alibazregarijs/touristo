@@ -1,107 +1,103 @@
-// __tests__/components/LatestUserSignups.test.tsx
+// src/app/[locale]/(dashboard)/components/LatestUserSignups.test.tsx
 import { render, screen } from '@testing-library/react';
-import LatestUserSignups from '@/app/[locale]/(dashboard)/components/LatestUserSignups';
-import { extractTripSummary } from '@/lib';
 import '@testing-library/jest-dom';
+import LatestUserSignups from '@/app/[locale]/(dashboard)/components/LatestUserSignups';
 
-// Mock the utility that transforms trip data
-jest.mock('/lib/index.ts', () => ({
-  extractTripSummary: jest.fn(),
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      'LatestUserSignups.title': 'Latest Users',
+      'LatestTripBookings.title': 'Latest Trips',
+      'LatestUserSignups.name': 'Name',
+      'LatestTripBookings.name': 'Trip Name',
+      'LatestUserSignups.Itinerary': 'Itineraries',
+      'LatestUserSignups.duration': 'Duration',
+      'LatestUserSignups.Days': 'Days',
+    };
+    return translations[key] || key;
+  },
+  useLocale: () => 'en',
 }));
 
-describe('LatestUserSignups', () => {
+jest.mock('/lib', () => ({
+  extractTripSummary: (trip: any) => ({
+    id: trip.id,
+    name: trip.name || 'Default Trip',
+    travelDates: trip.travelDates,
+  }),
+}));
+
+// Add data-testid="initials-avatar" to Avatar in your component!
+describe('LatestUserSignups Component', () => {
   const mockUsers = [
-    { id: '1', username: 'alice', countOfItineraryCreated: 5 },
-    { id: '2', username: 'bob', countOfItineraryCreated: 3 },
+    { id: 1, username: 'alice', countOfItineraryCreated: 3 },
+    { id: 2, username: 'bob', countOfItineraryCreated: 7 },
   ];
 
   const mockTrips = [
-    { id: 't1', name: 'Paris Adventure', travelDates: 'May 10–15' },
-    { id: 't2', name: 'Tokyo Trip', travelDates: 'Jun 1–7' },
+    { id: '1', name: 'Paris Adventure', travelDates: '7 days' },
+    { id: '2', name: 'Tokyo Escape', travelDates: '10 days' },
   ];
 
-  const mockSummarizedTrips = [
-    { id: 't1', name: 'Paris Adventure', travelDates: 'May 10–15' },
-    { id: 't2', name: 'Tokyo Trip', travelDates: 'Jun 1–7' },
-  ];
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-    (extractTripSummary as jest.Mock).mockImplementation((trip) => trip); // identity mock
-  });
-
-  describe('when lastUser = true (Latest user signups)', () => {
-    it('renders correct title and headers', () => {
+  describe('when lastUser=true (user signups)', () => {
+    it('renders user signups with correct title and headers', () => {
       render(<LatestUserSignups lastUser item={mockUsers} />);
 
-      expect(screen.getByText('Latest user signups')).toBeInTheDocument();
-      expect(screen.getByText('NAME')).toBeInTheDocument();
-      expect(screen.getByText('ITINERARY CREATED')).toBeInTheDocument();
-    });
-
-    it('renders user avatars with first letter of username', () => {
-      render(<LatestUserSignups lastUser item={mockUsers} />);
-
-      expect(screen.getByText('A')).toBeInTheDocument(); // alice → 'A'
-      expect(screen.getByText('B')).toBeInTheDocument(); // bob → 'B'
-    });
-
-    it('displays username and itinerary count', () => {
-      render(<LatestUserSignups lastUser item={mockUsers} />);
-
+      expect(screen.getByText('Latest Users')).toBeInTheDocument();
+      expect(screen.getByText('Name')).toBeInTheDocument();
+      expect(screen.getByText('Itineraries')).toBeInTheDocument();
       expect(screen.getByText('alice')).toBeInTheDocument();
       expect(screen.getByText('bob')).toBeInTheDocument();
-      expect(screen.getByText('5')).toBeInTheDocument();
       expect(screen.getByText('3')).toBeInTheDocument();
+      expect(screen.getByText('7')).toBeInTheDocument();
+
+      const avatars = screen.getAllByTestId('initials-avatar');
+      expect(avatars).toHaveLength(2);
+      expect(avatars[0]).toHaveTextContent('A');
+      expect(avatars[1]).toHaveTextContent('B');
     });
   });
 
-  describe('when lastUser = false (Latest trip bookings)', () => {
-    it('renders correct title and headers', () => {
+  describe('when lastUser=false (trip bookings)', () => {
+    it('renders trip bookings with correct title and headers', () => {
       render(<LatestUserSignups item={mockTrips} />);
 
-      expect(screen.getByText('Latest trip bookings')).toBeInTheDocument();
-      expect(screen.getByText('BOOKING')).toBeInTheDocument();
-      expect(screen.getByText('TRAVEL DURATION')).toBeInTheDocument();
-    });
-
-    it('calls extractTripSummary for each trip', () => {
-      render(<LatestUserSignups item={mockTrips} />);
-
-      expect(extractTripSummary).toHaveBeenCalledTimes(2);
-      expect(extractTripSummary).toHaveBeenCalledWith(mockTrips[0]);
-      expect(extractTripSummary).toHaveBeenCalledWith(mockTrips[1]);
-    });
-
-    it('renders user avatars with first letter of username', () => {
-      render(<LatestUserSignups lastUser item={mockUsers} />);
-
-      expect(screen.getByText('A')).toBeInTheDocument(); // alice → 'A'
-      expect(screen.getByText('B')).toBeInTheDocument(); // bob → 'B'
-    });
-
-    it('displays trip name and travel dates', () => {
-      render(<LatestUserSignups item={mockSummarizedTrips} />);
-
+      expect(screen.getByText('Latest Trips')).toBeInTheDocument();
+      expect(screen.getByText('Trip Name')).toBeInTheDocument();
+      expect(screen.getByText('Duration')).toBeInTheDocument();
       expect(screen.getByText('Paris Adventure')).toBeInTheDocument();
-      expect(screen.getByText('Tokyo Trip')).toBeInTheDocument();
-      expect(screen.getByText('May 10–15')).toBeInTheDocument();
-      expect(screen.getByText('Jun 1–7')).toBeInTheDocument();
+      expect(screen.getByText('Tokyo Escape')).toBeInTheDocument();
+      expect(screen.getByText('7 Days')).toBeInTheDocument();
+      expect(screen.getByText('10 Days')).toBeInTheDocument();
+
+      const avatars = screen.getAllByTestId('initials-avatar');
+      expect(avatars).toHaveLength(2);
+      expect(avatars[0]).toHaveTextContent('P');
+      expect(avatars[1]).toHaveTextContent('T');
     });
 
-    it('shows "N/A" when travelDates is missing', () => {
-      const tripsWithoutDates = [
-        { id: 't3', name: 'Mystery Trip', travelDates: null },
+    it('handles missing or invalid travelDates gracefully', () => {
+      const trips = [
+        { id: '3', name: 'Mystery Trip', travelDates: '' },
+        { id: '4', name: 'Another Trip' },
       ];
-      render(<LatestUserSignups item={tripsWithoutDates} />);
+      render(<LatestUserSignups item={trips} />);
+      expect(screen.getAllByText('N/A Days')).toHaveLength(2);
+    });
 
-      expect(screen.getByText('N/A')).toBeInTheDocument();
+    it('extracts number from travelDates with digits', () => {
+      const trips = [
+        { id: '6', name: 'Quick Trip', travelDates: '3' },
+        { id: '7', name: 'Long Trip', travelDates: '14-night stay' },
+      ];
+      render(<LatestUserSignups item={trips} />);
+      expect(screen.getByText('3 Days')).toBeInTheDocument();
+      expect(screen.getByText('14 Days')).toBeInTheDocument();
     });
   });
 
   it('renders correct number of items', () => {
     render(<LatestUserSignups lastUser item={mockUsers} />);
-    const userRows = screen.getAllByText(/alice|bob/);
-    expect(userRows).toHaveLength(2);
+    expect(screen.getAllByText(/alice|bob/)).toHaveLength(2);
   });
 });
