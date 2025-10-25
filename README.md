@@ -67,6 +67,10 @@ Middleware ensures correct locale detection
 
 Translations stored in messages/ directory
 
+## Screenshots
+Screens from the running app:
+![Overlay pagination](public/ProductImage/dashboard.PNG)
+
 🙌 Contributing
 Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to change.
 
