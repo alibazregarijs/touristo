@@ -131,7 +131,8 @@
     "weatherInfo": "Weather Info:",
     "bestTimeToVisit": "Best Time to Visit:",
     "popularItineraries": "Popular Itineraries",
-    "payAndJoin": "Pay and join trip"
+    "payAndJoin": "Pay and join trip",
+    "noTrips": "You haven't created any trips yet create one now!"
   },
   "Countries": {
     "Iran": "Iran",
