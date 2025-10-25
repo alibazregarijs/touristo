@@ -26,11 +26,17 @@ const page = async () => {
     <Box sx={{ maxHeight: '100%', overflowY: 'auto' }}>
       <Header
         title={t('AItripHeader.title')}
-        description={t('AItripHeader.description')}
+        description={
+          randomTrips.length > 0
+            ? t('AItripHeader.description')
+            : t('AItripHeader.noTrips')
+        }
         buttonTitle={t('AItripHeader.buttonTitle')}
         href="/en/create-trip"
       />
-      <ListTrips trips={randomTrips} isPaginated={true} />
+      {randomTrips.length > 0 && (
+        <ListTrips trips={randomTrips} isPaginated={true} />
+      )}
     </Box>
   );
 };
