@@ -8,6 +8,7 @@ import { useLocale } from 'next-intl';
 import LocaleSwitcher from './LocaleSwitcher';
 import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
+import SidebarSkeleton from '@/skeletons/SidebarSkeleton';
 
 const Sidebar = () => {
   const locale = useLocale();
@@ -19,6 +20,10 @@ const Sidebar = () => {
   const handleLogout = () => {
     signOut({ callbackUrl: '/sign-in' });
   };
+
+  if (!username || !email) {
+    return <SidebarSkeleton />;
+  }
   return (
     <>
       {/* Mobile Navbar */}
