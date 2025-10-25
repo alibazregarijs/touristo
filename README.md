@@ -67,10 +67,6 @@ Middleware ensures correct locale detection
 
 Translations stored in messages/ directory
 
-![Dashboard](https://raw.githubusercontent.com/alibazregarijs/touristo/main/public/ProductImage/dashboard.PNG)
-
-![Trip](https://raw.githubusercontent.com/alibazregarijs/touristo/main/public/ProductImage/trip.PNG)
-
 🙌 Contributing
 Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to change.
 
