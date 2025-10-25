@@ -1,6 +1,6 @@
 {
   "AuthForm": {
-    "title": "Create your account",
+    "signInTitle": "Sign In",
     "inputFields": {
       "username": "Username",
       "email": "Email Address",

@@ -1,9 +1,7 @@
 import React from 'react';
 import Header from '@/app/[locale]/(dashboard)/components/Header';
 import { Box } from '@mui/material';
-import { tripsObj } from '@/constants';
 import ListTrips from './components/ListTrips';
-import { convex } from '@/lib/Convex';
 import { api } from '@/convex/_generated/api';
 import { auth } from '@/auth';
 import { fetchQuery } from 'convex/nextjs';

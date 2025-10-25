@@ -22,4 +22,4 @@ const TripsCard = ({
   );
 };
 
-export default TripsCard;
+export default React.memo(TripsCard);

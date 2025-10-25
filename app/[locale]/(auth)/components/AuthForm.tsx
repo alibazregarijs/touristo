@@ -26,7 +26,6 @@ import {
   FieldErrors,
 } from 'react-hook-form';
 import { type FormFieldProps } from '@/types/index';
-import LocaleSwitcher from '@/components/LocaleSwitcher';
 
 const AuthForm = <T extends FieldValues>({
   page,
@@ -39,6 +38,8 @@ const AuthForm = <T extends FieldValues>({
   const [errorMessage, setErrorMessage] = useState('');
   const [showError, setShowError] = useState(false);
   const t = useTranslations('AuthForm');
+  const isSignIn = page === 'sign-in';
+
   const {
     register,
     handleSubmit,
@@ -87,7 +88,7 @@ const AuthForm = <T extends FieldValues>({
             },
           })}
         >
-          {t('title')}
+          {isSignIn ? t('signInTitle') : t('signUp')}
         </Typography>
 
         <Box
@@ -104,10 +105,10 @@ const AuthForm = <T extends FieldValues>({
             className="bg-pink-2 hover:bg-pink-1 mt-6 py-3 text-base font-semibold"
           >
             {isSubmitting
-              ? page === 'sign-in'
+              ? isSignIn
                 ? t('signinigIn')
                 : t('signingUp')
-              : page === 'sign-in'
+              : isSignIn
                 ? t('signIn')
                 : t('signUp')}
           </Button>
@@ -127,14 +128,12 @@ const AuthForm = <T extends FieldValues>({
 
         <Box className="mt-4 text-center">
           <Typography variant="body2" className="text-white-2">
-            {page === 'sign-in'
-              ? t('dontHaveAnAccount')
-              : t('alreadyHaveAnAccount')}
+            {isSignIn ? t('dontHaveAnAccount') : t('alreadyHaveAnAccount')}
             <Link
-              href={page === 'sign-in' ? '/signup' : '/login'}
+              href={isSignIn ? '/sign-up' : '/sign-in'}
               className="text-pink-2 hover:text-pink-1 mx-1! font-medium"
             >
-              {page === 'sign-in' ? t('signUp') : t('signIn')}
+              {isSignIn ? t('signUp') : t('signIn')}
             </Link>
           </Typography>
         </Box>

@@ -26,8 +26,8 @@ const TripsStateCard = ({
           backgroundColor: '#fff',
           display: 'flex',
           flexDirection: 'column',
-          height: '100%', // 👈 ensures full height in grid/flex containers
-          cursor: 'pointer', // 👈 visual feedback
+          height: '100%',
+          cursor: 'pointer',
           '&:hover': {
             boxShadow: '0px 4px 40px 0px #0000001A',
           },
@@ -40,8 +40,8 @@ const TripsStateCard = ({
             alt={trip.name}
             fill
             className="object-cover"
-            unoptimized // 👈 Loads directly in browser, bypassing server
-            loading="lazy" // 👈 Still gets lazy loading
+            unoptimized
+            loading="lazy"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </Box>
@@ -51,7 +51,7 @@ const TripsStateCard = ({
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            flexGrow: 1, // 👈 pushes content to use available space
+            flexGrow: 1,
           }}
         >
           {/* Title */}
@@ -81,11 +81,7 @@ const TripsStateCard = ({
           ) : null}
 
           {/* Buttons row */}
-          <Stack
-            direction={{ xs: 'column', md: 'row' }} // 👈 column on xs/sm, row on md+
-            spacing={1}
-            mt={2}
-          >
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={1} mt={2}>
             <MButton
               cssClass={isPaginated ? 'text-[12px]! p-1!' : undefined}
               title={trip.travelStyle}
@@ -103,4 +99,4 @@ const TripsStateCard = ({
   );
 };
 
-export default TripsStateCard;
+export default React.memo(TripsStateCard);

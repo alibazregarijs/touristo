@@ -38,4 +38,4 @@ const MButton = ({
   );
 };
 
-export default MButton;
+export default React.memo(MButton);

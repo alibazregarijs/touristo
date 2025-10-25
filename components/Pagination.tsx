@@ -93,4 +93,5 @@ const Pagination = <T,>({
   );
 };
 
-export default Pagination;
+// Wrap with React.memo and preserve generic type
+export default React.memo(Pagination) as typeof Pagination;

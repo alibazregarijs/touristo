@@ -7,7 +7,6 @@ import { useLocale } from 'next-intl';
 
 function LatestUserSignups<T>({ lastUser = false, item }: Props<T>) {
   const t = useTranslations();
-  const isRtl = useLocale() === 'fa';
   const items = !lastUser
     ? (item as unknown as Trip[]).map((trip) => extractTripSummary(trip))
     : item;
