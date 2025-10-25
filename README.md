@@ -68,5 +68,12 @@ Middleware ensures correct locale detection
 Translations stored in messages/ directory
 
 📸 Screenshots
-
+<img src="./assets/dashboard.png" alt="Dashboard" width="600"/>
+<img src="./assets/trip.png" alt="Booking Flow" width="600"/>
 ```
+
+🙌 Contributing
+Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to change.
+
+📜 License
+MIT License © 2025 [alibazregarijs](https://github.com/alibazregarijs)
