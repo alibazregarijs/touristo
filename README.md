@@ -67,10 +67,10 @@ Middleware ensures correct locale detection
 
 Translations stored in messages/ directory
 
-<img src="https://raw.githubusercontent.com/alibazregarijs/touristo/main/public/ProductImage/dashboard.PNG" alt="Dashboard Flow" width="600"/>
+<img src="https://raw.githubusercontent.com/alibazregarijs/touristo/main/public/ProductImage/dashboard.png" alt="Dashboard Flow" width="600"/>
 
 
-<img src="https://raw.githubusercontent.com/alibazregarijs/touristo/main/public/ProductImage/trip.PNG" alt="Booking Flow" width="600"/>
+<img src="https://raw.githubusercontent.com/alibazregarijs/touristo/main/public/ProductImage/trip.png" alt="Booking Flow" width="600"/>
 
 🙌 Contributing
 Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to change.
