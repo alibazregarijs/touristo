@@ -7,7 +7,6 @@ import Days from './components/Days';
 import ClientMap from './components/ClientMap';
 import ListTrips from '../components/ListTrips';
 import { fetchQuery } from 'convex/nextjs';
-import { auth } from '@/auth';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
 import { ListImage } from './components/ListImage';
@@ -28,11 +27,8 @@ const Page = async (props: PageProps) => {
   const params = await props.params;
   const id = params.id;
   const language = await getLocale();
-  const session = await auth();
-  const userId = session?.user?.id;
   const t = await getTranslations();
 
-  console.log(language, 'language');
   const tripQuery = await fetchQuery(api.trips.getTripById, {
     tripId: id as Id<'trips'>,
   });

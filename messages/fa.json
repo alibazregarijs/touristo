@@ -182,5 +182,14 @@
   "Pagination": {
     "previous": "قبل",
     "next": "بعد"
+  },
+  "CreateTripForm": {
+    "createTripError": "ایجاد سفر با مشکل مواجه شد",
+    "CreateTripFormGenerate": "لطفا فیلتر شکن  خود را روشن کنید"
+  },
+  "LocaleSwitcher": {
+    "en": "English",
+    "fa": "فارسی",
+    "select": "انتخاب زبان"
   }
 }

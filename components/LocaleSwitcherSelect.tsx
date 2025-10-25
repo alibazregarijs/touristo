@@ -39,11 +39,21 @@ export default function LocaleSwitcherSelect({ defaultValue, label }: Props) {
         label={label}
         onChange={onSelectChange}
         sx={{
-          minWidth: 80,
+          minWidth: 120,
           height: 32,
-          border: 'none',
           background: 'transparent',
-          '& .MuiOutlinedInput-notchedOutline': { border: 0 },
+          // force border as if hovered
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: (theme) => theme.palette.primary.main,
+            borderWidth: 2,
+          },
+          // keep it consistent on hover/focus
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: (theme) => theme.palette.primary.main,
+          },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: (theme) => theme.palette.primary.main,
+          },
         }}
       >
         {routing.locales.map((locale) => (

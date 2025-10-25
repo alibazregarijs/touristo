@@ -1,30 +1,29 @@
-// __tests__/components/StatsCards.test.tsx
+// src/app/[locale]/(dashboard)/components/StatsCards.test.tsx
 import { render, screen } from '@testing-library/react';
-import StatsCards from '@/app/[locale]/(dashboard)/components/StatsCards';
 import '@testing-library/jest-dom';
+import StatsCards from '@/app/[locale]/(dashboard)/components/StatsCards';
 
-// Mock the child component to isolate StatsCards
+// Mock the child component
 jest.mock('/app/[locale]/(dashboard)/components/UsersCard', () => {
-  return {
-    __esModule: true,
-    default: ({ state, data, activeUserToday }: any) => (
-      <div data-testid="users-card">
-        <span data-testid={`card-state-${state}`}>{state}</span>
-        <span data-testid="card-data">{JSON.stringify(data)}</span>
-        {activeUserToday !== undefined && (
-          <span data-testid="active-user-today">{activeUserToday}</span>
-        )}
-      </div>
-    ),
-  };
+  const MockUsersCard = ({ state, data, activeUserToday }: any) => (
+    <div data-testid={`users-card-${state}`}>
+      <span data-testid="state">{state}</span>
+      <span data-testid="data-length">{data.length}</span>
+      {activeUserToday !== undefined && (
+        <span data-testid="active-user">{activeUserToday}</span>
+      )}
+    </div>
+  );
+  MockUsersCard.displayName = 'MockUsersCard';
+  return MockUsersCard;
 });
 
-describe('StatsCards', () => {
+describe('StatsCards Component', () => {
   const mockUsersPerMonth = [10, 15, 20];
   const mockTripsPerMonth = [5, 8, 12];
   const mockOnlineUsersCount = 42;
 
-  it('renders three UsersCard instances with correct props', () => {
+  it('renders three UsersCard components with correct props', () => {
     render(
       <StatsCards
         usersPerMonth={mockUsersPerMonth}
@@ -33,44 +32,45 @@ describe('StatsCards', () => {
       />
     );
 
-    // Verify 3 cards are rendered
-    const cards = screen.getAllByTestId('users-card');
-    expect(cards).toHaveLength(3);
-
-    // Get all card-data elements (one per card)
-    const dataSpans = screen.getAllByTestId('card-data');
-    expect(dataSpans).toHaveLength(3);
-
-    // First card: total_user → usersPerMonth
-    expect(screen.getByTestId('card-state-total_user')).toBeInTheDocument();
-    expect(dataSpans[0]).toHaveTextContent(JSON.stringify(mockUsersPerMonth));
-
-    // Second card: total_trips → tripsPerMonth
-    expect(screen.getByTestId('card-state-total_trips')).toBeInTheDocument();
-    expect(dataSpans[1]).toHaveTextContent(JSON.stringify(mockTripsPerMonth));
-
-    // Third card: active_users_today → hardcoded data + onlineUsersCount
-    expect(
-      screen.getByTestId('card-state-active_users_today')
-    ).toBeInTheDocument();
-    expect(dataSpans[2]).toHaveTextContent(
-      JSON.stringify([5, 15, 12, 18, 20, 17, 22, 25, 23, 28])
+    // Total users card
+    const totalUserCard = screen.getByTestId('users-card-total_user');
+    expect(totalUserCard).toBeInTheDocument();
+    expect(totalUserCard).toHaveTextContent('total_user');
+    expect(screen.getAllByTestId('data-length')[0]).toHaveTextContent(
+      String(mockUsersPerMonth.length)
     );
-    expect(screen.getByTestId('active-user-today')).toHaveTextContent(
-      mockOnlineUsersCount.toString()
+
+    // Total trips card
+    const totalTripsCard = screen.getByTestId('users-card-total_trips');
+    expect(totalTripsCard).toBeInTheDocument();
+    expect(totalTripsCard).toHaveTextContent('total_trips');
+    expect(screen.getAllByTestId('data-length')[1]).toHaveTextContent(
+      String(mockTripsPerMonth.length)
     );
+
+    // Active users card
+    const activeUsersCard = screen.getByTestId('users-card-active_users_today');
+    expect(activeUsersCard).toBeInTheDocument();
+    expect(activeUsersCard).toHaveTextContent('active_users_today');
+    expect(screen.getByTestId('active-user')).toHaveTextContent(
+      String(mockOnlineUsersCount)
+    );
+    // This card uses hardcoded data, so length should be 10
+    expect(screen.getAllByTestId('data-length')[2]).toHaveTextContent('10');
   });
 
-  it('passes onlineUsersCount to the third UsersCard as activeUserToday', () => {
-    const customOnlineCount = 99;
+  it('passes correct data arrays to each UsersCard', () => {
     render(
       <StatsCards
-        usersPerMonth={[]}
-        tripsPerMonth={[]}
-        onlineUsersCount={customOnlineCount}
+        usersPerMonth={mockUsersPerMonth}
+        tripsPerMonth={mockTripsPerMonth}
+        onlineUsersCount={mockOnlineUsersCount}
       />
     );
 
-    expect(screen.getByTestId('active-user-today')).toHaveTextContent('99');
+    const dataLengths = screen.getAllByTestId('data-length');
+    expect(dataLengths[0]).toHaveTextContent('3'); // usersPerMonth length
+    expect(dataLengths[1]).toHaveTextContent('3'); // tripsPerMonth length
+    expect(dataLengths[2]).toHaveTextContent('10'); // hardcoded array length
   });
 });

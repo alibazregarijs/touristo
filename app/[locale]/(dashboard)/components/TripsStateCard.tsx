@@ -1,19 +1,10 @@
 'use client';
 import React from 'react';
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Stack,
-  Typography,
-  Grid,
-} from '@mui/material';
+import { Box, Card, CardContent, Stack, Typography, Grid } from '@mui/material';
 import Image from 'next/image';
 import { type Trip } from '@/types';
 import Link from 'next/link';
 import MButton from '@/components/Button';
-import { BUTTONS } from '@/constants';
 
 const TripsStateCard = ({
   trip,
@@ -45,7 +36,7 @@ const TripsStateCard = ({
         {/* Image section */}
         <Box sx={{ width: '100%', height: '340px', position: 'relative' }}>
           <Image
-            src={trip.imageUrls[0]}
+            src={trip.imageUrls?.[0]?.trim()}
             alt={trip.name}
             fill
             className="object-cover"
@@ -75,17 +66,19 @@ const TripsStateCard = ({
           </Typography>
 
           {/* Location row */}
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Image
-              src="/icons/location.png"
-              alt="location"
-              width={16}
-              height={16}
-            />
-            <Typography fontSize="12px" lineHeight="16px" fontWeight={400}>
-              {trip.itinerary[0].location}
-            </Typography>
-          </Stack>
+          {trip.itinerary?.length > 0 ? (
+            <Stack direction="row" alignItems="center" gap="4px">
+              <Image
+                src="/icons/location.png"
+                alt="Location"
+                width={16}
+                height={16}
+              />
+              <Typography fontSize="12px" lineHeight="16px" fontWeight={400}>
+                {trip.itinerary[0].location}
+              </Typography>
+            </Stack>
+          ) : null}
 
           {/* Buttons row */}
           <Stack

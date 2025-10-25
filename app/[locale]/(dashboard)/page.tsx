@@ -55,7 +55,6 @@ export default async function Page() {
       className="no-scrollbar"
     >
       {/* Header */}
-      <LocaleSwitcher />
       <Suspense fallback={<HeaderSkeleton />}>
         <Header
           title={t('DashboardPage.title', {

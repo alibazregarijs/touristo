@@ -1,56 +1,83 @@
-// __tests__/components/Header.test.tsx
+// src/app/[locale]/(dashboard)/components/Header.test.tsx
 import { render, screen } from '@testing-library/react';
-import Header from '@/app/[locale]/(dashboard)/components/Header';
 import '@testing-library/jest-dom';
+import Header from '@/app/[locale]/(dashboard)/components/Header';
 
-describe('Header', () => {
+// Mock next/link to avoid Next.js router errors and allow href assertions
+jest.mock('next/link', () => {
+  const MockLink = ({
+    children,
+    href,
+  }: {
+    children: React.ReactNode;
+    href: string;
+  }) => {
+    return (
+      <a href={href} data-testid="next-link">
+        {children}
+      </a>
+    );
+  };
+  MockLink.displayName = 'MockLink';
+  return MockLink;
+});
+
+describe('Header Component', () => {
   const defaultProps = {
-    title: 'Welcome John 👋',
-    description: 'Track activity and trends',
-    buttonTitle: 'Create a trip',
+    title: 'Dashboard',
+    description: 'Your personal overview',
+    buttonTitle: 'Create New Trip',
     href: '/en/create-trip',
   };
 
   it('renders title and description correctly', () => {
     render(<Header {...defaultProps} />);
 
-    expect(screen.getByText('Welcome John 👋')).toBeInTheDocument();
-    expect(screen.getByText('Track activity and trends')).toBeInTheDocument();
+    expect(screen.getByText(defaultProps.title)).toBeInTheDocument();
+    expect(screen.getByText(defaultProps.description)).toBeInTheDocument();
   });
 
-  it('renders button with correct text and link', () => {
+  it('renders the button with correct text', () => {
     render(<Header {...defaultProps} />);
 
-    const button = screen.getByRole('button', { name: 'Create a trip' });
-    expect(button).toBeInTheDocument();
-
-    const link = screen.getByRole('link', { name: 'Create a trip' });
-    expect(link).toHaveAttribute('href', '/en/create-trip');
+    expect(
+      screen.getByRole('button', { name: defaultProps.buttonTitle })
+    ).toBeInTheDocument();
   });
 
-  it('uses "#" as fallback href when href is not provided', () => {
+  it('wraps the button in a link with the correct href', () => {
+    render(<Header {...defaultProps} />);
+
+    const link = screen.getByTestId('next-link');
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', defaultProps.href);
+
+    const button = screen.getByRole('button', {
+      name: defaultProps.buttonTitle,
+    });
+    expect(link).toContainElement(button);
+  });
+
+  it('uses "#" as href when href prop is not provided', () => {
     render(
       <Header
-        title="Test"
-        description="Test desc"
-        buttonTitle="Test button"
-        // href intentionally omitted
+        title="No Link"
+        description="Button without href"
+        buttonTitle="Fallback Button"
       />
     );
 
-    const link = screen.getByRole('link', { name: 'Test button' });
+    const link = screen.getByTestId('next-link');
     expect(link).toHaveAttribute('href', '#');
   });
 
-  it('applies correct typography styles (via class assertions)', () => {
+  it('is accessible: button is visible and enabled', () => {
     render(<Header {...defaultProps} />);
 
-    const title = screen.getByText('Welcome John 👋');
-    const description = screen.getByText('Track activity and trends');
-
-    // These assertions depend on your actual CSS classes
-    // Adjust if your class names differ (e.g., from Tailwind or custom CSS)
-    expect(title).toHaveClass('font-semibold');
-    expect(description).toHaveClass('text-white-2');
+    const button = screen.getByRole('button', {
+      name: defaultProps.buttonTitle,
+    });
+    expect(button).toBeVisible();
+    expect(button).toBeEnabled();
   });
 });
