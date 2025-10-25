@@ -5,9 +5,10 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import SidebarItems from '@/components/SidebarItems';
 import { useLocale } from 'next-intl';
+import LocaleSwitcher from './LocaleSwitcher';
 
 export default function MobileNavbar() {
-  const rtl = useLocale();
+  const locale = useLocale();
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -23,7 +24,7 @@ export default function MobileNavbar() {
 
       {/* Drawer */}
       <Drawer
-        anchor={rtl ? 'left' : 'right'}
+        anchor={locale ? 'left' : 'right'}
         open={open}
         onClose={toggleDrawer(false)}
       >
@@ -33,6 +34,14 @@ export default function MobileNavbar() {
           onClick={toggleDrawer(false)}
         >
           <SidebarItems isDrawer={true} />
+          <Box
+            display="flex"
+            flexDirection="row"
+            justifyContent={'flex-start'}
+            sx={{ margin: 2 }}
+          >
+            <LocaleSwitcher />
+          </Box>
         </Box>
       </Drawer>
     </Box>

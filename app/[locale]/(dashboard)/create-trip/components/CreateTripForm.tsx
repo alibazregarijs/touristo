@@ -1,5 +1,5 @@
 'use client';
-import React, { useTransition } from 'react';
+import React, { useTransition, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import {
   Box,
@@ -8,6 +8,8 @@ import {
   InputAdornment,
   Button,
   CircularProgress,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import Image from 'next/image';
 import SelectField from '@/app/[locale]/(dashboard)/AI-trips/components/SelectField';
@@ -20,6 +22,7 @@ import { TripFormValues } from '@/types';
 import { COUNTRIES, defaultValues } from '@/constants';
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
+import { useRouter } from 'next/navigation';
 
 const Map = dynamic(() => import('@/components/Map'), {
   ssr: false,
@@ -27,13 +30,16 @@ const Map = dynamic(() => import('@/components/Map'), {
 });
 
 const CreateTripForm = () => {
+  const router = useRouter();
   const t = useTranslations();
   const isRTL = useLocale() === 'fa';
-  const [isSubmitting, startTransition] = useTransition();
+
   const { data: session } = useSession();
   const userId = session?.user?.id;
 
-  console.log(userId, 'userId');
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const getTripsAction = useAction(api.groqai.getTripsAction);
 
@@ -41,7 +47,6 @@ const CreateTripForm = () => {
     register,
     handleSubmit,
     control,
-    reset,
     watch,
     formState: { errors },
   } = useForm<TripFormValues>(defaultValues);
@@ -49,32 +54,42 @@ const CreateTripForm = () => {
   const selectedCountry = watch('country');
 
   const onSubmit = async (data: TripFormValues) => {
-    startTransition(async () => {
-      if (!data.country || !data.interest || !data.travelStyle) return;
+    setIsSubmitting(true);
+    if (!data.country || !data.interest || !data.travelStyle) return;
 
-      const imageUrl = await getImages(
-        data.country.label,
-        data.interest,
-        data.travelStyle
-      );
+    const imageUrl = await getImages(
+      data.country.label,
+      data.interest,
+      data.travelStyle
+    );
 
-      if (userId) {
-        const formData = {
-          ...data,
-          country: data.country, // non-null
-          duration: Number(data.duration), // number
-          userId: userId,
-          imageUrls: imageUrl as string[], // correct type
-        };
+    if (userId) {
+      const formData = {
+        ...data,
+        country: data.country, // non-null
+        duration: Number(data.duration), // number
+        userId: userId,
+        imageUrls: imageUrl as string[], // correct type
+      };
+      try {
         const result = await getTripsAction(formData);
-        reset();
-        console.log('Form Data:', result);
+        if (result.success) {
+          router.push(`/en/AI-trips/${result.tripId._id}`);
+        } else {
+          setErrorMessage(t('CreateTripForm.createTripError'));
+          setShowError(true);
+        }
+      } catch (error) {
+        setErrorMessage(t('CreateTripForm.CreateTripFormGenerate'));
+        setShowError(true);
+      } finally {
+        setIsSubmitting(false);
       }
-    });
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form aria-label="Create trip" onSubmit={handleSubmit(onSubmit)}>
       {/* Country Autocomplete */}
       <Controller
         name="country"
@@ -228,6 +243,15 @@ const CreateTripForm = () => {
           {isSubmitting ? t('CreateTrip.generating') : t('CreateTrip.generate')}
         </Button>
       </Box>
+      <Snackbar
+        open={showError}
+        autoHideDuration={6000}
+        onClose={() => setShowError(false)}
+      >
+        <Alert severity="error" onClose={() => setShowError(false)}>
+          <p data-testid="error-message">{errorMessage}</p>
+        </Alert>
+      </Snackbar>
     </form>
   );
 };

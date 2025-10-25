@@ -181,5 +181,14 @@
   "Pagination": {
     "previous": "Previous",
     "next": "Next"
+  },
+  "CreateTripForm": {
+    "createTripError": "Creating trip failed",
+    "CreateTripFormGenerate": "Please turn on your vpn"
+  },
+  "LocaleSwitcher": {
+    "en": "English",
+    "fa": "فارسی",
+    "select": "Select a locale"
   }
 }

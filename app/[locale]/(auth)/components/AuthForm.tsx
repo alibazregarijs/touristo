@@ -112,7 +112,6 @@ const AuthForm = <T extends FieldValues>({
                 : t('signUp')}
           </Button>
           <Divider className="text-white-2 my-6">{t('devider')}</Divider>
-          <LocaleSwitcher />
         </Box>
 
         {/* Google Sign-In */}

@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import TripsCard from '../Trips';
 
 // Mock the child component with a named function to satisfy react/display-name
-jest.mock('@/app/[locale]/(dashboard)/components/TripsStateCard', () => {
+jest.mock('/app/[locale]/(dashboard)/components/TripsStateCard', () => {
   const MockTripsStateCard = ({
     trip,
     isPaginated,

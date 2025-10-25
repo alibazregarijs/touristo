@@ -6,6 +6,7 @@ import Image from 'next/image';
 import SidebarItems from '@/components/SidebarItems';
 import MobileNavbar from '@/components/MobileNavbar';
 import { useLocale } from 'next-intl';
+import LocaleSwitcher from './LocaleSwitcher';
 
 const Sidebar = () => {
   const locale = useLocale();
@@ -75,6 +76,9 @@ const Sidebar = () => {
 
           <Box>
             <SidebarItems />
+          </Box>
+          <Box margin={locale === 'fa' ? 1.5 : 2}>
+            <LocaleSwitcher />
           </Box>
         </Box>
 

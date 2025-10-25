@@ -36,7 +36,7 @@ const TripsStateCard = ({
         {/* Image section */}
         <Box sx={{ width: '100%', height: '340px', position: 'relative' }}>
           <Image
-            src={trip.imageUrls[0]}
+            src={trip.imageUrls?.[0]?.trim()}
             alt={trip.name}
             fill
             className="object-cover"

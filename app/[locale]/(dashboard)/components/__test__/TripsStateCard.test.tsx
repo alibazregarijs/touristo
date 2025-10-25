@@ -36,7 +36,7 @@ jest.mock('next/link', () => {
 });
 
 // Mock MButton
-jest.mock('@/components/Button', () => {
+jest.mock('/components/Button.tsx', () => {
   const MockMButton = ({
     title,
     type,

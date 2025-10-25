@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import StatsCards from '@/app/[locale]/(dashboard)/components/StatsCards';
 
 // Mock the child component
-jest.mock('@/app/[locale]/(dashboard)/components/UsersCard', () => {
+jest.mock('/app/[locale]/(dashboard)/components/UsersCard', () => {
   const MockUsersCard = ({ state, data, activeUserToday }: any) => (
     <div data-testid={`users-card-${state}`}>
       <span data-testid="state">{state}</span>
