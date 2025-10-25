@@ -68,8 +68,9 @@ Middleware ensures correct locale detection
 Translations stored in messages/ directory
 
 📸 Screenshots
-<img src="./public/ProductImage/dashboard.PNG" alt="Dashboard Flow" width="600"/>
-<img src="./public/ProductImage/trip.PNG" alt="Booking Flow" width="600"/>
+<img src="https://raw.githubusercontent.com/alibazregarijs/touristo/main/public/ProductImage/dashboard.PNG" alt="Dashboard Flow" width="600"/>
+<img src="https://raw.githubusercontent.com/alibazregarijs/touristo/main/public/ProductImage/trip.PNG" alt="Booking Flow" width="600"/>
+
 ```
 
 🙌 Contributing
