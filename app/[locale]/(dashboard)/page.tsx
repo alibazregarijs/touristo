@@ -16,7 +16,6 @@ import { auth } from '@/auth';
 import { api } from '@/convex/_generated/api';
 import { fetchQuery } from 'convex/nextjs';
 import { parseTripToTripDetails } from '@/lib';
-import LocaleSwitcher from '@/components/LocaleSwitcher';
 import { getLocale, getTranslations } from 'next-intl/server';
 
 export default async function Page() {

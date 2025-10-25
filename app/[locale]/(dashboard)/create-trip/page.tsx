@@ -4,6 +4,9 @@ import { Box } from '@mui/material';
 import CreateTrip from '@/app/[locale]/(dashboard)/create-trip/components/CreateTrip';
 import { getTranslations } from 'next-intl/server';
 
+export const dynamic = 'force-static';
+export const revalidate = false;
+
 const page = async () => {
   const t = await getTranslations();
   return (

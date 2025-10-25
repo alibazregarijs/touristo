@@ -8,6 +8,7 @@ import { Google } from '@mui/icons-material';
 import { signInWithGoogle } from '@/app/[locale]/(auth)/actions';
 import Link from 'next/link';
 import { Alert, Snackbar } from '@mui/material';
+import CheckUserAuth from '@/hooks/CheckUserAuth';
 import {
   Container,
   Paper,
@@ -39,6 +40,8 @@ const AuthForm = <T extends FieldValues>({
   const [showError, setShowError] = useState(false);
   const t = useTranslations('AuthForm');
   const isSignIn = page === 'sign-in';
+
+  CheckUserAuth();
 
   const {
     register,

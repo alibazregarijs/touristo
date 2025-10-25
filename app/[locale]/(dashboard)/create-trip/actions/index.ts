@@ -1,6 +1,6 @@
 'use server';
 
-import { TripFormValues } from '@/app/[locale]/(dashboard)/AI-trips/components/CreateTripForm';
+import { TripFormValues } from '@/types';
 import { parseMarkdownToJson, parseTripData } from '@/lib';
 import { api } from '@/convex/_generated/api';
 import type { Trip } from '@/types';
@@ -103,7 +103,7 @@ Return the itinerary and lowest estimated price in a clean, non-markdown JSON fo
     });
 
     // ✅ Parse trip data to extract price
-    const tripDetail = parseTripData(JSON.stringify(trip)) as Trip;
+    const tripDetail = parseTripData(JSON.stringify(trip)) as unknown as Trip;
     const priceStr = tripDetail.estimatedPrice || '$0';
     const tripPrice = parseInt(priceStr.replace(/\D/g, ''), 10) || 0;
 
