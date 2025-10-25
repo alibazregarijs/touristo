@@ -1,17 +1,24 @@
 'use client';
 import React from 'react';
-import { Box, Stack, Typography, Divider } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Box, Stack, Typography, Divider, Avatar } from '@mui/material';
 import Image from 'next/image';
 import SidebarItems from '@/components/SidebarItems';
 import MobileNavbar from '@/components/MobileNavbar';
 import { useLocale } from 'next-intl';
 import LocaleSwitcher from './LocaleSwitcher';
+import { useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 
 const Sidebar = () => {
   const locale = useLocale();
   const isRTL = locale === 'fa';
+  const { data: session } = useSession();
+  const username = session?.user?.name;
+  const email = session?.user?.email;
 
+  const handleLogout = () => {
+    signOut({ callbackUrl: '/sign-in' });
+  };
   return (
     <>
       {/* Mobile Navbar */}
@@ -91,13 +98,16 @@ const Sidebar = () => {
             flexDirection: isRTL ? 'row-reverse' : 'row',
           }}
         >
-          <Image
-            className="hidden rounded-full lg:flex"
-            src="/images/user-profile.png"
-            alt="user-profile"
-            width={40}
-            height={40}
-          />
+          <Avatar
+            sx={{
+              width: 40,
+              height: 40,
+              bgcolor: '#70243c', // or theme.palette.primary.main
+              fontWeight: 'bold',
+            }}
+          >
+            {username?.charAt(0).toUpperCase()}
+          </Avatar>
           <Box sx={{ display: 'grid' }}>
             <Typography
               fontSize={'14px'}
@@ -105,18 +115,20 @@ const Sidebar = () => {
               fontWeight={600}
               className="text-black-1 truncate overflow-hidden font-semibold text-ellipsis"
             >
-              Adrian Hajdin
+              {username}
             </Typography>
             <Typography
               fontWeight={400}
               fontSize={'12px'}
               className="truncate overflow-hidden text-ellipsis text-[##7F7E83]"
             >
-              adrian@jsmaster.com
+              {email}
             </Typography>
           </Box>
           <Box>
             <Image
+              onClick={handleLogout}
+              className="cursor-pointer"
               src="/icons/logout.png"
               alt="logout"
               width={24}
