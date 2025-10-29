@@ -31,10 +31,17 @@ export default function LocaleSwitcherSelect({ defaultValue, label }: Props) {
     );
   }
 
+  // unique ids for accessibility
+  const labelId = 'locale-switcher-label';
+  const selectId = 'locale-switcher-select';
+
   return (
     <FormControl size="small" variant="outlined">
-      <InputLabel>{label}</InputLabel>
+      <InputLabel id={labelId}>{label}</InputLabel>
       <Select
+        id={selectId}
+        name="locale" // ✅ gives the hidden input a name
+        labelId={labelId} // ✅ ties label to select
         value={defaultValue}
         label={label}
         onChange={onSelectChange}
@@ -42,12 +49,10 @@ export default function LocaleSwitcherSelect({ defaultValue, label }: Props) {
           minWidth: 120,
           height: 32,
           background: 'transparent',
-          // force border as if hovered
           '& .MuiOutlinedInput-notchedOutline': {
             borderColor: (theme) => theme.palette.primary.main,
             borderWidth: 2,
           },
-          // keep it consistent on hover/focus
           '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: (theme) => theme.palette.primary.main,
           },
